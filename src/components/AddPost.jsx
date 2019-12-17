@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import {firestore} from "../firebase";
+import {firestore, auth} from "../firebase";
 
 class AddPost extends Component {
-  state = { title: '', content: '' };
+  state = {
+    title: '',
+    content: '',
+    error: null
+  };
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -14,28 +18,39 @@ class AddPost extends Component {
 
     const { title, content } = this.state;
 
-    const post = {
-      title,
-      content,
-      user: {
-        uid: '1111',
-        displayName: 'Steve Kinney',
-        email: 'steve@mailinator.com',
-        photoURL: 'http://placekitten.com/g/200/200',
-      },
-      stars: 0,
-      comments: 0,
-      createdAt: new Date(),
+    let post = {};
+
+    if(auth.currentUser) {
+      post = {
+        title,
+        content,
+        user: {
+          uid: auth.currentUser.uid,
+          displayName: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          photoURL: auth.currentUser.photoURL,
+        },
+        stars: 0,
+        comments: 0,
+        createdAt: new Date(),
+      }
     }
 
-    await firestore.collection("posts").add(post);
-    
-    this.setState({
-      title: "",
-      content: ""
-    })
+    try {
+      await firestore.collection("posts").add(post);      
+      this.setState({
+        title: "",
+        content: "",
+        error: null
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({
+        error: error.message
+      })
+    }
   };
-
+  
   render() {
     const { title, content } = this.state;
     return (
@@ -54,7 +69,12 @@ class AddPost extends Component {
           value={content}
           onChange={this.handleChange}
         />
-        <input className="create" type="submit" value="Create Post" />
+        <input
+          disabled={!auth.currentUser ? true : false}
+          className="create"
+          type="submit"
+          value={auth.currentUser ? "Create Post" : "Login to create a post!"}
+        />
       </form>
     );
   }

@@ -16,6 +16,14 @@ class SignIn extends Component {
     this.setState({ email: '', password: '' });
   };
 
+  handleGoogleSignin = async () => {
+    try {
+      await signInWithGoogle()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   render() {
     const { email, password } = this.state;
 
@@ -37,7 +45,7 @@ class SignIn extends Component {
           onChange={this.handleChange}
         />
         <input type="submit" value="Sign In" />
-        <button onClick={() => signInWithGoogle()}>Sign In With Google</button>
+        <button onClick={this.handleGoogleSignin}>Sign In With Google</button>
       </form>
     );
   }
