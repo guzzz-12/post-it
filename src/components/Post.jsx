@@ -1,16 +1,37 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import {firestore, auth} from "../firebase";
 
 const Post = ({id, title, content, user, createdAt, stars, comments}) => {
-  const [error, setError] = useState(null);
+  const [starred, setStarred] = useState(false);
+
+  useEffect(() => {
+    const checkStars = async () => {
+      const docRef = firestore.collection("posts").doc(id)
+      const post = await docRef.get()
+      const stars = post.data().stars
+      const userId = auth.currentUser.uid
+  
+      if(!stars.includes(userId)) {
+        setStarred(false)
+      } else {
+        setStarred(true)
+      }
+    }
+
+    if(auth.currentUser) {
+      checkStars().then(() => console.log("Stars Checked"))
+    } else {
+      setStarred(false)
+    }
+
+    // eslint-disable-next-line
+  }, [])
 
   const handleDelete = async (id) => {
     try {
-      await firestore.collection("posts").doc(id).delete();
-      setError(null);  
+      await firestore.collection("posts").doc(id).delete(); 
     } catch (err) {
-      setError(err.message)
       console.log(err)
     }
   }
@@ -19,11 +40,34 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
     try {
       const docRef = firestore.collection("posts").doc(id)
       const post = await docRef.get()
-      const stars = post.data().stars  
-      await docRef.update({stars: stars + 1})  
+      const stars = post.data().stars
+      const userId = auth.currentUser.uid
+
+      if(!stars.includes(userId)) {
+        stars.push(userId)
+        await docRef.update({stars})
+        setStarred(true)
+      }
+
     } catch (err) {
-      setError(err.message)
       console.log(err)
+    }
+  }
+
+  const removeStar = async (id) => {
+    try {
+      const docRef = firestore.collection("posts").doc(id)
+      const post = await docRef.get()
+      const userId = auth.currentUser.uid
+  
+      const updatedStars = post.data().stars.filter(star => star !== userId)
+  
+      await docRef.update({stars: updatedStars})
+  
+      setStarred(false)
+      
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -39,7 +83,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
             <span role="img" aria-label="star">
               ⭐️
             </span>
-            {stars}
+            {stars.length}
           </p>
           <p>
             <span role="img" aria-label="comments">
@@ -54,7 +98,18 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
           {auth.currentUser && auth.currentUser.uid === user.uid &&
             <button className="delete" onClick={() => handleDelete(id)}>Delete</button>
           }
-          {auth.currentUser && <button className="star" onClick={() => addStar(id)}>Star</button>}
+          {auth.currentUser &&
+            <button
+              className="star"
+              onClick={!starred ? () => addStar(id) : () => removeStar(id)}
+            >
+              {starred ?
+                <span>Dislike <i className="far fa-thumbs-down"></i></span>
+                :
+                <span>Like <i className="far fa-thumbs-up"></i></span>
+              }
+            </button>
+          }
         </div>
       </div>
     </article>

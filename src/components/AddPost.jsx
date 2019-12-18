@@ -30,7 +30,7 @@ class AddPost extends Component {
           email: auth.currentUser.email,
           photoURL: auth.currentUser.photoURL,
         },
-        stars: 0,
+        stars: [],
         comments: 0,
         createdAt: new Date(),
       }
