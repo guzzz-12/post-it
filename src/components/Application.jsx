@@ -12,6 +12,7 @@ class Application extends Component {
 
   unsubscribeFromFirestore = null;
   unsubscribeFromAuth = null;
+  unsubscribeFromUsers = null;
 
   async componentDidMount() {
     this.unsubscribeFromFirestore = firestore.collection("posts").onSnapshot((snap) => {
@@ -23,9 +24,50 @@ class Application extends Component {
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
       const userDoc = await createUserProfileDoc(user)
-      console.log(userDoc)
       this.setState({user: userDoc})
     })
+
+    this.unsubscribeFromUsers = firestore.collection("users").onSnapshot((snap) => {
+      if(this.state.user && auth.currentUser) {
+        const user = snap.docs.find(el => {
+          return el.id === auth.currentUser.uid
+        })
+        
+        if(user && this.state.user.displayName !== user.data().displayName) {
+          this.updateUserPosts(user.id, user.data().displayName)
+        }
+
+        this.setState({
+          user: {
+            uid: user.id,
+            ...user.data()
+          }
+        })
+      }
+    })
+  }
+
+  updateUserPosts = async (uid, name) => {
+    let promises = []
+    let posts = []
+    let userPosts = []
+
+    const postsRef = firestore.collection("posts")
+
+    const postSnapshot = await postsRef.get()
+
+    postSnapshot.forEach(post => posts.push({id: post.id, ...post.data()}))
+
+    userPosts = posts.filter(post => post.user.uid === uid)
+
+    userPosts.forEach((post) => {
+      const updatedPost = {...post}
+      updatedPost.displayName = name;
+      updatedPost.user.displayName = name;
+      promises.push(postsRef.doc(post.id).update(updatedPost))
+    })
+
+    await Promise.all(promises)
   }
 
   componentWillUnmount() {
@@ -33,7 +75,6 @@ class Application extends Component {
   }
 
   render() {
-    console.log(auth.currentUser)
     const { posts } = this.state;
 
     return (
