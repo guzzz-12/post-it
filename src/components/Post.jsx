@@ -52,11 +52,9 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
         </div>
         <div>
           {auth.currentUser && auth.currentUser.uid === user.uid &&
-            <React.Fragment>
-              <button className="star" onClick={() => addStar(id)}>Star</button>
-              <button className="delete" onClick={() => handleDelete(id)}>Delete</button>
-            </React.Fragment>
+            <button className="delete" onClick={() => handleDelete(id)}>Delete</button>
           }
+          {auth.currentUser && <button className="star" onClick={() => addStar(id)}>Star</button>}
         </div>
       </div>
     </article>

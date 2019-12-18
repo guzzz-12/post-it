@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import {auth, createUserProfileDoc} from "../firebase";
 
 class SignUp extends Component {
-  state = { displayName: '', email: '', password: '' };
+  state = {
+    displayName: '',
+    email: '',
+    password: ''
+  };
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -9,10 +14,33 @@ class SignUp extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
-    this.setState({ displayName: '', email: '', password: '' });
+    try {
+      const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+
+      console.log(newUser)
+      
+      auth.currentUser.sendEmailVerification({url: "http://localhost:3000/"})
+      .then(() => {
+        console.log("Email verification sent, please check your inbox")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      
+      await createUserProfileDoc(newUser.user, {displayName: this.state.displayName, emailVerified: newUser.user.emailVerified})
+
+    } catch (error) {
+      console.log(error)
+    }
+
+    this.setState({
+      displayName: '',
+      email: '',
+      password: ''
+    });
   };
 
   render() {

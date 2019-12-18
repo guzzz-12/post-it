@@ -20,4 +20,58 @@ export const auth = firebase.auth()
 export const provider = new firebase.auth.GoogleAuthProvider()
 export const signInWithGoogle = () => auth.signInWithPopup(provider)
 
+export const createUserProfileDoc = async (user, data) => {
+  //Chequear si el usuario existe, si no existe, retornar
+  if(!user) {
+    return
+  }
+
+  //Referencia al documento del usuario
+  const userRef = firestore.collection("users").doc(user.uid)
+
+  //Si el documento no existe, crearlo
+  const userSnapshot = await userRef.get()
+  if(!userSnapshot.exists) {
+    const createdAt = new Date()
+    try {
+      await userRef.set({
+        displayName: user.displayName,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        photoURL: user.photoURL,
+        createdAt,
+        ...data
+      })
+    } catch (error) {
+      console.log(`Error creating user profile: ${error}`)
+    }
+  }
+
+  //Si el usuario verifica el email, cambiar emailVerified a true en la base de datos
+  if(userSnapshot.exists && !userSnapshot.data().emailVerified && auth.currentUser.emailVerified) {
+    await userRef.update({emailVerified: true})
+  }
+
+  return getUserDoc(user.uid)
+}
+
+export const getUserDoc = async (uid) => {
+  if(!uid) {
+    return null
+  }
+
+  try {
+    const userDoc = await firestore.collection("users").doc(uid).get()
+    const userData = userDoc.data()
+
+    return {
+      uid,
+      ...userData
+    }
+
+  } catch (error) {
+    console.log(`Error fetching user data: ${error}`)
+  }
+}
+
 export default firebase
