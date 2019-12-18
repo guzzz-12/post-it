@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {auth, createUserProfileDoc} from "../firebase";
+import md5 from "md5";
 
 class SignUp extends Component {
   state = {
@@ -19,8 +20,10 @@ class SignUp extends Component {
 
     try {
       const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-
-      console.log(newUser)
+      await newUser.user.updateProfile({
+        displayName: this.state.displayName,
+        photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
+      })
       
       auth.currentUser.sendEmailVerification({url: "http://localhost:3000/"})
       .then(() => {
@@ -30,17 +33,17 @@ class SignUp extends Component {
         console.log(err)
       })
       
-      await createUserProfileDoc(newUser.user, {displayName: this.state.displayName, emailVerified: newUser.user.emailVerified})
+      await createUserProfileDoc(newUser.user)
+
+      this.setState({
+        displayName: '',
+        email: '',
+        password: ''
+      });
 
     } catch (error) {
       console.log(error)
     }
-
-    this.setState({
-      displayName: '',
-      email: '',
-      password: ''
-    });
   };
 
   render() {

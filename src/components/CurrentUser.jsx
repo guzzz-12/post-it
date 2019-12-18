@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import {auth} from "../firebase";
 
-const CurrentUser = ({ displayName, photoURL, email, createdAt, children }) => {
+const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, children }) => {
   return (
     <section className="CurrentUser">
       <div className="CurrentUser--profile">
