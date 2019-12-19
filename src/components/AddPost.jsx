@@ -5,12 +5,12 @@ class AddPost extends Component {
   state = {
     title: '',
     content: '',
-    error: null
+    error: {}
   };
 
   handleChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, error: {} });
   };
 
   handleSubmit = async (event) => {
@@ -20,7 +20,7 @@ class AddPost extends Component {
 
     let post = {};
 
-    if(auth.currentUser) {
+    if(auth.currentUser && this.isFormValid({title, content})) {
       post = {
         title,
         content,
@@ -34,38 +34,73 @@ class AddPost extends Component {
         comments: 0,
         createdAt: new Date(),
       }
-    }
 
-    try {
-      await firestore.collection("posts").add(post);      
-      this.setState({
-        title: "",
-        content: "",
-        error: null
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        error: error.message
-      })
+      try {
+        await firestore.collection("posts").add(post);      
+        this.setState({
+          title: "",
+          content: "",
+          error: {}
+        })
+      } catch (error) {
+        console.log(error)
+        this.setState({
+          error: {
+            type: "postSubmit",
+            message: error.message
+          }
+        })
+      }
     }
   };
+
+  isFormValid = (data) => {
+    if(data.title === "" && data.content === "") {
+      this.setState({
+        error: {
+          type: "emptyFields",
+          message: "You must complete all fields"
+        }
+      })
+      return false
+    } else if(data.title === "") {
+      this.setState({
+        error: {
+          type: "postTitle",
+          message: "You must provide the title"
+        }
+      })
+      return false
+    } else if(data.content === "") {
+      this.setState({
+        error: {
+          type: "postContent",
+          message: "You must provide the content"
+        }
+      })
+      return false
+    }
+    return true
+  }
   
   render() {
+    const {error} = this.state;
     const { title, content } = this.state;
     return (
       <form onSubmit={this.handleSubmit} className="AddPost">
         <input
+          className={`${error.type === "postTitle" || error.type === "emptyFields" ? "post-validation-error" : ""}`}
           type="text"
           name="title"
-          placeholder="Title"
+          placeholder={`${error.type === "postTitle" || error.type === "emptyFields" ? error.message : "Title"}`}
           value={title}
           onChange={this.handleChange}
         />
         <input
+          className={`${error.type === "postContent" || error.type === "emptyFields" ? "post-validation-error" : ""}`}
           type="text"
           name="content"
-          placeholder="Body"
+          placeholder={`${error.type === "postContent" || error.type === "emptyFields" ? error.message : "Body"}`}
           value={content}
           onChange={this.handleChange}
         />
