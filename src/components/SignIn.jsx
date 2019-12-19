@@ -6,7 +6,11 @@ class SignIn extends Component {
   state = {
     email: '',
     password: '',
-    error: {}
+    error: {
+      status: false,
+      type: null,
+      message: null
+    }
   };
 
   handleChange = event => {
@@ -26,6 +30,7 @@ class SignIn extends Component {
       } catch (error) {
         this.setState({
           error: {
+            status: true,
             type: "submit",
             message: error.message
           }
@@ -41,11 +46,13 @@ class SignIn extends Component {
     } catch (error) {
       this.setState({
         error: {
+          status: true,
           type: "submit",
           message: "Error submiting, please try again."
         }
       }, () => this.clearErrorMessage())
       console.log(error.message)
+      return;
     }
   };
 
@@ -53,6 +60,7 @@ class SignIn extends Component {
     if(data.email === "" && data.password === "") {
       this.setState({
         error: {
+          status: true,
           type: "emptyFields",
           message: "You must complete all fields"
         }
@@ -61,6 +69,7 @@ class SignIn extends Component {
     } else if(data.email === "") {
       this.setState({
         error: {
+          status: true,
           type: "email",
           message: "You must provide a valid email"
         }
@@ -69,6 +78,7 @@ class SignIn extends Component {
     } else if(data.password === "") {
       this.setState({
         error: {
+          status: true,
           type: "password",
           message: "You must provide the password"
         }
@@ -81,21 +91,24 @@ class SignIn extends Component {
   clearErrorMessage = () => {
     setTimeout(() => {
       this.setState({
-        error: {}
+        error: {
+          ...this.state.error,
+          status: false
+        }
       })
-    }, 3900)
+    }, 3500)
   }
 
   render() {
     const { email, password, error } = this.state;
 
     return (
-      <div className="SignIn">
-        <DisplayErrors error={error.message} />
+      <div className="SignIn" style={{position: "relative", overflow: "hidden"}}>
+        <DisplayErrors error={error} />
         <form onSubmit={this.handleSubmit}>
           <h2>Sign In</h2>
           <input
-            className={`${error.type === "email" || error.type === "emptyFields" ? "input-validation-error" : ""}`}
+            className={`${error.status ? "input-validation-error" : ""}`}
             type="email"
             name="email"
             placeholder="Email"
@@ -103,14 +116,14 @@ class SignIn extends Component {
             onChange={this.handleChange}
           />
           <input
-            className={`${error.type === "password" || error.type === "emptyFields" ? "input-validation-error" : ""}`}
+            className={`${error.status ? "input-validation-error" : ""}`}
             type="password"
             name="password"
             placeholder="Password"
             value={password}
             onChange={this.handleChange}
           />
-          <button disabled={error.message} style={{marginBottom: "10px"}}>Sign In</button>
+          <button disabled={error.status} style={{marginBottom: "10px"}}>Sign In</button>
         </form>
         <button onClick={this.handleGoogleSignin}>Sign In With Google</button>
       </div>

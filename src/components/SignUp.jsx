@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import {auth, createUserProfileDoc} from "../firebase";
 import md5 from "md5";
+import DisplayErrors from './DisplayErrors';
 
 class SignUp extends Component {
   state = {
     displayName: '',
     email: '',
-    password: ''
+    password: '',
+    error: {
+      status: false,
+      type: null,
+      message: null
+    }
   };
 
   handleChange = event => {
@@ -18,43 +24,117 @@ class SignUp extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-      await newUser.user.updateProfile({
-        displayName: this.state.displayName,
-        photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
-      })
-      
-      auth.currentUser.sendEmailVerification({url: "http://localhost:3000/"})
-      .then(() => {
-        console.log("Email verification sent, please check your inbox")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      
-      await createUserProfileDoc(newUser.user)
-
-      this.setState({
-        displayName: '',
-        email: '',
-        password: ''
-      });
-
-    } catch (error) {
-      console.log(error)
+    if(this.isFormValid(this.state)) {
+      try {
+        const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+        await newUser.user.updateProfile({
+          displayName: this.state.displayName,
+          photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
+        })
+        
+        auth.currentUser.sendEmailVerification({url: "http://localhost:3000/"})
+        .then(() => {
+          console.log("Email verification sent, please check your inbox")
+        })
+        .catch((error) => {
+          this.setState({
+            error: {
+              status: true,
+              type: "emailSend",
+              message: error.message
+            }
+          }, () => this.clearErrorMessage())
+          console.log(error)
+        })
+        
+        await createUserProfileDoc(newUser.user)
+  
+        this.setState({
+          displayName: '',
+          email: '',
+          password: ''
+        });
+  
+      } catch (error) {
+        this.setState({
+          error: {
+            status: true,
+            type: "submit",
+            message: error.message
+          }
+        }, () => this.clearErrorMessage())
+        console.log(error)
+      }
     }
   };
 
+  isFormValid = (data) => {
+    if(data.displayName === "" && data.email === "" && data.password === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "emptyFields",
+          message: "You must complete all fields"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+    } else if(data.displayName === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "displayName",
+          message: "You must provide your username"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+    } else if(data.email === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "email",
+          message: "You must provide a valid email"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+    } else if(data.password === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "password",
+          message: "You must provide the password"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+    }
+    return true
+  }
+
+  clearErrorMessage = () => {
+    setTimeout(() => {
+      this.setState({
+        error: {
+          ...this.state.error,
+          status: false
+        }
+      })
+    }, 3500)
+  }
+
   render() {
-    const { displayName, email, password } = this.state;
+    const { displayName, email, password, error } = this.state;
 
     return (
-      <form className="SignUp" onSubmit={this.handleSubmit}>
+      <form
+        className="SignUp"
+        onSubmit={this.handleSubmit}
+        style={{position: "relative", overflow: "hidden"}}
+      >
+        <DisplayErrors error={error} />
         <h2>Sign Up</h2>
         <input
           type="text"
           name="displayName"
+          className={`${error.status ? "input-validation-error" : ""}`}
           placeholder="Display Name"
           value={displayName}
           onChange={this.handleChange}
@@ -62,6 +142,7 @@ class SignUp extends Component {
         <input
           type="email"
           name="email"
+          className={`${error.status ? "input-validation-error" : ""}`}
           placeholder="Email"
           value={email}
           onChange={this.handleChange}
@@ -69,11 +150,12 @@ class SignUp extends Component {
         <input
           type="password"
           name="password"
+          className={`${error.status ? "input-validation-error" : ""}`}
           placeholder="Password"
           value={password}
           onChange={this.handleChange}
         />
-        <input type="submit" value="Sign Up" />
+        <input disabled={error.status} type="submit" value="Sign Up" />
       </form>
     );
   }

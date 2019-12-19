@@ -1,16 +1,28 @@
 import React, { Component } from 'react';
 import {firestore, auth} from "../firebase";
+import DisplayErrors from './DisplayErrors';
 
 class AddPost extends Component {
   state = {
     title: '',
     content: '',
-    error: {}
+    error: {
+      status: false,
+      type: null,
+      message: null
+    }
   };
 
   handleChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value, error: {} });
+    this.setState({
+      [name]: value,
+      error: {
+        status: false,
+        type: null,
+        message: null
+      }
+    });
   };
 
   handleSubmit = async (event) => {
@@ -46,10 +58,11 @@ class AddPost extends Component {
         console.log(error)
         this.setState({
           error: {
+            status: true,
             type: "postSubmit",
             message: error.message
           }
-        })
+        }, () => this.clearErrorMessage())
       }
     }
   };
@@ -58,54 +71,72 @@ class AddPost extends Component {
     if(data.title === "" && data.content === "") {
       this.setState({
         error: {
+          status: true,
           type: "emptyFields",
           message: "You must complete all fields"
         }
-      })
+      }, () => this.clearErrorMessage())
       return false
     } else if(data.title === "") {
       this.setState({
         error: {
+          status: true,
           type: "postTitle",
           message: "You must provide the title"
         }
-      })
+      }, () => this.clearErrorMessage())
       return false
     } else if(data.content === "") {
       this.setState({
         error: {
+          status: true,
           type: "postContent",
           message: "You must provide the content"
         }
-      })
+      }, () => this.clearErrorMessage())
       return false
     }
     return true
   }
+
+  clearErrorMessage = () => {
+    setTimeout(() => {
+      this.setState({
+        error: {
+          ...this.state.error,
+          status: false
+        }
+      })
+    }, 3500)
+  }
   
   render() {
-    const {error} = this.state;
-    const { title, content } = this.state;
+    const { title, content, error } = this.state;
     return (
-      <form onSubmit={this.handleSubmit} className="AddPost">
+      <form
+        onSubmit={this.handleSubmit}
+        className="AddPost"
+        style={{position: "relative"}}
+      >
+        <DisplayErrors error={error} />
         <input
-          className={`${error.type === "postTitle" || error.type === "emptyFields" ? "input-validation-error" : ""}`}
+          className={`${error.status ? "input-validation-error" : ""}`}
           type="text"
           name="title"
-          placeholder={`${error.type === "postTitle" || error.type === "emptyFields" ? error.message : "Title"}`}
+          placeholder="Title"
           value={title}
           onChange={this.handleChange}
         />
         <input
-          className={`${error.type === "postContent" || error.type === "emptyFields" ? "input-validation-error" : ""}`}
+          className={`${error.status ? "input-validation-error" : ""}`}
           type="text"
           name="content"
-          placeholder={`${error.type === "postContent" || error.type === "emptyFields" ? error.message : "Body"}`}
+          placeholder="Body"
           value={content}
           onChange={this.handleChange}
         />
         <input
-          disabled={!auth.currentUser ? true : false}
+          disabled={!auth.currentUser || error.status ? true : false}
           className="create"
           type="submit"
           value={auth.currentUser ? "Create Post" : "Login to create a post!"}

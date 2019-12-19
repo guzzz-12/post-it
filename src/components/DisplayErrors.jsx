@@ -1,19 +1,16 @@
 import React, {useState, useEffect} from 'react';
 
 const DisplayErrors = (props) => {
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState({});
 
   useEffect(() => {
     setError(props.error)
-    setTimeout(() => {
-      setError(undefined)
-    }, 3500);
   }, [props.error])
 
   return (
-    <div className= {`${!error ? "display-errors display-errors--hidden" : "display-errors"}`} >
+    <div className= {`${!error.status ? "display-errors display-errors--hidden" : "display-errors"}`} >
       <p>Error:</p>
-      <p>{props.error}</p>
+      <p>{error.message}</p>
     </div>
   );
 }

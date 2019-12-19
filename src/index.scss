@@ -66,7 +66,7 @@ input[type='submit'],
   }
 }
 
-button:disabled {
+button:disabled, input[type="submit"]:disabled {
   color: rgb(165, 165, 165);
   border-color: transparent;
   background-color: rgb(226, 226, 226);
@@ -228,8 +228,9 @@ input[type="file"] {
   padding: 2rem;
   border: 2px solid red;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgb(252, 229, 229);
   transition: all 350ms;
+  z-index: 10;
 
   p:first-of-type {
     margin: 0;
@@ -248,5 +249,6 @@ input[type="file"] {
 .display-errors--hidden {
   transform: translate(-50%, -100%);
   opacity: 0;
+  z-index: -10;
   transition: all 350ms;
 }
