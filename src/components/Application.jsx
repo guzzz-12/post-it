@@ -72,6 +72,8 @@ class Application extends Component {
 
   componentWillUnmount() {
     this.unsubscribeFromFirestore();
+    this.unsubscribeFromAuth();
+    this.unsubscribeFromUsers();
   }
 
   render() {

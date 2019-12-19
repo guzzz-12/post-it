@@ -26,7 +26,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
     }
 
     // eslint-disable-next-line
-  }, [])
+  }, [auth.currentUser])
 
   const handleDelete = async (id) => {
     try {
