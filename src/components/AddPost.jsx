@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {firestore, auth} from "../firebase";
 import DisplayErrors from './DisplayErrors';
+import {UserContext} from "../providers/UserProvider";
 
 class AddPost extends Component {
   state = {
@@ -12,6 +13,8 @@ class AddPost extends Component {
       message: null
     }
   };
+
+  static contextType = UserContext;
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -111,6 +114,7 @@ class AddPost extends Component {
   }
   
   render() {
+    let user = this.context;
     const { title, content, error } = this.state;
     return (
       <form
@@ -136,10 +140,10 @@ class AddPost extends Component {
           onChange={this.handleChange}
         />
         <input
-          disabled={!auth.currentUser || error.status ? true : false}
+          disabled={!user || error.status ? true : false}
           className="create"
           type="submit"
-          value={auth.currentUser ? "Create Post" : "Login to create a post!"}
+          value={user ? "Create Post" : "Login to create a post!"}
         />
       </form>
     );

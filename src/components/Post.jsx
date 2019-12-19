@@ -1,9 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import moment from 'moment';
 import {firestore, auth} from "../firebase";
+import {UserContext} from "../providers/UserProvider";
 
 const Post = ({id, title, content, user, createdAt, stars, comments}) => {
   const [starred, setStarred] = useState(false);
+
+  const userfromContext = useContext(UserContext);
 
   useEffect(() => {
     const checkStars = async () => {
@@ -95,10 +98,10 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
           <p>{moment(createdAt).calendar()}</p>
         </div>
         <div>
-          {auth.currentUser && auth.currentUser.uid === user.uid &&
+          {userfromContext && userfromContext.uid === user.uid &&
             <button className="delete" onClick={() => handleDelete(id)}>Delete</button>
           }
-          {auth.currentUser &&
+          {userfromContext &&
             <button
               className="star"
               onClick={!starred ? () => addStar(id) : () => removeStar(id)}
