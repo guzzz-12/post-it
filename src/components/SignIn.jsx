@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  {signInWithGoogle} from "../firebase";
+import  {signInWithGoogle, auth} from "../firebase";
 
 class SignIn extends Component {
   state = { email: '', password: '' };
@@ -10,10 +10,17 @@ class SignIn extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = event => {
+  handleSubmit= async (event) => {
     event.preventDefault();
 
-    this.setState({ email: '', password: '' });
+    try {
+      await auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+      console.log("Logged in successfully")
+      this.setState({ email: '', password: '' });
+      
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   handleGoogleSignin = async () => {
@@ -28,25 +35,27 @@ class SignIn extends Component {
     const { email, password } = this.state;
 
     return (
-      <form className="SignIn" onSubmit={this.handleSubmit}>
-        <h2>Sign In</h2>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={this.handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={password}
-          onChange={this.handleChange}
-        />
-        <input type="submit" value="Sign In" />
+      <div className="SignIn">
+        <form onSubmit={this.handleSubmit}>
+          <h2>Sign In</h2>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={this.handleChange}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            onChange={this.handleChange}
+          />
+          <button style={{marginBottom: "10px"}}>Sign In</button>
+        </form>
         <button onClick={this.handleGoogleSignin}>Sign In With Google</button>
-      </form>
+      </div>
     );
   }
 }

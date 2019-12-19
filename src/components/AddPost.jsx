@@ -89,7 +89,7 @@ class AddPost extends Component {
     return (
       <form onSubmit={this.handleSubmit} className="AddPost">
         <input
-          className={`${error.type === "postTitle" || error.type === "emptyFields" ? "post-validation-error" : ""}`}
+          className={`${error.type === "postTitle" || error.type === "emptyFields" ? "input-validation-error" : ""}`}
           type="text"
           name="title"
           placeholder={`${error.type === "postTitle" || error.type === "emptyFields" ? error.message : "Title"}`}
@@ -97,7 +97,7 @@ class AddPost extends Component {
           onChange={this.handleChange}
         />
         <input
-          className={`${error.type === "postContent" || error.type === "emptyFields" ? "post-validation-error" : ""}`}
+          className={`${error.type === "postContent" || error.type === "emptyFields" ? "input-validation-error" : ""}`}
           type="text"
           name="content"
           placeholder={`${error.type === "postContent" || error.type === "emptyFields" ? error.message : "Body"}`}
