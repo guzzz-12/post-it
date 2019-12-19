@@ -66,12 +66,19 @@ input[type='submit'],
   }
 }
 
+button:disabled {
+  color: rgb(165, 165, 165);
+  border-color: transparent;
+  background-color: rgb(226, 226, 226);
+}
+
 input[type="file"] {
   margin: 1em 0;
   padding: 1em 0;
 }
 
 .Application {
+  position: relative;
   max-width: 600px;
   margin: auto;
 }
@@ -197,7 +204,7 @@ input[type="file"] {
 }
 
 /*----- Errores de formularios -----*/
-.post-validation-error {
+.input-validation-error {
   color: red;
   border: 1px solid red;
   background-color: rgba(255, 0, 0, 0.25);
@@ -205,4 +212,41 @@ input[type="file"] {
   &::placeholder {
     color: red
   }
+}
+
+.display-errors {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 450px;
+  padding: 2rem;
+  border: 2px solid red;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: all 350ms;
+
+  p:first-of-type {
+    margin: 0;
+    font-size: 2rem;
+    color: red;
+  }
+  
+  p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    // color: red;
+  }
+}
+
+.display-errors--hidden {
+  transform: translate(-50%, -100%);
+  opacity: 0;
+  transition: all 350ms;
 }
