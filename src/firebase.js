@@ -18,7 +18,14 @@ firebase.initializeApp(firebaseConfig)
 export const firestore = firebase.firestore()
 export const auth = firebase.auth()
 export const provider = new firebase.auth.GoogleAuthProvider()
-export const signInWithGoogle = () => auth.signInWithPopup(provider)
+export const signInWithGoogle = async () => {
+  try {
+    await auth.signInWithPopup(provider)  
+  } catch (error) {
+    console.log(error)
+    throw new Error(error.message)
+  }
+}
 
 export const createUserProfileDoc = async (user, data) => {
   //Chequear si el usuario existe, si no existe, retornar

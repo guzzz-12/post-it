@@ -48,10 +48,9 @@ class SignIn extends Component {
         error: {
           status: true,
           type: "submit",
-          message: "Error submiting, please try again."
+          message: error.message
         }
       }, () => this.clearErrorMessage())
-      console.log(error.message)
       return;
     }
   };
