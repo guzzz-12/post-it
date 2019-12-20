@@ -26,35 +26,33 @@ class SignUp extends Component {
 
     if(this.isFormValid(this.state)) {
       try {
-        const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-        await newUser.user.updateProfile({
-          displayName: this.state.displayName,
-          photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
+        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then((createdUser) => {
+          createdUser.user.updateProfile({
+            displayName: this.state.displayName,
+            photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
+          })
+          return createdUser
         })
-        
-        auth.currentUser.sendEmailVerification({url: "http://localhost:3000/"})
-        .then(() => {
-          console.log("Email verification sent, please check your inbox")
+        .then((createdUser) => {
+          createUserProfileDoc(createdUser.user)
+          this.sendVerification(createdUser.user)
+          this.setState({
+            displayName: '',
+            email: '',
+            password: ''
+          });
         })
         .catch((error) => {
           this.setState({
             error: {
               status: true,
-              type: "emailSend",
+              type: "submit",
               message: error.message
             }
           }, () => this.clearErrorMessage())
           console.log(error)
-        })
-        
-        await createUserProfileDoc(newUser.user)
-  
-        this.setState({
-          displayName: '',
-          email: '',
-          password: ''
-        });
-  
+        })  
       } catch (error) {
         this.setState({
           error: {
@@ -67,6 +65,23 @@ class SignUp extends Component {
       }
     }
   };
+
+  sendVerification = (user) => {
+    user.sendEmailVerification({url: "http://localhost:3000/"})
+    .then(() => {
+      console.log("Email verification sent, please check your inbox")
+    })
+    .catch((error) => {
+      this.setState({
+        error: {
+          status: true,
+          type: "emailSend",
+          message: error.message
+        }
+      }, () => this.clearErrorMessage())
+      console.log(error)
+    })
+  }
 
   isFormValid = (data) => {
     if(data.displayName === "" && data.email === "" && data.password === "") {
