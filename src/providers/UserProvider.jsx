@@ -46,15 +46,14 @@ const UserProvider = (props) => {
           return el.id === auth.currentUser.uid
         })
         
-        if(user && user.displayName !== user.data().displayName) {
-          updateUserPosts(user.id, user.data().displayName)
-          setUser({
-            user: {
-              uid: user.id,
-              ...user.data()
-            }
-          })
-        }
+        updateUserPosts(user.id, user.data().displayName)
+        
+        setUser({
+          user: {
+            uid: user.id,
+            ...user.data()
+          }
+        })
       }
     })
     
