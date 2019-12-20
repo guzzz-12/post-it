@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import {auth} from "../firebase";
+import {firestore, auth} from "../firebase";
 import {Link, withRouter} from "react-router-dom";
 
 const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, children, history }) => {
@@ -9,10 +9,16 @@ const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, c
     history.push("/")
   }
 
+  // Volver al avatar por defecto en caso de que error al cargar el avatar del storage o éste haya sido eliminado
+  const onLoadErrorHandler = async () => {
+    const userRef = firestore.collection("users").doc(auth.currentUser.uid);
+    await userRef.update({photoURL: auth.currentUser.photoURL})
+  }
+
   return (
     <section className="CurrentUser">
       <div className="CurrentUser--profile">
-        {photoURL && <img src={photoURL} alt={displayName} />}
+        {photoURL && <img src={photoURL} onError={onLoadErrorHandler} alt={displayName} />}
         <div className="CurrentUser--information">
           <Link to="/profile">
             <h2>{displayName}</h2>
