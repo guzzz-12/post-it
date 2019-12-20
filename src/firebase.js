@@ -20,7 +20,8 @@ export const auth = firebase.auth()
 export const provider = new firebase.auth.GoogleAuthProvider()
 export const signInWithGoogle = async () => {
   try {
-    await auth.signInWithPopup(provider)  
+    const credentials = await auth.signInWithPopup(provider)
+    return credentials;
   } catch (error) {
     console.log(error)
     throw new Error(error.message)

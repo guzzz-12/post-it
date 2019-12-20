@@ -42,7 +42,8 @@ class SignIn extends Component {
 
   handleGoogleSignin = async () => {
     try {
-      await signInWithGoogle()
+      const credentials = await signInWithGoogle();
+      console.log(credentials)
     } catch (error) {
       this.setState({
         error: {
