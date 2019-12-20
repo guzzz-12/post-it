@@ -94,6 +94,10 @@ input[type="file"] {
   }
 }
 
+a {
+  text-decoration: none;
+}
+
 .SignIn {
   @extend %authentication;
 }
