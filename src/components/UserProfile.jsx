@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {firestore, auth} from "../firebase";
+import {firestore, auth, storage} from "../firebase";
 
 class UserProfile extends Component {
   state = {
@@ -14,6 +14,10 @@ class UserProfile extends Component {
 
   get userRef() {
     return firestore.collection("users").doc(this.uid)
+  }
+
+  get file() {
+    return this.imageInputRef && this.imageInputRef.current.files[0]
   }
 
   onChangeHandler = (e) => {
@@ -32,6 +36,26 @@ class UserProfile extends Component {
         })
       } catch (error) {
         console.log(error)        
+      }
+    }
+
+    if(this.file) {
+      try {
+        const fileName = this.uid
+        const uploadResponse = await storage.ref()
+          .child("user-profiles")
+          .child(this.uid)
+          .child(fileName)
+          .put(this.file)
+
+        const downloadURL = await uploadResponse.ref.getDownloadURL()
+
+        await this.userRef.update({
+          photoURL: downloadURL
+        })
+
+      } catch (error) {
+        console.log(error)
       }
     }
   }
