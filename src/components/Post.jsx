@@ -77,8 +77,13 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
   return (
     <article className="Post">
       <div className="Post--content">
-        <h3>{title}</h3>
-        <div>{content}</div>
+        <div className="Post--content-img">
+          <img src={user.photoURL} alt="user avatar"/>
+        </div>
+        <div className="Post--content-text">
+          <h3>{title}</h3>
+          <div>{content}</div>
+        </div>
       </div>
       <div className="Post--meta">
         <div>

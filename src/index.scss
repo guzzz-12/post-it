@@ -162,9 +162,27 @@ a {
 }
 
 .Post--content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   padding: 1em;
+
   h3 {
     margin-top: 0;
+  }
+
+  &-img {
+    flex-basis: 10%;
+    margin-right: 1rem;
+
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  &-text {
+    flex-grow: 1;
   }
 }
 
