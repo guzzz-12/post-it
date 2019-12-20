@@ -9,7 +9,7 @@ const UserProvider = (props) => {
   let unsubscribeFromAuth = null;
   let unsubscribeFromUsers = null;
 
-  const updateUserPosts = async (uid, name) => {
+  const updateUserPosts = async (uid, data) => {
     let promises = []
     let posts = []
     let userPosts = []
@@ -24,8 +24,9 @@ const UserProvider = (props) => {
 
     userPosts.forEach((post) => {
       const updatedPost = {...post}
-      updatedPost.displayName = name;
-      updatedPost.user.displayName = name;
+      updatedPost.displayName = data.displayName;
+      updatedPost.user.displayName = data.displayName;
+      updatedPost.user.photoURL = data.photoURL;
       promises.push(postsRef.doc(post.id).update(updatedPost))
     })
 
@@ -40,13 +41,13 @@ const UserProvider = (props) => {
     });
 
     // eslint-disable-next-line
-    unsubscribeFromUsers = firestore.collection("users").onSnapshot((snap) => {
-      if(user && auth.currentUser) {
+    unsubscribeFromUsers = firestore.collection("users").onSnapshot(async (snap) => {
+      if(user.user && auth.currentUser) {
         const user = snap.docs.find(el => {
           return el.id === auth.currentUser.uid
         })
         
-        updateUserPosts(user.id, user.data().displayName)
+        await updateUserPosts(user.id, {...user.data()})
         
         setUser({
           user: {

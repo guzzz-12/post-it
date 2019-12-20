@@ -172,17 +172,15 @@ a {
   }
 
   &-img {
-    flex-basis: 10%;
+    flex-basis: 65px;
+    align-self: flex-start;
+    height: 65px;
     margin-right: 1rem;
-
-    img {
-      display: block;
-      width: 100%;
-    }
+    border-radius: 50%;
   }
 
   &-text {
-    flex-grow: 1;
+    flex-basis: 80%;
   }
 }
 

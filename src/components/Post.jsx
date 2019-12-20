@@ -9,20 +9,19 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
   const userfromContext = useContext(UserContext);
 
   useEffect(() => {
-    const checkStars = async () => {
-      const docRef = firestore.collection("posts").doc(id)
-      const post = await docRef.get()
-      const stars = post.data().stars
-      const userId = auth.currentUser.uid
-  
-      if(!stars.includes(userId)) {
-        setStarred(false)
-      } else {
-        setStarred(true)
-      }
-    }
-
     if(auth.currentUser) {
+      const checkStars = async () => {
+        const docRef = firestore.collection("posts").doc(id)
+        const post = await docRef.get()
+        const stars = post.data().stars
+        const userId = auth.currentUser.uid
+    
+        if(!stars.includes(userId)) {
+          setStarred(false)
+        } else {
+          setStarred(true)
+        }
+      }
       checkStars().then(() => console.log("Stars Checked"))
     } else {
       setStarred(false)
@@ -77,9 +76,14 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
   return (
     <article className="Post">
       <div className="Post--content">
-        <div className="Post--content-img">
-          <img src={user.photoURL} alt="user avatar"/>
-        </div>
+        <div
+          className="Post--content-img"
+          style={{
+            backgroundImage: `url(${user.photoURL})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        />
         <div className="Post--content-text">
           <h3>{title}</h3>
           <div>{content}</div>
