@@ -3,7 +3,10 @@ import {firestore, auth, storage} from "../firebase";
 
 class UserProfile extends Component {
   state = {
-    displayName: ""
+    displayName: "",
+    imgFile: "",
+    uploading: false,
+    updatingName: false
   }
 
   imageInputRef = React.createRef();
@@ -29,18 +32,30 @@ class UserProfile extends Component {
   onSubmitHandler = async (e) => {
     e.preventDefault();
     if(this.state.displayName) {
+      this.setState({
+        updatingName: true
+      })
+
       try {
         await this.userRef.update({displayName: this.state.displayName})
         this.setState({
-          displayName: ""
+          displayName: "",
+          updatingName: false
         })
       } catch (error) {
-        console.log(error)        
+        console.log(error)
+        this.setState({
+          updatingName: false
+        })       
       }
     }
 
     if(this.file) {
       try {
+        this.setState({
+          uploading: true
+        })
+
         const fileName = this.uid
         const uploadResponse = await storage.ref()
           .child("user-profiles")
@@ -54,7 +69,16 @@ class UserProfile extends Component {
           photoURL: downloadURL
         })
 
+        this.setState({
+          imgFile: "",
+          uploading: false
+        })
+
       } catch (error) {
+        this.setState({
+          imgFile: "",
+          uploading: false
+        })
         console.log(error)
       }
     }
@@ -74,11 +98,20 @@ class UserProfile extends Component {
           <input
             type="file"
             ref={this.imageInputRef}
+            name="imgFile"
+            onChange={this.onChangeHandler}
+            value={this.state.imgFile}
+            accept="image/png, image/jpeg"
           />
           <input
             type="submit"
             className="update"
-            value="Update profile"
+            disabled={this.state.uploading || this.state.updatingName}
+            value={
+              this.state.uploading ? "Updating avatar..." :
+              this.state.updatingName ? "Updating name..." :
+              "Update profile"
+            }
           />
         </form>
       </section>
