@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {firestore, auth} from "../firebase";
+import {firestore, auth, getUserDoc} from "../firebase";
 import DisplayErrors from './DisplayErrors';
 import {UserContext} from "../providers/UserProvider";
 
@@ -36,14 +36,15 @@ class AddPost extends Component {
     let post = {};
 
     if(auth.currentUser && this.isFormValid({title, content})) {
+      const author = await getUserDoc(auth.currentUser.uid)
       post = {
         title,
         content,
         user: {
-          uid: auth.currentUser.uid,
-          displayName: auth.currentUser.displayName,
-          email: auth.currentUser.email,
-          photoURL: auth.currentUser.photoURL,
+          uid: author.uid,
+          displayName: author.displayName,
+          email: author.email,
+          photoURL: author.photoURL,
         },
         stars: [],
         comments: 0,

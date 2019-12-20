@@ -46,6 +46,7 @@ export const createUserProfileDoc = async (user, data) => {
     const createdAt = new Date()
     try {
       await userRef.set({
+        uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         emailVerified: user.emailVerified,
