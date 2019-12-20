@@ -8,6 +8,7 @@ class SignUp extends Component {
     displayName: '',
     email: '',
     password: '',
+    loading: false,
     error: {
       status: false,
       type: null,
@@ -25,26 +26,35 @@ class SignUp extends Component {
     event.preventDefault();
 
     if(this.isFormValid(this.state)) {
+      this.setState({
+        loading: true
+      })
+
       try {
+        let newUser = null;
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then((createdUser) => {
           createdUser.user.updateProfile({
             displayName: this.state.displayName,
             photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
           })
-          return createdUser
+          newUser = createdUser;
         })
-        .then((createdUser) => {
-          createUserProfileDoc(createdUser.user)
-          this.sendVerification(createdUser.user)
-          this.setState({
-            displayName: '',
-            email: '',
-            password: ''
-          });
+        .then(() => {
+          this.sendVerification(newUser.user)
+          createUserProfileDoc(newUser.user)
+          // .then(() => {
+          //   this.setState({
+          //     displayName: '',
+          //     email: '',
+          //     password: '',
+          //     loading: false
+          //   });
+          // })
         })
         .catch((error) => {
           this.setState({
+            loading: false,
             error: {
               status: true,
               type: "submit",
@@ -55,6 +65,7 @@ class SignUp extends Component {
         })  
       } catch (error) {
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "submit",
@@ -136,7 +147,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { displayName, email, password, error } = this.state;
+    const { displayName, email, password, error, loading } = this.state;
 
     return (
       <form
@@ -170,7 +181,11 @@ class SignUp extends Component {
           value={password}
           onChange={this.handleChange}
         />
-        <input disabled={error.status} type="submit" value="Sign Up" />
+        <input
+          disabled={error.status || loading}
+          type="submit"
+          value={loading ? "Submitting..." : "Sign Up"}
+        />
       </form>
     );
   }

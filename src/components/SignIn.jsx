@@ -6,6 +6,7 @@ class SignIn extends Component {
   state = {
     email: '',
     password: '',
+    loading: false,
     error: {
       status: false,
       type: null,
@@ -23,12 +24,20 @@ class SignIn extends Component {
     event.preventDefault();
 
     if(this.isFormValid(this.state)) {
+      this.setState({
+        loading: true
+      })
+
       try {
         await auth.signInWithEmailAndPassword(this.state.email, this.state.password)
         this.setState({ email: '', password: '', error: {} });
+        this.setState({
+          loading: false
+        })
         
       } catch (error) {
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "submit",
@@ -41,11 +50,19 @@ class SignIn extends Component {
   };
 
   handleGoogleSignin = async () => {
+    this.setState({
+      loading: true
+    })
+
     try {
       const credentials = await signInWithGoogle();
+      this.setState({
+        loading: false
+      })
       console.log(credentials)
     } catch (error) {
       this.setState({
+        loading: false,
         error: {
           status: true,
           type: "submit",
@@ -100,7 +117,7 @@ class SignIn extends Component {
   }
 
   render() {
-    const { email, password, error } = this.state;
+    const { email, password, error, loading } = this.state;
 
     return (
       <div className="SignIn" style={{position: "relative", overflow: "hidden"}}>
@@ -123,9 +140,13 @@ class SignIn extends Component {
             value={password}
             onChange={this.handleChange}
           />
-          <button disabled={error.status} style={{marginBottom: "10px"}}>Sign In</button>
+          <button disabled={error.status || loading} style={{marginBottom: "10px"}}>
+            {loading ? "Submiting..." : "Sign In"}
+          </button>
         </form>
-        <button onClick={this.handleGoogleSignin}>Sign In With Google</button>
+        <button disabled={error.status || loading} onClick={this.handleGoogleSignin}>
+          {loading ? "Submiting..." : "Sign In With Google"}
+        </button>
       </div>
     );
   }
