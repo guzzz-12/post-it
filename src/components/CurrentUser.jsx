@@ -1,9 +1,14 @@
 import React from 'react';
 import moment from 'moment';
 import {auth} from "../firebase";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
-const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, children }) => {
+const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, children, history }) => {
+  const signOutHandler = async () => {
+    await auth.signOut()
+    history.push("/")
+  }
+
   return (
     <section className="CurrentUser">
       <div className="CurrentUser--profile">
@@ -18,10 +23,10 @@ const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, c
       </div>
       <div>
         <div>{children}</div>
-        <button onClick={() => auth.signOut()}>Sign Out</button>
+        <button onClick={signOutHandler}>Sign Out</button>
       </div>
     </section>
   );
 };
 
-export default CurrentUser;
+export default withRouter(CurrentUser);
