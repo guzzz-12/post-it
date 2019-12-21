@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import {Link} from "react-router-dom";
 
 const Comment = ({id, content, user, createdAt, currentUser, onDelete }) => {
   return (
@@ -7,7 +8,9 @@ const Comment = ({id, content, user, createdAt, currentUser, onDelete }) => {
       <div className="Comment__main-content">
         <div className="Comment__user-avatar" style={{backgroundImage: `url(${user.photoURL})`}}></div>
         <dir className="Comment__text">
-          <span className="Comment--author">{user.displayName}</span>
+          <Link to={`/users/${user.uid}`}>
+            <span className="Comment--author">{user.displayName}</span>
+          </Link>          
           <span className="Comment--content">{content}</span>
         </dir>
         {currentUser && user.uid === currentUser.uid &&
