@@ -15,7 +15,7 @@ const Posts = (props) => {
   return (
     <section className="Posts">
       {props.user && <AddPost/>}
-      <h2 className="Posts__title">Posts</h2>
+      {posts.length > 0 && <h2 className="Posts__title">Posts</h2>}
       {renderPosts()}
       {!props.user &&
         <div className="Posts__message">

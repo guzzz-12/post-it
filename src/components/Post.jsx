@@ -82,22 +82,22 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
 
   return (
     <article className="Post">
-      <div className="Post--content">
-        <div
-          className="Post--content-img"
-          style={{
-            backgroundImage: `url(${user.photoURL})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center"
-          }}
-        />
-        <div className="Post--content-text">
-          <Link to={`/post/${id}`}>
-            <h3>{title}</h3>
-          </Link>
-          <div>{content}</div>
-        </div>
-      </div>
+        <Link to={`/post/${id}`}>
+          <div className="Post--content">
+            <div
+              className="Post--content-img"
+              style={{
+                backgroundImage: `url(${user.photoURL})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }}
+            />
+            <div className="Post--content-text">
+              <h3>{title}</h3>
+              <div>{content}</div>
+            </div>
+          </div>
+        </Link>
       <div className="Post--meta">
         <div>
           <p>
@@ -111,7 +111,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
               {comments} Comments
             </span>
           </p>
-          <p>Posted by {user && user.displayName}</p>
+          <p>Posted by <Link to={`/users/${user.uid}`}>{user && user.displayName}</Link></p>
           <p>{moment(createdAt).calendar()}</p>
         </div>
         <div>
