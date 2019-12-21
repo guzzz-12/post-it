@@ -5,9 +5,7 @@ const Comment = ({id, content, user, createdAt, currentUser, onDelete }) => {
   return (
     <article className="Comment">
       <div className="Comment__main-content">
-        <div className="Comment__user-avatar">
-          <img src={user.photoURL} alt="User avatar"/>
-        </div>
+        <div className="Comment__user-avatar" style={{backgroundImage: `url(${user.photoURL})`}}></div>
         <dir className="Comment__text">
           <span className="Comment--author">{user.displayName}</span>
           <span className="Comment--content">{content}</span>
