@@ -18,7 +18,11 @@ const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, c
   return (
     <section className="CurrentUser">
       <div className="CurrentUser--profile">
-        {photoURL && <img src={photoURL} onError={onLoadErrorHandler} alt={displayName} />}
+        {photoURL &&
+          <div className="CurrentUser__img-container">
+            <img src={photoURL} onError={onLoadErrorHandler} alt={displayName} />
+          </div>
+        }
         <div className="CurrentUser--information">
           <Link to="/profile">
             <h2>{displayName}</h2>

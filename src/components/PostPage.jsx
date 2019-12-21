@@ -62,6 +62,7 @@ class PostPage extends Component {
     await this.commentsRef.add({
       user: this.props.user,
       createdAt: Date.now(),
+      postID: this.props.match.params.postId,
       ...comment
     })
   }

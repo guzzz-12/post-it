@@ -115,10 +115,20 @@ a {
   .CurrentUser--information {
     flex: 4;
   }
-  img {
-    flex: 1;
-    margin-right: 1em;
-    max-height: 150px;
+  &__img-container {
+    flex-basis: 150px;
+    height: 150px;
+    
+    img {
+      display: block;
+      flex: 1;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+      margin-right: 1em;
+    }
   }
   h2 {
     margin-bottom: 1em;
