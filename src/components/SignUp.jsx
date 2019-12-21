@@ -38,19 +38,10 @@ class SignUp extends Component {
             displayName: this.state.displayName,
             photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
           })
-          newUser = createdUser;
+          newUser = createdUser
         })
         .then(() => {
           this.sendVerification(newUser.user)
-          createUserProfileDoc(newUser.user)
-          // .then(() => {
-          //   this.setState({
-          //     displayName: '',
-          //     email: '',
-          //     password: '',
-          //     loading: false
-          //   });
-          // })
         })
         .catch((error) => {
           this.setState({

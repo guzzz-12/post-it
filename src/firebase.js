@@ -43,7 +43,7 @@ export const createUserProfileDoc = async (user, data) => {
   //Si el documento no existe, crearlo
   const userSnapshot = await userRef.get()
   if(!userSnapshot.exists) {
-    const createdAt = new Date()
+    const createdAt = Date.now()
     try {
       await userRef.set({
         uid: user.uid,

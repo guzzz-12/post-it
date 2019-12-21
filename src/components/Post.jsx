@@ -14,14 +14,16 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
       const checkStars = async () => {
         const docRef = firestore.collection("posts").doc(id)
         const post = await docRef.get()
-        const stars = post.data().stars
-        const userId = auth.currentUser.uid
-    
-        if(!stars.includes(userId)) {
-          setStarred(false)
-        } else {
-          setStarred(true)
-        }
+
+        if(post.exists) {
+          const stars = post.data().stars
+          const userId = auth.currentUser.uid
+          if(!stars.includes(userId)) {
+            setStarred(false)
+          } else {
+            setStarred(true)
+          }
+        }    
       }
       checkStars().then(() => console.log("Stars Checked"))
     } else {
@@ -47,6 +49,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
       // await Promise.all(promises)
       
       await firestore.collection("posts").doc(id).delete();
+      setStarred(false)
       history.push("/");
       
     } catch (err) {
