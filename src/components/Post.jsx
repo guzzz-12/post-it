@@ -82,7 +82,6 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
 
   return (
     <article className="Post">
-        <Link to={`/post/${id}`}>
           <div className="Post--content">
             <div
               className="Post--content-img"
@@ -93,11 +92,12 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
               }}
             />
             <div className="Post--content-text">
-              <h3>{title}</h3>
+              <Link to={`/post/${id}`}>
+                <h3>{title} <i className="fas fa-external-link-alt link-icon"></i></h3>
+              </Link>
               <div>{content}</div>
             </div>
           </div>
-        </Link>
       <div className="Post--meta">
         <div>
           <p>

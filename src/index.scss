@@ -300,6 +300,18 @@ a {
   h3 {
     margin-top: 0;
   }
+  
+  &-text a:hover {
+    text-decoration: underline;    
+  }
+
+  &-text i {
+    margin-left: 10px;
+
+    &:before {
+      color: #979797;
+    }
+  }
 
   &-img {
     flex-basis: 65px;
