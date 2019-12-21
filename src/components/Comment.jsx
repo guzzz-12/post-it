@@ -13,7 +13,10 @@ const Comment = ({id, content, user, createdAt, currentUser, onDelete }) => {
           <span className="Comment--content">{content}</span>
         </dir>
         {currentUser && user.uid === currentUser.uid &&
-          <div className="Comment__delete" onClick={() => onDelete(id)} title="Delete comment">
+          <div
+            className="Comment__delete"
+            onClick={() => onDelete(id)}
+            title="Delete comment">
             <i className="far fa-window-close"></i>
           </div>
         }
