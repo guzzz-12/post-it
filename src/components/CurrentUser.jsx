@@ -1,12 +1,13 @@
 import React from 'react';
-import moment from 'moment';
 import {firestore, auth} from "../firebase";
 import {Link, withRouter} from "react-router-dom";
 
-const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, children, history }) => {
+const CurrentUser = (props) => {
+  const {displayName, photoURL, children} = props.user;
+
   const signOutHandler = async () => {
     await auth.signOut()
-    history.push("/")
+    props.history.push("/")
   }
 
   // Volver al avatar por defecto en caso de que error al cargar el avatar del storage o éste haya sido eliminado
@@ -16,22 +17,20 @@ const CurrentUser = ({ displayName, photoURL, email, emailVerified, createdAt, c
   }
 
   return (
-    <section className="CurrentUser">
-      <div className="CurrentUser--profile">
-        {photoURL &&
-          <div className="CurrentUser__img-container">
-            <img src={photoURL} onError={onLoadErrorHandler} alt={displayName} />
+    <section className="user">
+      <div className="user__profile">
+        <Link to="/profile">
+          <div className="user__information">
+            {photoURL &&
+              <div className="user__img-container">
+                <img src={photoURL} onError={onLoadErrorHandler} alt={displayName} />
+              </div>
+            }
+            <p>{displayName}</p>
           </div>
-        }
-        <div className="CurrentUser--information">
-          <Link to="/profile">
-            <h2>{displayName}</h2>
-          </Link>
-          <p className="email">{email}</p>
-          <p className="created-at">{moment(createdAt).calendar()}</p>
-        </div>
+        </Link>
       </div>
-      <div>
+      <div className="user__signout-btn">
         <div>{children}</div>
         <button onClick={signOutHandler}>Sign Out</button>
       </div>

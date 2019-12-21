@@ -1,35 +1,43 @@
 import React, {useEffect, useState} from "react";
 import moment from "moment";
 import {firestore, auth} from "../firebase";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 const User = (props) => {
   const [user, setUser] = useState(null)
   const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
-    const userRef = firestore.collection("users").doc(props.match.params.userId);
-
-    const getUser = async () => {
-      const userSnap = await userRef.get()
-
-      if(!userSnap.exists) {
-        setNotFound(true);
-        setUser(null)
+    if(props.match.params.userId) {
+      const userRef = firestore.collection("users").doc(props.match.params.userId);
+  
+      const getUser = async () => {
+        const userSnap = await userRef.get()
+  
+        if(!userSnap.exists) {
+          setNotFound(true);
+          setUser(null)
+        }
+  
+        const user = userSnap.data()
+        setUser(user);
       }
+  
+      getUser();
 
-      const user = userSnap.data()
-      setUser(user);
+    } else if(props.currentUser) {
+      setUser(props.currentUser)
+    } else if(!props.match.params.userId && !props.currentUser && !auth.currentUser) {
+      props.history.push("/")
     }
-
-    getUser();
 
     return () => {
       setUser(null)
       setNotFound(false)
     }
 
-  }, [props.match.params.userId])
+    // eslint-disable-next-line
+  }, [props.match.params.userId, props.currentUser, auth.currentUser])
 
   return (
     <React.Fragment>
@@ -44,14 +52,12 @@ const User = (props) => {
               </div>
             }
             <div className="CurrentUser--information">
-              <Link to={`/users/${props.match.params.userId}`}>
                 <h2>{user.displayName}</h2>
-              </Link>
               <p className="email">{user.email}</p>
               <p className="created-at">{moment(user.createdAt).calendar()}</p>
             </div>
-          </div>
-        </section>      
+          </div>   
+        </section>
       }
     </React.Fragment>
   );

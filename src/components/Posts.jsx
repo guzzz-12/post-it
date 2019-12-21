@@ -13,6 +13,7 @@ const Posts = () => {
 
   return (
     <section className="Posts">
+      <h2>Add post</h2>
       <AddPost/>
       {renderPosts()}
     </section>

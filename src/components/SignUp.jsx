@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {auth, createUserProfileDoc} from "../firebase";
+import {auth} from "../firebase";
 import md5 from "md5";
 import DisplayErrors from './DisplayErrors';
 

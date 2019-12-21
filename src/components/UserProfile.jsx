@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {firestore, auth, storage} from "../firebase";
+import User from './User';
+import WithUser from './WithUser';
 
 class UserProfile extends Component {
   state = {
@@ -86,38 +88,41 @@ class UserProfile extends Component {
 
   render() {
     return (
-      <section className="UserProfile">
-        <form onSubmit={this.onSubmitHandler}>
-          <input
-            type="text"
-            value={this.state.displayName}
-            name="displayName"
-            onChange={this.onChangeHandler}
-            placeholder="Username"
-          />
-          <input
-            type="file"
-            ref={this.imageInputRef}
-            name="imgFile"
-            onChange={this.onChangeHandler}
-            value={this.state.imgFile}
-            accept="image/png, image/jpeg"
-          />
-          <input
-            type="submit"
-            className="update"
-            disabled={this.state.uploading || this.state.updatingName}
-            value={
-              this.state.uploading ? "Updating avatar..." :
-              this.state.updatingName ? "Updating name..." :
-              "Update profile"
-            }
-          />
-        </form>
-      </section>
+      <React.Fragment>
+        <User currentUser={this.props.user} />
+        <section className="UserProfile">
+          <form onSubmit={this.onSubmitHandler}>
+            <input
+              type="text"
+              value={this.state.displayName}
+              name="displayName"
+              onChange={this.onChangeHandler}
+              placeholder="Username"
+            />
+            <input
+              type="file"
+              ref={this.imageInputRef}
+              name="imgFile"
+              onChange={this.onChangeHandler}
+              value={this.state.imgFile}
+              accept="image/png, image/jpeg"
+            />
+            <input
+              type="submit"
+              className="update"
+              disabled={this.state.uploading || this.state.updatingName}
+              value={
+                this.state.uploading ? "Updating avatar..." :
+                this.state.updatingName ? "Updating name..." :
+                "Update profile"
+              }
+            />
+          </form>
+        </section>
+      </React.Fragment>
     );
   }
 }
 
-export default UserProfile;
+export default WithUser(UserProfile);
 
