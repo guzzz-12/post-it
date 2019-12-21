@@ -50,11 +50,28 @@ class PostPage extends Component {
   }
 
   createComment = async (comment) => {
+    const postCommentsUsersRef = await this.postsRef.get()
+    const commentsUsersIds = postCommentsUsersRef.data().commentsUsers
+    
+    if(!commentsUsersIds.includes(this.props.user.uid)) {
+      commentsUsersIds.push(this.props.user.uid)
+      
+      await this.postsRef.update({commentsUsers: commentsUsersIds})
+    }
+
     await this.commentsRef.add({
       user: this.props.user,
       createdAt: Date.now(),
       ...comment
     })
+  }
+
+  deleteComment = async (id) => {
+    try {
+      await this.commentsRef.doc(id).delete()      
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   componentWillUnmount() {
@@ -72,6 +89,7 @@ class PostPage extends Component {
           comments={comments}
           postId={post && post.id}
           onCreate={this.createComment}
+          onDelete={this.deleteComment}
           user={this.props.user}
         />
       </section>
