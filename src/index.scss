@@ -109,14 +109,15 @@ input[type="file"] {
   justify-content: space-between;
   align-items: center;
   
-  &__profile {
-    display: flex;
-    align-items: center;
-  }
+  // &__profile {
+  //   display: flex;
+  //   align-items: center;
+  // }
 
   &__img-container {
     flex-basis: 45px;
     height: 45px;
+    margin-right: 10px;
 
     img {
       display: block;
@@ -125,14 +126,19 @@ input[type="file"] {
       object-fit: cover;
       object-position: center;
       border-radius: 50%;
-      margin-right: 1em;
     }
   }
 
   &__information {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-right: 1rem;
+    margin-right: 2rem;
+
+    p {
+      margin: 0;
+      font-weight: bold;
+    }
     
     .email {
       margin: 0;
@@ -229,9 +235,26 @@ a {
   }
 }
 
-.AddPost,
 .AddComment {
   margin-bottom: 1em;
+}
+
+.AddPost {
+  padding: 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid #7dbbc3;
+  border-radius: 10px;
+
+  h2 {
+    text-align: center;
+    margin: 0 0 2rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #7dbbc3;
+  }
+
+  input:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 }
 
 .AddComment {
@@ -245,6 +268,21 @@ a {
   }
   input[type="submit"] {
     flex: 1;
+  }
+}
+
+.Posts {
+
+  &__message {
+    padding: 3rem;
+    border: 1px solid #7dbbc3;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  &__title {
+    text-align: center;
+    margin-top: 0;
   }
 }
 

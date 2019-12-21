@@ -2,8 +2,9 @@ import React, {useContext} from 'react'
 import Post from './Post';
 import AddPost from './AddPost';
 import { PostContext } from '../providers/PostsProvider';
+import WithUser from './WithUser';
 
-const Posts = () => {
+const Posts = (props) => {
   const posts = useContext(PostContext);
   const renderPosts = () => {
     return posts.map(post => {
@@ -13,11 +14,16 @@ const Posts = () => {
 
   return (
     <section className="Posts">
-      <h2>Add post</h2>
-      <AddPost/>
+      {props.user && <AddPost/>}
+      <h2 className="Posts__title">Posts</h2>
       {renderPosts()}
+      {!props.user &&
+        <div className="Posts__message">
+          <h2>Login to star creating your posts!</h2>
+        </div>
+      }
     </section>
   )
 }
 
-export default Posts;
+export default WithUser(Posts);

@@ -124,6 +124,7 @@ class AddPost extends Component {
         style={{position: "relative"}}
       >
         <DisplayErrors error={error} />
+        <h2>Create post</h2>
         <input
           className={`${error.status ? "input-validation-error" : ""}`}
           type="text"

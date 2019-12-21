@@ -26,7 +26,7 @@ const CurrentUser = (props) => {
                 <img src={photoURL} onError={onLoadErrorHandler} alt={displayName} />
               </div>
             }
-            <p>{displayName}</p>
+            <p>{displayName.split(" ")[0]}</p>
           </div>
         </Link>
       </div>
