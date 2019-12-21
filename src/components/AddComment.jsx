@@ -11,6 +11,8 @@ class AddComment extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+    this.props.onCreate(this.state)
+
     this.setState({ content: '' });
   };
 
@@ -21,7 +23,7 @@ class AddComment extends Component {
         <input
           type="text"
           name="content"
-          placeholder="Comment"
+          placeholder="Add comment"
           value={content}
           onChange={this.handleChange}
         />

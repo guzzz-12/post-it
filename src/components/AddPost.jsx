@@ -47,7 +47,7 @@ class AddPost extends Component {
           photoURL: author.photoURL,
         },
         stars: [],
-        comments: 0,
+        comments: [],
         createdAt: new Date(),
       }
 

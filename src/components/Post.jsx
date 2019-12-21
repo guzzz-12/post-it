@@ -2,8 +2,9 @@ import React, {useState, useEffect, useContext} from 'react';
 import moment from 'moment';
 import {firestore, auth} from "../firebase";
 import {UserContext} from "../providers/UserProvider";
+import {Link, withRouter} from "react-router-dom";
 
-const Post = ({id, title, content, user, createdAt, stars, comments}) => {
+const Post = ({id, title, content, user, createdAt, stars, comments, history}) => {
   const [starred, setStarred] = useState(false);
 
   const userfromContext = useContext(UserContext);
@@ -32,7 +33,22 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
 
   const handleDelete = async (id) => {
     try {
-      await firestore.collection("posts").doc(id).delete(); 
+      // const promises = []
+      // const commentsIds = []
+      // const comments = await firestore.collection("posts").doc(id).collection("comments").get()
+      // comments.forEach(doc => {
+      //   commentsIds.push(doc.id)
+      // })
+
+      // commentsIds.forEach(id => {
+      //   promises.push(firestore.collection("posts").doc(id).collection("comments").doc(id).delete())
+      // })
+      
+      // await Promise.all(promises)
+      
+      await firestore.collection("posts").doc(id).delete();
+      history.push("/");
+      
     } catch (err) {
       console.log(err)
     }
@@ -85,7 +101,9 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
           }}
         />
         <div className="Post--content-text">
-          <h3>{title}</h3>
+          <Link to={`/post/${id}`}>
+            <h3>{title}</h3>
+          </Link>
           <div>{content}</div>
         </div>
       </div>
@@ -128,4 +146,4 @@ const Post = ({id, title, content, user, createdAt, stars, comments}) => {
   );
 };
 
-export default Post;
+export default withRouter(Post);
