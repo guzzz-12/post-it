@@ -48,6 +48,7 @@ class AddPost extends Component {
         },
         stars: [],
         commentsUsers: [],
+        comments: 0,
         createdAt: Date.now(),
       }
 

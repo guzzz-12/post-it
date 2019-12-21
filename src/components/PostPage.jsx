@@ -52,6 +52,7 @@ class PostPage extends Component {
   createComment = async (comment) => {
     const postCommentsUsersRef = await this.postsRef.get()
     const commentsUsersIds = postCommentsUsersRef.data().commentsUsers
+    const commentsAmount = postCommentsUsersRef.data().comments
     
     if(!commentsUsersIds.includes(this.props.user.uid)) {
       commentsUsersIds.push(this.props.user.uid)
@@ -65,12 +66,18 @@ class PostPage extends Component {
       postID: this.props.match.params.postId,
       ...comment
     })
+
+    await this.postsRef.update({comments: commentsAmount + 1})
   }
 
   deleteComment = async (id) => {
+    const postCommentsUsersRef = await this.postsRef.get()
+    const commentsAmount = postCommentsUsersRef.data().comments
+
     try {
       //Borrar el comentario
       await this.commentsRef.doc(id).delete()
+      await this.postsRef.update({comments: commentsAmount - 1})
 
       //Eliminar la id del usuario de la propiedad commentsUsers del post cuando el usuario elimina todos sus comentarios
       const allComments = []

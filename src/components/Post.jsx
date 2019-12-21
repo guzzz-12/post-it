@@ -10,9 +10,10 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
   const userfromContext = useContext(UserContext);
 
   useEffect(() => {
+    const docRef = firestore.collection("posts").doc(id)
+
     if(auth.currentUser) {
       const checkStars = async () => {
-        const docRef = firestore.collection("posts").doc(id)
         const post = await docRef.get()
 
         if(post.exists) {
@@ -34,20 +35,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
   }, [auth.currentUser])
 
   const handleDelete = async (id) => {
-    try {
-      // const promises = []
-      // const commentsIds = []
-      // const comments = await firestore.collection("posts").doc(id).collection("comments").get()
-      // comments.forEach(doc => {
-      //   commentsIds.push(doc.id)
-      // })
-
-      // commentsIds.forEach(id => {
-      //   promises.push(firestore.collection("posts").doc(id).collection("comments").doc(id).delete())
-      // })
-      
-      // await Promise.all(promises)
-      
+    try {  
       await firestore.collection("posts").doc(id).delete();
       setStarred(false)
       history.push("/");
@@ -120,9 +108,8 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
           </p>
           <p>
             <span role="img" aria-label="comments">
-              🙊
+              {comments} Comments
             </span>
-            {comments}
           </p>
           <p>Posted by {user && user.displayName}</p>
           <p>{moment(createdAt).calendar()}</p>
