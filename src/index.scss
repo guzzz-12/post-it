@@ -206,14 +206,42 @@ a {
 
 .Comment {
   margin: 1em 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  
+  &__main-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  &__user-avatar {
+    flex-basis: 35px;
+    flex-shrink: 0;
+    height: 35px;
+    margin-right: 1rem;
+    
+    img {
+      display: block;
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
+  
+  &__text {
+    padding: 1rem;
+    margin: 0;
+    flex-grow: 1;
+    border-radius: 20px;
+    background-color: rgb(231, 231, 231);
+  }
 }
 
 .Comment--author {
   color: $comment-highlight-color;
   font-weight: bold;
-  &:after {
-    content: ': ';
-  }
+  margin-right: 1rem;
 }
 
 .Comment--timestamp {
