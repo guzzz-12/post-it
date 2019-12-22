@@ -4,7 +4,7 @@ import {firestore, auth} from "../firebase";
 import {UserContext} from "../providers/UserProvider";
 import {Link, withRouter} from "react-router-dom";
 
-const Post = ({id, title, content, user, createdAt, stars, comments, history}) => {
+const Post = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
   const [starred, setStarred] = useState(false);
 
   const userfromContext = useContext(UserContext);
@@ -47,7 +47,10 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
       await userRef.update({posts: userPosts})
       
       setStarred(false)
-      history.push("/");
+
+      if(location.pathname.startsWith(`/post/${id}`)) {
+        history.push("/");
+      }
       
     } catch (err) {
       console.log(err)
@@ -89,6 +92,12 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
     }
   }
 
+  const reducePostContent = () => {
+    const contentArray = content.split(" ")
+    const reducedContent = contentArray.splice(0, 30).join(" ")
+    return `${reducedContent}... [Click to continue reading...]`
+  }
+
   return (
     <article className="Post">
       <Link to={`/post/${id}`}>
@@ -103,7 +112,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
           />
           <div className="Post--content-text">
             <h3>{title}</h3>
-            <div>{content}</div>
+            <div>{reducePostContent()}</div>
           </div>
         </div>
       </Link>
