@@ -1,4 +1,4 @@
-$input-color: #7dbbc3;
+$input-color: rgb(71, 145, 241);
 $button-color: #f4b9b2;
 $info-color: #daedbd;
 $comment-highlight-color: #de6b48;
@@ -25,12 +25,14 @@ html,
 
 html,
 body,
-input {
+input,
+textarea {
   font: menu;
 }
 
 input,
-button {
+button,
+textarea {
   display: block;
   width: 100%;
   &:not(:last-child) {
@@ -43,11 +45,17 @@ button {
 
 input[type='text'],
 input[type='email'],
-input[type='password'] {
+input[type='password'],
+textarea {
   border: none;
   border-bottom: 1px solid $input-color;
   font-size: 1.5em;
   padding: 0.5em;
+}
+
+textarea.post-content {
+  border: 1px solid $input-color;
+  margin-bottom: 1rem;
 }
 
 button,
@@ -108,11 +116,6 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  // &__profile {
-  //   display: flex;
-  //   align-items: center;
-  // }
 
   &__img-container {
     flex-basis: 45px;
@@ -453,4 +456,80 @@ a {
   opacity: 0;
   z-index: -10;
   transition: all 350ms;
+}
+
+
+/*----- Estilos de la página del post -----*/
+.post-main {
+  // min-height: 100vh;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
+  &__title {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+
+    &-author {
+
+      a {
+        font-weight: bold;
+      }
+    }
+
+    &-date {
+      margin: 0;
+    }
+  }
+
+  &__content {
+    font-size: 1.5rem;
+  }
+
+  &__user-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    
+    button {
+      display: block;
+      width: 100px;
+      margin-bottom: 0;
+      
+      &:first-of-type {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  &__likes {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+
+    p {
+      margin: 0;
+      color: rgb(71, 145, 241);
+    }
+
+    i:before {
+      color: rgb(71, 145, 241);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;      
+  }
 }
