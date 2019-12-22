@@ -168,6 +168,16 @@ input[type="file"] {
   }
 }
 
+.profile-form {
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid $input-color;
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
 .Application {
   position: relative;
   max-width: 600px;
