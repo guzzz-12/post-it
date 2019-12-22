@@ -134,11 +134,12 @@ class AddPost extends Component {
           value={title}
           onChange={this.handleChange}
         />
-        <input
-          className={`${error.status ? "input-validation-error" : ""}`}
-          type="text"
+        <textarea
+          className={`${error.status ? "input-validation-error" : "post-content"}`}
           name="content"
-          placeholder="Body"
+          placeholder="Post content"
+          cols="30"
+          rows="5"
           value={content}
           onChange={this.handleChange}
         />

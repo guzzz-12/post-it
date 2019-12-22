@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Post from "./Post";
 import Comments from "./Comments";
 import {firestore} from "../firebase";
 import {collectIdsAndDocs} from "../utils";
 import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
+import PostMain from "./PostMain";
 
 class PostPage extends Component {
   
@@ -111,7 +111,7 @@ class PostPage extends Component {
 
     return (
       <section>
-        {post && <Post {...post} />}
+        {post && <PostMain post={post} />}
         <Comments
           comments={comments}
           postId={post && post.id}
