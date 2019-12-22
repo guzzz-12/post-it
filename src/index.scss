@@ -30,6 +30,10 @@ textarea {
   font: menu;
 }
 
+body {
+  margin: 0;
+}
+
 input,
 button,
 textarea {
@@ -85,21 +89,73 @@ input[type="file"] {
   padding: 1em 0;
 }
 
+.email-warning {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  border: 1px solid #fff;
+  background-color: $danger-color;
+  
+  &--hidden {
+    display: none;
+    top: 0;
+  }
+
+  h3 {
+    text-transform: uppercase;
+    color: #fff;
+  }
+  
+  p {
+    margin: 0;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  p:first-of-type {
+    margin-bottom: 10px;
+  }
+
+  p {
+    span{
+      padding: 5px;
+      color: #fff;
+      font-weight: bold;
+      border: 1px solid #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}
+
 .main-nav {
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+  // margin-bottom: 2rem;
+  background-color: $input-color;
+
+  
   &__content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    max-width: 600px;
     margin: 0 auto;
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #ccc;
+
+    h1 {
+      color: #fff;
+    }
   }
 
   &__signin-signup {
     border: 1px solid #ccc;
-    background-color: #7dbbc3;
+    background-color: #fff;
     
     &:hover {
       background-color: #a7e7f0;
@@ -116,12 +172,12 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  
   &__img-container {
     flex-basis: 45px;
     height: 45px;
     margin-right: 10px;
-
+    
     img {
       display: block;
       width: 45px;
@@ -131,16 +187,20 @@ input[type="file"] {
       border-radius: 50%;
     }
   }
-
+  
   &__information {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 2rem;
-
+    padding: 0.5rem 1rem;
+    
     p {
       margin: 0;
+      font-size: 1.1rem;
       font-weight: bold;
+      letter-spacing: 0.5px;
+      color: #fff;
     }
     
     .email {
@@ -158,7 +218,9 @@ input[type="file"] {
     button {
       display: block;
       width: 100%;
-      background-color: #de6b48;
+      font-family: inherit;
+      background-color: #fff;
+      border: 1px solid #ccc;
       cursor: pointer;
       
       &:hover {
