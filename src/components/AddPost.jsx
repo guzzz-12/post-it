@@ -18,9 +18,11 @@ class AddPost extends Component {
   static contextType = UserContext;
 
   componentDidMount() {
-    this.setState({
-      userRef: firestore.collection("users").doc(auth.currentUser.uid)
-    })
+    if(auth.currentUser) {
+      this.setState({
+        userRef: firestore.collection("users").doc(auth.currentUser.uid)
+      })
+    }
   }
 
   handleChange = event => {
@@ -158,10 +160,10 @@ class AddPost extends Component {
           onChange={this.handleChange}
         />
         <input
-          disabled={!user || error.status ? true : false}
+          disabled={!user || error.status || !user.emailVerified ? true : false}
           className="create"
           type="submit"
-          value={user ? "Create Post" : "Login to create a post!"}
+          value={user && user.emailVerified ? "Create Post" : user && !user.emailVerified ? "Verify your account to create posts" : "Login to create posts!"}
         />
       </form>
     );
