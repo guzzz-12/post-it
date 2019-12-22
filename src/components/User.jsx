@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import moment from "moment";
 import {firestore, auth} from "../firebase";
 import {withRouter} from "react-router-dom";
+import UserPosts from "./UserPosts";
+import UserInfo from "./UserInfo";
 
 const User = (props) => {
   const [user, setUser] = useState(null)
@@ -20,10 +21,11 @@ const User = (props) => {
         }
   
         const user = userSnap.data()
+        
         setUser(user);
       }
   
-      getUser();
+      getUser()
 
     } else if(props.currentUser) {
       setUser(props.currentUser)
@@ -44,20 +46,10 @@ const User = (props) => {
       {!user && !notFound && "Loading..."}
       {!user && notFound && "User not found..."}
       {user && !notFound &&
-        <section className="CurrentUser">
-          <div className="CurrentUser--profile">
-            {user.photoURL &&
-              <div className="CurrentUser__img-container">
-                <img src={user.photoURL} alt={user.displayName} />
-              </div>
-            }
-            <div className="CurrentUser--information">
-                <h2>{user.displayName}</h2>
-              <p className="email">{user.email}</p>
-              <p className="created-at">{moment(user.createdAt).calendar()}</p>
-            </div>
-          </div>   
-        </section>
+        <React.Fragment>
+          <UserInfo user={user} />
+          <UserPosts user={user} />
+        </React.Fragment>
       }
     </React.Fragment>
   );

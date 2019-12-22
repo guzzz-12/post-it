@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {firestore, auth, storage} from "../firebase";
-import User from './User';
-import WithUser from './WithUser';
+import WithUser from "./WithUser";
+import UserInfo from "./UserInfo";
+import UserPosts from "./UserPosts";
 
 class UserProfile extends Component {
   state = {
@@ -89,8 +90,9 @@ class UserProfile extends Component {
   render() {
     return (
       <React.Fragment>
-        <User currentUser={this.props.user} />
-        <section className="UserProfile">
+        <UserInfo user={this.props.user} />
+        <section className="profile-form">
+          <h2>Update your profile</h2>
           <form onSubmit={this.onSubmitHandler}>
             <input
               type="text"
@@ -119,6 +121,7 @@ class UserProfile extends Component {
             />
           </form>
         </section>
+        <UserPosts user={this.props.user} />
       </React.Fragment>
     );
   }
