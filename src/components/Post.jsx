@@ -82,28 +82,29 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
 
   return (
     <article className="Post">
-          <div className="Post--content">
-            <div
-              className="Post--content-img"
-              style={{
-                backgroundImage: `url(${user.photoURL})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center"
-              }}
-            />
-            <div className="Post--content-text">
-              <Link to={`/post/${id}`}>
-                <h3>{title} <i className="fas fa-external-link-alt link-icon"></i></h3>
-              </Link>
-              <div>{content}</div>
-            </div>
+      <Link to={`/post/${id}`}>
+        <div className="Post--content">
+          <div
+            className="Post--content-img"
+            style={{
+              backgroundImage: `url(${user.photoURL})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+          />
+          <div className="Post--content-text">
+            <h3>{title}</h3>
+            <div>{content}</div>
           </div>
+        </div>
+      </Link>
       <div className="Post--meta">
         <div>
           <p>
             <span role="img" aria-label="star">
-              ⭐️
+              <i className="far fa-thumbs-up" />
             </span>
+            {" "}
             {stars.length}
           </p>
           <p>
