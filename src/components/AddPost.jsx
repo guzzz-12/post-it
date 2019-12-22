@@ -7,6 +7,7 @@ class AddPost extends Component {
   state = {
     title: '',
     content: '',
+    userRef: null,
     error: {
       status: false,
       type: null,
@@ -15,6 +16,12 @@ class AddPost extends Component {
   };
 
   static contextType = UserContext;
+
+  componentDidMount() {
+    this.setState({
+      userRef: firestore.collection("users").doc(auth.currentUser.uid)
+    })
+  }
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -53,12 +60,19 @@ class AddPost extends Component {
       }
 
       try {
-        await firestore.collection("posts").add(post);      
+        const newPost = await firestore.collection("posts").add(post);      
         this.setState({
           title: "",
           content: "",
           error: {}
         })
+
+        const userSnap = await this.state.userRef.get()
+        const userPosts = userSnap.data().posts
+        userPosts.push(newPost.id)
+
+        await this.state.userRef.update({posts: userPosts})
+
       } catch (error) {
         console.log(error)
         this.setState({

@@ -37,6 +37,15 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history}) =
   const handleDelete = async (id) => {
     try {  
       await firestore.collection("posts").doc(id).delete();
+
+      const userRef = firestore.collection("users").doc(userfromContext.uid)
+      const userSnap = await userRef.get()
+      const userPosts = userSnap.data().posts
+      const deletedPostIndex = userPosts.indexOf(id)
+      userPosts.splice(deletedPostIndex, 1)
+      
+      await userRef.update({posts: userPosts})
+      
       setStarred(false)
       history.push("/");
       

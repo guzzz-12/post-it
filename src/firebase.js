@@ -51,6 +51,7 @@ export const createUserProfileDoc = async (user, data) => {
         email: user.email,
         emailVerified: user.emailVerified,
         photoURL: user.photoURL,
+        posts: [],
         createdAt,
         ...data
       })

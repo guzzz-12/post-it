@@ -35,8 +35,16 @@ const PostMain = (props) => {
   const handleDelete = async (id) => {
     try {  
       await firestore.collection("posts").doc(id).delete();
-      props.history.push("/");
       
+      const userRef = firestore.collection("users").doc(props.user.uid)
+      const userSnap = await userRef.get()
+      const userPosts = userSnap.data().posts
+      const deletedPostIndex = userPosts.indexOf(id)
+      userPosts.splice(deletedPostIndex, 1)
+      
+      await userRef.update({posts: userPosts})
+
+      props.history.push("/");
     } catch (err) {
       console.log(err)
     }
