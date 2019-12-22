@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import WithUser from "./WithUser";
 
 class AddComment extends Component {
   state = { content: '' };
@@ -22,15 +23,22 @@ class AddComment extends Component {
       <form onSubmit={this.handleSubmit} className="AddComment">
         <input
           type="text"
+          disabled={this.props.user && !this.props.user.emailVerified}
           name="content"
           placeholder="Add comment"
           value={content}
           onChange={this.handleChange}
         />
-        <input className="create" type="submit" value="Create Comment" />
+        <input
+          disabled={this.props.user && !this.props.user.emailVerified}
+          className="create"
+          type="submit"
+          value={`${this.props.user && !this.props.user.emailVerified ?
+            "Verify your account to add comments" : "Add comment"}`}
+        />
       </form>
     );
   }
 }
 
-export default AddComment;
+export default WithUser(AddComment);
