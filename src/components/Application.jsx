@@ -10,16 +10,18 @@ import UserProfile from './UserProfile';
 class Application extends Component {
   render() {
     return (
-      <main className="Application">
+      <React.Fragment>
         <Nav />
-        <Switch>
-          <Route exact path="/" component={Posts} />
-          <Route exact path="/signin-signup" component={SignInAndSignUp} />
-          <Route exact path="/profile" component={UserProfile} />
-          <Route exact path="/post/:postId" component={PostPage} />
-          <Route exact path="/users/:userId" component={User} />
-        </Switch>
-      </main>
+        <main className="Application">
+          <Switch>
+            <Route exact path="/" component={Posts} />
+            <Route exact path="/signin-signup" component={SignInAndSignUp} />
+            <Route exact path="/profile" component={UserProfile} />
+            <Route exact path="/post/:postId" component={PostPage} />
+            <Route exact path="/users/:userId" component={User} />
+          </Switch>
+        </main>
+      </React.Fragment>
     );
   }
 }

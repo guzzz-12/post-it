@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {auth} from "../firebase";
+import {auth, createUserProfileDoc} from "../firebase";
 import md5 from "md5";
 import DisplayErrors from './DisplayErrors';
 
@@ -41,6 +41,7 @@ class SignUp extends Component {
           newUser = createdUser
         })
         .then(() => {
+          createUserProfileDoc(newUser.user)
           this.sendVerification(newUser.user)
         })
         .catch((error) => {
