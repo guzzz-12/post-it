@@ -3,6 +3,7 @@ import moment from 'moment';
 import {firestore, auth} from "../firebase";
 import {UserContext} from "../providers/UserProvider";
 import {Link, withRouter} from "react-router-dom";
+import ReactHtmlParser from 'react-html-parser';
 
 const Post = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
   const [starred, setStarred] = useState(false);
@@ -112,7 +113,7 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history, lo
           />
           <div className="Post--content-text">
             <h3>{title}</h3>
-            <div>{reducePostContent()}</div>
+            <div>{ReactHtmlParser(reducePostContent())}</div>
           </div>
         </div>
       </Link>

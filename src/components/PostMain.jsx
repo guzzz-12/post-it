@@ -3,6 +3,7 @@ import moment from "moment";
 import {Link, withRouter} from "react-router-dom";
 import {firestore, auth} from "../firebase";
 import WithUser from "./WithUser";
+import ReactHtmlParser from 'react-html-parser';
 
 const PostMain = (props) => {
   const [starred, setStarred] = useState(false);
@@ -96,7 +97,7 @@ const PostMain = (props) => {
           <p className="post-main__info-date">{moment(props.post.createdAt).calendar()}</p>
         </div>
         <div className="post-main__content">
-          <p>{props.post.content}</p>
+          <p>{ReactHtmlParser(props.post.content)}</p>
         </div>
       </article>
       <div className="post-main__user-actions">
