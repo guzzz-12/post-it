@@ -3,6 +3,7 @@ import {firestore, auth} from "../firebase";
 import {withRouter} from "react-router-dom";
 import UserPosts from "./UserPosts";
 import UserInfo from "./UserInfo";
+import Spinner from "./Spinner/Spinner";
 
 const User = (props) => {
   const [user, setUser] = useState(null)
@@ -43,7 +44,7 @@ const User = (props) => {
 
   return (
     <React.Fragment>
-      {!user && !notFound && "Loading..."}
+      {!user && !notFound && <Spinner />}
       {!user && notFound && "User not found..."}
       {user && !notFound &&
         <React.Fragment>

@@ -1,10 +1,19 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import WithUser from "./WithUser";
 import CurrentUser from "./CurrentUser";
 import EmailVerificationWarning from "./EmailVerificationWarning";
+import Spinner from "./Spinner/Spinner";
 
 const Nav = (props) => {
+  const [userLoaded, setUserLoaded] = useState(false);
+
+  useEffect(() => {
+    if(props.user || props.user === undefined) {
+      setUserLoaded(true)
+    }
+  }, [props.user])
+
   return (
     <React.Fragment>
       <nav
@@ -13,15 +22,19 @@ const Nav = (props) => {
       >
         <div className="main-nav__content">
           <Link to="/"><h1>Think Piece</h1></Link>
-          {!props.user ?
-            <div className="main-nav__signin-signup">
-              <Link to="/signin-signup">Sing In or Sign Up</Link>
-            </div>
-            :
-            <div className="main-nav__current-user">
-              <CurrentUser user={props.user} />
-            </div>
-          }
+          <div style={{position: "relative", minHeight:"2rem", minWidth: "150px"}}>
+            {!userLoaded && <Spinner transparent={true} small={true} white={true}/>}
+            {!props.user && userLoaded &&
+              <div className="main-nav__signin-signup">
+                <Link to="/signin-signup">Sing In or Sign Up</Link>
+              </div>
+            }
+            {props.user && userLoaded &&
+              <div className="main-nav__current-user">
+                <CurrentUser user={props.user} />
+              </div>            
+            }
+          </div>
         </div>
       </nav>
       <EmailVerificationWarning user={props.user} />
