@@ -101,15 +101,27 @@ class UserProfile extends Component {
         <section className="profile-form">
           <h2>Update your profile</h2>
           <form onSubmit={this.onSubmitHandler}>
+            <div className="profile-form__username">
+              <input
+                type="text"
+                value={this.state.displayName}
+                name="displayName"
+                onChange={this.onChangeHandler}
+                placeholder="Update username"
+              />
+            </div>
+            <div>
+              <label
+                className="profile-form__upload-btn"
+                htmlFor="upload-image"
+              >
+                {`${(this.state.imgFile && "File: " + this.state.imgFile.split('\\')[2]) || "Choose new avatar"}`}
+              </label>
+            </div>
             <input
-              type="text"
-              value={this.state.displayName}
-              name="displayName"
-              onChange={this.onChangeHandler}
-              placeholder="Username"
-            />
-            <input
+              style={{display: "none"}}
               type="file"
+              id="upload-image"
               ref={this.imageInputRef}
               name="imgFile"
               onChange={this.onChangeHandler}
@@ -119,7 +131,8 @@ class UserProfile extends Component {
             <input
               type="submit"
               className="update"
-              disabled={this.state.uploading || this.state.updatingName}
+              id="update"
+              disabled={this.state.uploading || this.state.updatingName || !this.state.displayName && !this.state.imgFile}
               value={
                 this.state.uploading ? "Updating avatar..." :
                 this.state.updatingName ? "Updating name..." :

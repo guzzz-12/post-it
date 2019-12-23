@@ -69,8 +69,9 @@ input[type='submit'],
   width: 100%;
   font-size: 1.1em;
   padding: 0.5em;
+  cursor: pointer;
   @include button($button-color);
-  &.star, &.create, &.update {
+  &.star, &.create {
     @include button($input-color);
   }
   &.delete {
@@ -248,6 +249,34 @@ input[type="file"] {
 
   h2 {
     margin-top: 0;
+  }
+
+  &__username {
+    display: block;
+    margin-bottom: 2rem;
+  }
+
+  &__upload-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: #fff;
+    background-color: $input-color;
+    cursor: pointer;
+  }
+
+  & #update {
+    padding: 1rem;
+    color: #fff;
+    background-color: $danger-color;
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: auto;
+    }
   }
 }
 
