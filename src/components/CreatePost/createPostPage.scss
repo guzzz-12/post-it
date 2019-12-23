@@ -1,0 +1,24 @@
+.create-post-page {
+
+  &__header {
+
+  }
+
+  &__data {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+
+  &__title-input {
+    margin-bottom: 2rem;
+    border-bottom: none;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+
+  &__submit-post {
+
+  }
+}

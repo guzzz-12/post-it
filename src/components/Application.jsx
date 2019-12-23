@@ -6,6 +6,7 @@ import User from "./User";
 import Nav from "./Nav";
 import SignInAndSignUp from "./SignInAndSignUp";
 import UserProfile from './UserProfile';
+import CreatePostPage from './CreatePost/CreatePostPage';
 
 class Application extends Component {
   render() {
@@ -15,6 +16,7 @@ class Application extends Component {
         <main className="Application">
           <Switch>
             <Route exact path="/" component={Posts} />
+            <Route exact path="/create-post" component={CreatePostPage} />
             <Route exact path="/signin-signup" component={SignInAndSignUp} />
             <Route exact path="/profile" component={UserProfile} />
             <Route exact path="/post/:postId" component={PostPage} />

@@ -30,6 +30,9 @@ const CurrentUser = (props) => {
           </div>
         </Link>
       </div>
+      <div className="user__create-post">
+        <button><Link to="/create-post">Create post</Link></button>
+      </div>
       <div className="user__signout-btn">
         <div>{children}</div>
         <button onClick={signOutHandler}>Sign Out</button>
