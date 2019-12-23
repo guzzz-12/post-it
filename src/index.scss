@@ -444,14 +444,28 @@ a {
 }
 
 .Post--meta {
-  padding: 0.5em;
-  background-color: $info-color;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.5em;
+  background-color: $input-color;
   p {
     display: inline-block;
     margin: 1em;
+    color: #fff;
+
+    span {
+      color: #fff;
+      
+      i:before {
+        color: #fff;
+      }
+
+    }
+    
+    a {
+      color: #fff;
+    }
   }
   button {
     display: inline-block;
