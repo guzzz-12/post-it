@@ -1,0 +1,20 @@
+.main-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  color: #fff;
+  background-color: rgb(71, 145, 241);
+
+  &__container {
+    max-width: 600px;
+    margin: auto;
+  }
+
+  p {
+    text-transform: uppercase;
+    color: #fff;
+    // text-align: center;
+  }
+}

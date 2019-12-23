@@ -7,6 +7,7 @@ import Nav from "./Nav";
 import SignInAndSignUp from "./SignInAndSignUp";
 import UserProfile from './UserProfile';
 import CreatePostPage from './CreatePost/CreatePostPage';
+import Footer from './Footer/Footer';
 
 class Application extends Component {
   render() {
@@ -23,6 +24,7 @@ class Application extends Component {
             <Route exact path="/users/:userId" component={User} />
           </Switch>
         </main>
+        <Footer />
       </React.Fragment>
     );
   }
