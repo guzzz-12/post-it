@@ -1,6 +1,5 @@
 import React, {useContext} from 'react'
 import Post from './Post';
-import AddPost from './AddPost';
 import { PostContext } from '../providers/PostsProvider';
 import WithUser from './WithUser';
 
@@ -14,7 +13,6 @@ const Posts = (props) => {
 
   return (
     <section className="Posts">
-      {props.user && <AddPost/>}
       {posts.length > 0 && <h2 className="Posts__title">Posts</h2>}
       {renderPosts()}
       {!props.user &&
