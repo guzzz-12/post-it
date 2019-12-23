@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {firestore, auth, storage} from "../firebase";
+import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
 import UserInfo from "./UserInfo";
 import UserPosts from "./UserPosts";
@@ -10,6 +11,12 @@ class UserProfile extends Component {
     imgFile: "",
     uploading: false,
     updatingName: false
+  }
+
+  componentDidMount() {
+    if(!auth.currentUser) {
+      this.props.history.push("/")
+    }
   }
 
   imageInputRef = React.createRef();
@@ -127,5 +134,5 @@ class UserProfile extends Component {
   }
 }
 
-export default WithUser(UserProfile);
+export default WithUser(withRouter(UserProfile));
 
