@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import  {signInWithGoogle, auth} from "../firebase";
 import DisplayErrors from './DisplayErrors';
+import {withRouter} from "react-router-dom";
 
 class SignIn extends Component {
   state = {
@@ -34,6 +35,8 @@ class SignIn extends Component {
         this.setState({
           loading: false
         })
+
+        this.props.history.push("/profile")
         
       } catch (error) {
         this.setState({
@@ -152,4 +155,4 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);
