@@ -164,6 +164,8 @@ input[type="file"] {
     a{
       display: block;
       padding: 1rem;
+      text-align: center;
+      text-transform: uppercase;
     }
   }
 }
@@ -357,6 +359,7 @@ a {
 }
 
 .Posts {
+  min-height: 50vh;
 
   &__message {
     padding: 3rem;

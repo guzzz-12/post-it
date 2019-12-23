@@ -7,9 +7,8 @@ import ReactHtmlParser from 'react-html-parser';
 
 const Post = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
   const [starred, setStarred] = useState(false);
-
   const userfromContext = useContext(UserContext);
-
+  
   useEffect(() => {
     const docRef = firestore.collection("posts").doc(id)
 
