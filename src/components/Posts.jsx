@@ -35,7 +35,7 @@ const Posts = (props) => {
 
   return (
     <React.Fragment>
-      {isLoading && <Spinner />}
+      {isLoading && <Spinner position="flex-start"/>}
       <section className="Posts">
         {posts.length > 0 && <h2 className="Posts__title">Posts</h2>}
         {renderPosts()}

@@ -1,9 +1,11 @@
 import React from "react";
 import moment from "moment";
+import Spinner from "./Spinner/Spinner";
 
 const UserPage = (props) => {
   return (
     <React.Fragment>
+      {!props.user && <Spinner/>}
       {props.user &&
         <section className="CurrentUser">
           <div className="CurrentUser--profile">
