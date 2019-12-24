@@ -10,7 +10,8 @@ const Comment = ({id, content, user, createdAt, currentUser, onDelete }) => {
         <dir className="Comment__text">
           <Link to={`/users/${user.uid}`}>
             <span className="Comment--author">{user.displayName}</span>
-          </Link>          
+          </Link>
+          {" "}       
           <span className="Comment--content">{content}</span>
         </dir>
         {currentUser && user.uid === currentUser.uid &&

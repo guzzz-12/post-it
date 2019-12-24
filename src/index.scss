@@ -386,8 +386,9 @@ a {
   &__content-input-img {
     flex-basis: 35px;
     height: 35px;
-    margin-right: 1rem;
+    margin-right: 10px;
     border-radius: 50%;
+    border: 1px solid #ccc;
 
     background-size: cover;
     background-position: center;
@@ -397,8 +398,13 @@ a {
     padding: 1rem;
     font-size: 1.1rem;
     border-radius: 100px;
-    background-color: #e7e7e7;
-    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    border: 1px solid #e7e7e7;
+
+    &:focus {
+      background-color: #e7e7e7;
+      border: 1px solid $input-color;
+    }
   }
 
   #AddComment__create-comment {
@@ -584,9 +590,9 @@ a {
 }
 
 .Comment--author {
-  color: $comment-highlight-color;
+  color: $input-color;
   font-weight: bold;
-  margin-right: 1rem;
+  // margin-right: 10px;
 }
 
 .Comment--timestamp {
