@@ -165,18 +165,22 @@ input[type="file"] {
   }
 
   &__signin-signup {
-    border: 1px solid #ccc;
-    background-color: #fff;
-    
-    &:hover {
-      background-color: #a7e7f0;
-    }
+    display: flex;
+    justify-content: space-between;
     
     a{
       display: block;
       padding: 1rem;
       text-align: center;
+      font-weight: bold;
+      color: #fff;
       text-transform: uppercase;
+      border-radius: 10px;
+      transition: all 350ms;
+
+      &:hover {
+        background-color: rgb(60, 117, 192);
+      }
     }
   }
 }
@@ -184,17 +188,17 @@ input[type="file"] {
 .user {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   
   &__img-container {
-    flex-basis: 45px;
-    height: 45px;
+    flex-basis: 35px;
+    height: 35px;
     margin-right: 10px;
     
     img {
       display: block;
-      width: 45px;
-      height: 45px;
+      width: 35px;
+      height: 35px;
       object-fit: cover;
       object-position: center;
       border-radius: 50%;
@@ -206,6 +210,12 @@ input[type="file"] {
     justify-content: center;
     align-items: center;
     padding: 0.5rem 1rem;
+    transition: all 350ms;
+    border-radius: 10px;
+
+    &:hover {
+      background-color: rgb(60, 117, 192);
+    }
     
     p {
       margin: 0;
@@ -225,22 +235,23 @@ input[type="file"] {
   }
 
   &__signout-btn, &__create-post {
+    display: flex;
+    align-items: stretch;
     
     button {
-      display: flex;
-      align-items: center;
       width: 100%;
       font-family: inherit;
       font-weight: bold;
-      color: #fff;
+      border-radius: 10px;
       background-color: transparent;
       border: 1px solid transparent;
+      color: #fff;
       cursor: pointer;
       transition: all 350ms;
       
       &:hover {
         transition: all 350ms;
-        background-color: rgb(42, 86, 145)
+        background-color: rgb(60, 117, 192);
       }
     }
   }
@@ -361,7 +372,41 @@ a {
 }
 
 .AddComment {
-  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__content-input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  &__content-input-img {
+    flex-basis: 35px;
+    height: 35px;
+    margin-right: 1rem;
+    border-radius: 50%;
+
+    background-size: cover;
+    background-position: center;
+  }
+
+  #AddComment__content-input {
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 100px;
+    background-color: #e7e7e7;
+    border: 1px solid #ccc;
+  }
+
+  #AddComment__create-comment {
+    display: block;
+    flex: 0 0;
+    background-color: yellow;
+    border: none;
+  }
 }
 
 .AddPost {
@@ -516,6 +561,7 @@ a {
     flex-grow: 1;
     border-radius: 20px;
     background-color: #e7e7e7;
+    border: 1px solid #ccc;
   }
 
   &__delete {

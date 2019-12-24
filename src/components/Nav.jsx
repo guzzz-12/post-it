@@ -25,9 +25,14 @@ const Nav = (props) => {
           <div style={{position: "relative", minHeight:"2rem", minWidth: "150px"}}>
             {!userLoaded && <Spinner transparent={true} small={true} white={true}/>}
             {!props.user && userLoaded &&
-              <div className="main-nav__signin-signup">
-                <Link to="/signin-signup">Sing In or Sign Up</Link>
+            <div className="main-nav__signin-signup">
+              <div className="main-nav__signin">
+                <Link to="/signin-signup">Sing In</Link>
               </div>
+              <div className="main-nav__signup">
+                <Link to="/signin-signup">Sign Up</Link>
+              </div>
+            </div>
             }
             {props.user && userLoaded &&
               <div className="main-nav__current-user">

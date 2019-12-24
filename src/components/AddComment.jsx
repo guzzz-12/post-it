@@ -21,21 +21,18 @@ class AddComment extends Component {
     const { content } = this.state;
     return (
       <form onSubmit={this.handleSubmit} className="AddComment">
-        <input
-          type="text"
-          disabled={this.props.user && !this.props.user.emailVerified}
-          name="content"
-          placeholder="Add comment"
-          value={content}
-          onChange={this.handleChange}
-        />
-        <input
-          disabled={this.props.user && !this.props.user.emailVerified}
-          className="create"
-          type="submit"
-          value={`${this.props.user && !this.props.user.emailVerified ?
-            "Verify your account to add comments" : "Add comment"}`}
-        />
+        <div className="AddComment__content-input-container">
+          <div className="AddComment__content-input-img" style={{backgroundImage: `url(${this.props.user.photoURL})`}}></div>
+          <input
+            type="text"
+            id="AddComment__content-input"
+            disabled={this.props.user && !this.props.user.emailVerified}
+            name="content"
+            placeholder="Add comment..."
+            value={content}
+            onChange={this.handleChange}
+          />
+        </div>
       </form>
     );
   }
