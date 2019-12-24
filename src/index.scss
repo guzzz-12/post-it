@@ -467,6 +467,11 @@ a {
   justify-content: flex-start;
   align-items: center;
   padding: 1em;
+  transition: all 350ms;
+
+  &:hover {
+    background-color: #e7e7e7;
+  }
 
   h3 {
     margin-top: 0;
@@ -654,6 +659,8 @@ a {
     margin-top: 0;
     margin-bottom: 1rem;
     font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: 400;
     text-align: center;
   }
 
@@ -682,12 +689,29 @@ a {
   &__user-actions {
     display: flex;
     justify-content: space-between;
-    align-items: center;    
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 100px;  
     
     button {
       display: block;
       width: 100px;
       margin-bottom: 0;
+      // background-color: transparent;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+
+      span {
+        color: #fff;
+
+        i {
+          &:before {
+            color: #fff;
+          }
+        }
+      }
       
       &:first-of-type {
         margin-right: 1rem;
