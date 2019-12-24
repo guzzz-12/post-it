@@ -21,7 +21,7 @@ const Nav = (props) => {
         style={{marginBottom: `${!props.user || (props.user && props.user.emailVerified) ? "2rem" : "0"}`}}
       >
         <div className="main-nav__content">
-          <Link to="/"><h1>Think Piece</h1></Link>
+          <Link to="/"><h1>Post It!</h1></Link>
           <div style={{position: "relative", minHeight:"2rem", minWidth: "150px"}}>
             {!userLoaded && <Spinner transparent={true} small={true} white={true}/>}
             {!props.user && userLoaded &&

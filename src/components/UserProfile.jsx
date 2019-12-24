@@ -5,15 +5,17 @@ import WithUser from "./WithUser";
 import UserInfo from "./UserInfo";
 import UserPosts from "./UserPosts";
 
-class UserProfile extends Component {
+class UserProfile extends Component {  
+  
   state = {
     displayName: "",
     imgFile: "",
     uploading: false,
     updatingName: false
   }
-
+  
   componentDidMount() {
+    document.title = "Post It! | Your Profile"
     if(!auth.currentUser) {
       this.props.history.push("/")
     }

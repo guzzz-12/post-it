@@ -8,6 +8,8 @@ import DisplayErrors from "../DisplayErrors";
 import "./createPostPage.scss";
 
 const CreatePostPage = (props) => {
+  document.title = "Post It! | Create Post"
+
   const user = useContext(UserContext);
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");

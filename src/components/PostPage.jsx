@@ -5,9 +5,9 @@ import {collectIdsAndDocs} from "../utils";
 import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
 import PostMain from "./PostMain";
+import Spinner from './Spinner/Spinner';
 
-class PostPage extends Component {
-  
+class PostPage extends Component {  
   state = {
     post: null,
     comments: []
@@ -21,6 +21,8 @@ class PostPage extends Component {
   commentsRef = this.postsRef.collection("comments")
   
   async componentDidMount() {
+    // document.title = `Post It! | ${}`
+
     try {
       this.unsubscribeFromPost = this.postsRef.onSnapshot(async (snapshot) => {
         if(!snapshot.exists) {
@@ -107,11 +109,14 @@ class PostPage extends Component {
     this.unsubscribeFromComments()
   }
   
-  render() {
+  render() {    
     const {post, comments} = this.state;
+
+    document.title = `Post It! ${!post ? "" : `| ${post.title}`}`
 
     return (
       <section className="generic-wrapper">
+        {!post && <Spinner />}
         {post && <PostMain post={post} />}
         <Comments
           comments={comments}

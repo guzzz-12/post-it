@@ -5,6 +5,8 @@ import WithUser from './WithUser';
 import Spinner from './Spinner/Spinner';
 
 const Posts = (props) => {
+  document.title = "Post It! | Home"
+
   const posts = useContext(PostContext);
   
   const [isLoading, setIsLoading] = useState(true);

@@ -42,6 +42,8 @@ const User = (props) => {
     // eslint-disable-next-line
   }, [props.match.params.userId, props.currentUser, auth.currentUser])
 
+  document.title = `Post It! ${!user ? "" : `| ${user.displayName}`}`
+
   return (
     <div className="generic-wrapper">
       {!user && !notFound && <Spinner />}

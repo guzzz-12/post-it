@@ -6,6 +6,8 @@ import WithUser from "./WithUser";
 import {withRouter} from "react-router-dom";
 
 const SignInAndSignUp = (props) => {
+  document.title = "Post It! | Signin - Signup"
+
   if(!props.user) {
     return (
       <div className="generic-wrapper">
