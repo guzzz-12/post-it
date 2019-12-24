@@ -58,11 +58,11 @@ class SignIn extends Component {
     })
 
     try {
-      const credentials = await signInWithGoogle();
+      await signInWithGoogle();
       this.setState({
         loading: false
       })
-      console.log(credentials)
+      
     } catch (error) {
       this.setState({
         loading: false,

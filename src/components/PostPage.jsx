@@ -33,19 +33,6 @@ class PostPage extends Component {
         this.setState({
           post: post
         })
-
-        // const postSnap = await this.postsRef.get()
-        // const postUser = postSnap.data().user.uid
-
-        // let userComments = []
-        // let promises = []
-
-        // if(auth.currentUser) {
-        //   const commentsQuery = this.commentsRef.where("user.uid", "==", `${auth.currentUser.uid}`)
-        //   const userCommentsRef = await commentsQuery.get()
-        //   const userCommentsSnap = userCommentsRef.docs
-        //   userCommentsSnap.forEach(comment => promises.push(comment.update({"user.displayName": })))
-        // }
       })
       
     } catch (error) {
@@ -53,11 +40,10 @@ class PostPage extends Component {
     }
 
     this.unsubscribeFromComments = this.commentsRef.onSnapshot((snapshot) => {
-      console.log("Comments changed!")
       const comments = snapshot.docs.map(doc => {
         return collectIdsAndDocs(doc)
       })
-      console.log(comments)
+      
       this.setState({
         comments: comments
       })
