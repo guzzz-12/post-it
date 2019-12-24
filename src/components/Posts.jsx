@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react'
-import Post from './Post';
+import PostPreview from './PostPreview';
 import { PostContext } from '../providers/PostsProvider';
 import WithUser from './WithUser';
 import Spinner from './Spinner/Spinner';
@@ -29,7 +29,7 @@ const Posts = (props) => {
 
   const renderPosts = () => {
     return posts.map(post => {
-      return <Post {...post} key={post.id} />
+      return <PostPreview {...post} key={post.id} />
     })
   }
 

@@ -5,7 +5,7 @@ import {UserContext} from "../providers/UserProvider";
 import {Link, withRouter} from "react-router-dom";
 import ReactHtmlParser from 'react-html-parser';
 
-const Post = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
+const PostPreview = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
   const [starred, setStarred] = useState(false);
   const userfromContext = useContext(UserContext);
   
@@ -35,22 +35,35 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history, lo
   }, [auth.currentUser])
 
   const handleDelete = async (id) => {
-    try {  
+    const commentsRef = firestore.collection("posts").doc(id).collection("comments");
+    try {
+      //Borrar el post
       await firestore.collection("posts").doc(id).delete();
 
+      //Borrar la id del post del documento del usuario que lo creó
       const userRef = firestore.collection("users").doc(userfromContext.uid)
       const userSnap = await userRef.get()
       const userPosts = userSnap.data().posts
       const deletedPostIndex = userPosts.indexOf(id)
-      userPosts.splice(deletedPostIndex, 1)
-      
+      userPosts.splice(deletedPostIndex, 1)      
       await userRef.update({posts: userPosts})
       
       setStarred(false)
 
-      if(location.pathname.startsWith(`/post/${id}`)) {
-        history.push("/");
-      }
+      // Borrar los comentarios asociados al post que se eliminó
+      let commentsDocs = []
+      const commentsIds = []
+      const deleteCommentsPromises = []
+
+      commentsRef.get()
+      .then((snap) => {
+        commentsDocs = snap.docs
+      })
+      .then(() => {
+        commentsDocs.forEach(doc => commentsIds.push(doc.id))
+        commentsIds.forEach(commentId => deleteCommentsPromises.push(commentsRef.doc(commentId).delete()))
+        Promise.all(deleteCommentsPromises).then(() => console.log("Post comments removed"))
+      })
       
     } catch (err) {
       console.log(err)
@@ -155,4 +168,4 @@ const Post = ({id, title, content, user, createdAt, stars, comments, history, lo
   );
 };
 
-export default withRouter(Post);
+export default withRouter(PostPreview);

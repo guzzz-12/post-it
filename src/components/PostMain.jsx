@@ -34,17 +34,35 @@ const PostMain = (props) => {
   }, [auth.currentUser])
 
   const handleDelete = async (id) => {
-    try {  
+    const commentsRef = firestore.collection("posts").doc(id).collection("comments");
+    try {
+      //Borrar el post
       await firestore.collection("posts").doc(id).delete();
       
+      //Borrar la id del post del documento del usuario que lo creó
       const userRef = firestore.collection("users").doc(props.user.uid)
       const userSnap = await userRef.get()
       const userPosts = userSnap.data().posts
       const deletedPostIndex = userPosts.indexOf(id)
-      userPosts.splice(deletedPostIndex, 1)
-      
+      userPosts.splice(deletedPostIndex, 1) 
       await userRef.update({posts: userPosts})
 
+      // Borrar los comentarios asociados al post que se eliminó
+      let commentsDocs = []
+      const commentsIds = []
+      const deleteCommentsPromises = []
+
+      commentsRef.get()
+      .then((snap) => {
+        commentsDocs = snap.docs
+      })
+      .then(() => {
+        commentsDocs.forEach(doc => commentsIds.push(doc.id))
+        commentsIds.forEach(commentId => deleteCommentsPromises.push(commentsRef.doc(commentId).delete()))
+        Promise.all(deleteCommentsPromises).then(() => console.log("Comments should now be removed"))
+      })    
+
+      //Redirigir al home al borrar el post
       props.history.push("/");
     } catch (err) {
       console.log(err)

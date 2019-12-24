@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import {PostContext} from "../providers/PostsProvider";
-import Post from "./Post";
+import PostPreview from "./PostPreview";
 
 const UserPosts = (props) => {
   const postsFromProvider = useContext(PostContext)
@@ -22,7 +22,7 @@ const UserPosts = (props) => {
     if(userPosts.length > 0) {
       return userPosts.map((post) => {
         return (
-          post && <Post {...post} key={post.id} />
+          post && <PostPreview {...post} key={post.id} />
         )
       })
     }
