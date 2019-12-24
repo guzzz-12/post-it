@@ -41,7 +41,7 @@ class PostPage extends Component {
       console.log(error)
     }
 
-    this.unsubscribeFromComments = this.commentsRef.onSnapshot((snapshot) => {
+    this.unsubscribeFromComments = this.commentsRef.orderBy("createdAt", "asc").onSnapshot((snapshot) => {      
       const comments = snapshot.docs.map(doc => {
         return collectIdsAndDocs(doc)
       })
