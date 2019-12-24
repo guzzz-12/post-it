@@ -12,7 +12,7 @@ import Footer from './Footer/Footer';
 class Application extends Component {
   render() {
     return (
-      <React.Fragment>
+      <div className="main-wrapper">
         <Nav />
         <main className="Application">
           <Switch>
@@ -24,8 +24,8 @@ class Application extends Component {
             <Route exact path="/users/:userId" component={User} />
           </Switch>
         </main>
-        <Footer />
-      </React.Fragment>
+        <Footer/>
+      </div>
     );
   }
 }

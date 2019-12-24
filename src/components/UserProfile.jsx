@@ -96,7 +96,7 @@ class UserProfile extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="generic-wrapper">
         <UserInfo user={this.props.user} />
         <section className="profile-form">
           <h2>Update your profile</h2>
@@ -142,7 +142,7 @@ class UserProfile extends Component {
           </form>
         </section>
         <UserPosts user={this.props.user} />
-      </React.Fragment>
+      </div>
     );
   }
 }

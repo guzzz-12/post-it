@@ -36,7 +36,7 @@ const Posts = (props) => {
   return (
     <React.Fragment>
       {isLoading && <Spinner position="flex-start"/>}
-      <section className="Posts">
+      <section className="Posts generic-wrapper">
         {posts.length > 0 && <h2 className="Posts__title">Posts</h2>}
         {renderPosts()}
         {userLoaded && !props.user && !isLoading &&

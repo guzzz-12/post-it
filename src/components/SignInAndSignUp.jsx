@@ -8,7 +8,7 @@ import {withRouter} from "react-router-dom";
 const SignInAndSignUp = (props) => {
   if(!props.user) {
     return (
-      <div>
+      <div className="generic-wrapper">
         <SignIn />
         <SignUp />
       </div>

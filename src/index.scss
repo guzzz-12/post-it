@@ -133,6 +133,16 @@ input[type="file"] {
   }
 }
 
+.main-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.generic-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .main-nav {
   position: relative;
   width: 100%;
@@ -282,9 +292,8 @@ input[type="file"] {
 
 .Application {
   position: relative;
-  max-width: 600px;
   margin: auto;
-  padding-bottom: 1rem;
+  padding-bottom: 55px;
 }
 
 %authentication {

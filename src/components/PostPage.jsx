@@ -125,7 +125,7 @@ class PostPage extends Component {
     const {post, comments} = this.state;
 
     return (
-      <section>
+      <section className="generic-wrapper">
         {post && <PostMain post={post} />}
         <Comments
           comments={comments}

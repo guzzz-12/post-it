@@ -43,7 +43,7 @@ const User = (props) => {
   }, [props.match.params.userId, props.currentUser, auth.currentUser])
 
   return (
-    <React.Fragment>
+    <div className="generic-wrapper">
       {!user && !notFound && <Spinner />}
       {!user && notFound && "User not found..."}
       {user && !notFound &&
@@ -52,7 +52,7 @@ const User = (props) => {
           <UserPosts user={user} />
         </React.Fragment>
       }
-    </React.Fragment>
+    </div>
   );
 }
 

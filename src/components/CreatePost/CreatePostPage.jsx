@@ -143,7 +143,7 @@ const CreatePostPage = (props) => {
   }
 
   return (
-    <section className="create-post-page">
+    <section className="create-post-page generic-wrapper">
       <DisplayErrors error={error} />
       <h2 className="create-post-page__header">Create new post</h2>
       <div className="create-post-page__data">
