@@ -8,6 +8,7 @@ class SignUp extends Component {
     displayName: '',
     email: '',
     password: '',
+    passwordConfirm: "",
     loading: false,
     error: {
       status: false,
@@ -123,6 +124,15 @@ class SignUp extends Component {
         }
       }, () => this.clearErrorMessage())
       return false
+    } else if(data.passwordConfirm !== data.password) {
+      this.setState({
+        error: {
+          status: true,
+          type: "password",
+          message: "Passwords don't match."
+        }
+      }, () => this.clearErrorMessage())
+      return false
     }
     return true
   }
@@ -139,7 +149,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { displayName, email, password, error, loading } = this.state;
+    const { displayName, email, password, passwordConfirm, error, loading } = this.state;
 
     return (
       <form
@@ -171,6 +181,14 @@ class SignUp extends Component {
           className={`${error.status ? "input-validation-error" : ""}`}
           placeholder="Password"
           value={password}
+          onChange={this.handleChange}
+        />
+        <input
+          type="password"
+          name="passwordConfirm"
+          className={`${error.status ? "input-validation-error" : ""}`}
+          placeholder="Confirm your password"
+          value={passwordConfirm}
           onChange={this.handleChange}
         />
         <input
