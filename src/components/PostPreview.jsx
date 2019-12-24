@@ -1,12 +1,15 @@
-import React, {useState, useEffect, useContext} from 'react';
-import moment from 'moment';
+import React, {useState, useEffect, useContext} from "react";
+import moment from "moment";
 import {firestore, auth} from "../firebase";
 import {UserContext} from "../providers/UserProvider";
 import {Link, withRouter} from "react-router-dom";
-import ReactHtmlParser from 'react-html-parser';
+import ReactHtmlParser from "react-html-parser";
+import ConfirmModal from "./ConfirmModal/ConfirmModal";
 
 const PostPreview = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
   const [starred, setStarred] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const userfromContext = useContext(UserContext);
   
   useEffect(() => {
@@ -111,8 +114,18 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
     return `${reducedContent}... [Click to continue reading...]`
   }
 
+  const hideModal = () => {
+    setShowModal(false);
+  }
+
   return (
     <article className="Post">
+      <ConfirmModal
+        action={handleDelete}
+        show={showModal}
+        hide={hideModal}
+        itemToDelete={id}
+      />
       <Link to={`/post/${id}`}>
         <div className="Post--content">
           <div
@@ -148,7 +161,7 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
         </div>
         <div>
           {userfromContext && userfromContext.uid === user.uid &&
-            <button className="delete" onClick={() => handleDelete(id)}>Delete</button>
+            <button className="delete" onClick={() => setShowModal(true)}>Delete</button>
           }
           {userfromContext &&
             <button

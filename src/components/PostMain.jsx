@@ -4,9 +4,11 @@ import {Link, withRouter} from "react-router-dom";
 import {firestore, auth} from "../firebase";
 import WithUser from "./WithUser";
 import ReactHtmlParser from 'react-html-parser';
+import ConfirmModal from "./ConfirmModal/ConfirmModal";
 
 const PostMain = (props) => {
   const [starred, setStarred] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const docRef = firestore.collection("posts").doc(props.post.id)
@@ -104,8 +106,18 @@ const PostMain = (props) => {
     }
   }
 
+  const hideModal = () => {
+    setShowModal(false)
+  }
+
   return (
     <section className="post-main">
+      <ConfirmModal
+        action={handleDelete}
+        show={showModal}
+        hide={hideModal}
+        itemToDelete={props.post.id}
+      />
       <article className="post-main__content">
         <h1 className="post-main__title">{props.post.title}</h1>
         <div className="post-main__info">
@@ -124,7 +136,7 @@ const PostMain = (props) => {
         </div>
         <div className="post-main__buttons">
           {props.user && props.user.uid === props.post.user.uid &&
-            <button className="delete" onClick={() => handleDelete(props.post.id)}>Delete post</button>
+            <button className="delete" onClick={() => setShowModal(true)}>Delete post</button>
           }
           {props.user &&
             <button
