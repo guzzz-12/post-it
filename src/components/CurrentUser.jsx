@@ -7,7 +7,6 @@ const CurrentUser = (props) => {
 
   const signOutHandler = async () => {
     await auth.signOut()
-    props.history.push("/")
   }
 
   // Volver al avatar por defecto en caso de que error al cargar el avatar del storage o éste haya sido eliminado
