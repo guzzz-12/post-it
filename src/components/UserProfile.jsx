@@ -4,6 +4,7 @@ import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
 import UserInfo from "./UserInfo";
 import UserPosts from "./UserPosts";
+import DisplayErrors from "./DisplayErrors";
 
 class UserProfile extends Component {  
   
@@ -11,7 +12,12 @@ class UserProfile extends Component {
     displayName: "",
     imgFile: "",
     uploading: false,
-    updatingName: false
+    updatingName: false,
+    error: {
+      status: false,
+      type: null,
+      message: null
+    }
   }
   
   componentDidMount() {
@@ -57,8 +63,13 @@ class UserProfile extends Component {
       } catch (error) {
         console.log(error)
         this.setState({
-          updatingName: false
-        })       
+          updatingName: false,
+          error: {
+            status: true,
+            type: "displayname",
+            message: error.message
+          }
+        }, () => () => this.clearErrorMessage())       
       }
     }
 
@@ -89,16 +100,33 @@ class UserProfile extends Component {
       } catch (error) {
         this.setState({
           imgFile: "",
-          uploading: false
-        })
+          uploading: false,
+          error: {
+            status: true,
+            type: "imageUploading",
+            message: error.message
+          }
+        }, () => () => this.clearErrorMessage())
         console.log(error)
       }
     }
   }
 
+  clearErrorMessage = () => {
+    setTimeout(() => {
+      this.setState({
+        error: {
+          ...this.state.error,
+          status: false
+        }
+      })
+    }, 3500)
+  }
+
   render() {
     return (
       <div className="generic-wrapper">
+        <DisplayErrors error={this.state.error} />
         <UserInfo user={this.props.user} />
         <section className="profile-form">
           <h2>Update your profile</h2>
