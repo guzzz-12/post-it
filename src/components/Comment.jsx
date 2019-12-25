@@ -6,12 +6,16 @@ const Comment = ({id, content, user, createdAt, currentUser, onDelete }) => {
   return (
     <article className="Comment">
       <div className="Comment__main-content">
-        <div className="Comment__user-avatar" style={{backgroundImage: `url(${user.photoURL})`}}></div>
+        <div className="Comment__user-avatar" style={{
+          backgroundImage: `url(${user.photoURL}), url("/img/default-user.png")`,
+          backgroundColor: "#ccc"
+        }}
+        />
         <dir className="Comment__text">
           <Link to={`/users/${user.uid}`}>
             <span className="Comment--author">{user.displayName}</span>
           </Link>
-          {" "}       
+          {" "}
           <span className="Comment--content">{content}</span>
         </dir>
         {currentUser && user.uid === currentUser.uid &&
