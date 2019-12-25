@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {auth, createUserProfileDoc} from "../firebase";
 import md5 from "md5";
 import DisplayErrors from './DisplayErrors';
+import {withRouter} from "react-router-dom";
 
 class SignUp extends Component {
   state = {
@@ -46,6 +47,10 @@ class SignUp extends Component {
 
         // Enviar email de verificación de cuenta
         this.sendVerification(newUser.user)
+
+        this.setState({
+          loading: false
+        }, () => this.props.history.push("/profile"))
          
       } catch (error) {
         this.setState({
@@ -192,4 +197,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default withRouter(SignUp);
