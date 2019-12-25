@@ -32,30 +32,15 @@ class SignUp extends Component {
       })
 
       try {
-        let newUser = null;
-        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then((createdUser) => {
-          createdUser.user.updateProfile({
-            displayName: this.state.displayName,
-            photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
-          })
-          newUser = createdUser
+        const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+
+        await newUser.user.updateProfile({
+          displayName: this.state.displayName,
+          photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
         })
-        .then(() => {
-          createUserProfileDoc(newUser.user)
-          this.sendVerification(newUser.user)
-        })
-        .catch((error) => {
-          this.setState({
-            loading: false,
-            error: {
-              status: true,
-              type: "submit",
-              message: error.message
-            }
-          }, () => this.clearErrorMessage())
-          console.log(error)
-        })  
+
+        this.sendVerification(newUser.user)
+         
       } catch (error) {
         this.setState({
           loading: false,
