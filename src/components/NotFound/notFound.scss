@@ -1,0 +1,38 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  max-width: 400px;
+  padding: 2rem;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+
+  &__wrapper {
+    text-align: center;
+
+    h1 {
+      font-size: 4rem;
+      margin: 0 0 1rem 0;
+    }
+
+    i {
+      font-size: 6rem;
+
+      &:before {
+        color: #ccc;
+      }
+    }
+
+    p {
+      font-size: 1.6rem;
+    }
+  }
+}

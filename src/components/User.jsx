@@ -4,6 +4,7 @@ import {withRouter} from "react-router-dom";
 import UserPosts from "./UserPosts";
 import UserInfo from "./UserInfo";
 import Spinner from "./Spinner/Spinner";
+import NotFound from "./NotFound/NotFound";
 
 const User = (props) => {
   const [user, setUser] = useState(null)
@@ -47,7 +48,7 @@ const User = (props) => {
   return (
     <div className="generic-wrapper">
       {!user && !notFound && <Spinner />}
-      {!user && notFound && "User not found..."}
+      {!user && notFound && <NotFound />}
       {user && !notFound &&
         <React.Fragment>
           <UserInfo user={user} />

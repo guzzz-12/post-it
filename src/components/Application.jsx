@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Posts from './Posts';
 import {Switch, Route} from "react-router-dom";
+import Posts from './Posts';
 import PostPage from "./PostPage";
 import User from "./User";
 import Nav from "./Nav";
@@ -8,6 +8,7 @@ import SignInAndSignUp from "./SignInAndSignUp";
 import UserProfile from './UserProfile';
 import CreatePostPage from './CreatePost/CreatePostPage';
 import Footer from './Footer/Footer';
+import NotFound from './NotFound/NotFound';
 
 class Application extends Component {
   render() {
@@ -22,6 +23,7 @@ class Application extends Component {
             <Route exact path="/profile" component={UserProfile} />
             <Route exact path="/post/:postId" component={PostPage} />
             <Route exact path="/users/:userId" component={User} />
+            <Route exact path="*" component={NotFound} />
           </Switch>
         </main>
         <Footer/>
