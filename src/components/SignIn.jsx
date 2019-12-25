@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  {signInWithGoogle, auth} from "../firebase";
+import  {signInWithGoogle, auth, createUserProfileDoc} from "../firebase";
 import DisplayErrors from './DisplayErrors';
 import {withRouter} from "react-router-dom";
 
@@ -31,12 +31,12 @@ class SignIn extends Component {
 
       try {
         await auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-        this.setState({ email: '', password: '', error: {} });
         this.setState({
-          loading: false
-        })
-
-        this.props.history.push("/profile")
+          email: '',
+          password: '',
+          loading: false,
+          error: {}
+        });
         
       } catch (error) {
         this.setState({
@@ -58,7 +58,12 @@ class SignIn extends Component {
     })
 
     try {
-      await signInWithGoogle();
+      // Logueare con google
+      const user = await signInWithGoogle();
+
+      // Crear el perfil del usuario si no existe
+      await createUserProfileDoc(user.user)
+
       this.setState({
         loading: false
       })

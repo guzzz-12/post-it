@@ -32,13 +32,19 @@ class SignUp extends Component {
       })
 
       try {
+        // Crear cuenta del usuario
         const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
 
+        //Actualizar datos de la cuenta del usuario
         await newUser.user.updateProfile({
           displayName: this.state.displayName,
           photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
         })
 
+        // Crear perfil del usuario
+        await createUserProfileDoc(newUser.user)
+
+        // Enviar email de verificación de cuenta
         this.sendVerification(newUser.user)
          
       } catch (error) {

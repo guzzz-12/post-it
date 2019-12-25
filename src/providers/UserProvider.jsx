@@ -1,5 +1,5 @@
 import React, {useState, useEffect, createContext} from 'react';
-import {firestore, auth, createUserProfileDoc} from "../firebase";
+import {firestore, auth, getUserDoc} from "../firebase";
 import {withRouter} from "react-router-dom";
 
 export const UserContext = createContext();
@@ -33,14 +33,16 @@ const UserProvider = (props) => {
 
     await Promise.all(promises)
   }
+
+  useEffect(() => {
+    auth.currentUser ? props.history.push("/profile") : props.history.push("/signin-signup")
+  }, [user.user])
   
   useEffect(() => {
     // eslint-disable-next-line
     unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
-      if(!user) {
-        props.history.push("/")
-      }
-      const userDoc = await createUserProfileDoc(user)
+      // Obtener el perfil del usuario
+      const userDoc = user ? await getUserDoc(user.uid) : null
       setUser({user: userDoc})
     });
 
