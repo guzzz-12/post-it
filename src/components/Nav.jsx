@@ -9,7 +9,7 @@ const Nav = (props) => {
   const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
-    if(props.user || props.user === undefined) {
+    if(props.user || !props.user) {
       setUserLoaded(true)
     }
   }, [props.user])
