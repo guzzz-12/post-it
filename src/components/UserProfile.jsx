@@ -5,6 +5,7 @@ import WithUser from "./WithUser";
 import UserInfo from "./UserInfo";
 import UserPosts from "./UserPosts";
 import DisplayErrors from "./DisplayErrors";
+import ConfirmModal from "./ConfirmModal/ConfirmModal";
 
 class UserProfile extends Component {  
   
@@ -13,6 +14,8 @@ class UserProfile extends Component {
     imgFile: "",
     uploading: false,
     updatingName: false,
+    showModal: false,
+    currentUserUid: null,
     error: {
       status: false,
       type: null,
@@ -24,6 +27,10 @@ class UserProfile extends Component {
     document.title = "Post It! | Your Profile"
     if(!auth.currentUser) {
       this.props.history.push("/")
+    } else {
+      this.setState({
+        currentUserUid: auth.currentUser.uid
+      })
     }
   }
 
@@ -112,6 +119,51 @@ class UserProfile extends Component {
     }
   }
 
+  deletUserAccount = async (userId) => {
+    const userPhotoUrl = this.props.user.photoURL;
+    const postsRef = await firestore.collection("posts").where("user.uid", "==", userId).get()
+    const deletePostsPromises = []
+
+    try {
+      // Borrar perfil del usuario
+      await this.userRef.delete()
+
+      // Borrar avatar del storage
+      if(!userPhotoUrl.toLowerCase().includes("gravatar")) {
+        await storage.ref()
+        .child("user-profiles")
+        .child(userId)
+        .child(userId)
+        .delete()
+      }
+  
+      // Borrar posts del usuario
+      postsRef.forEach(post => {
+        deletePostsPromises.push(post.ref.delete())
+      })
+      
+      if(deletePostsPromises.length > 0) {
+        await Promise.all(deletePostsPromises)
+      }
+  
+      // Borrar cuenta del usuario
+      await auth.currentUser.delete()
+      
+    } catch (error) {
+      this.setState({
+        error: {
+          status: true,
+          type: "deleteAccount",
+          message: error.message
+        }
+      }, () => {
+        this.hideModal()
+        this.clearErrorMessage()
+      })
+      console.log(error)
+    }
+  }
+
   clearErrorMessage = () => {
     setTimeout(() => {
       this.setState({
@@ -123,12 +175,26 @@ class UserProfile extends Component {
     }, 3500)
   }
 
+  hideModal = () => {
+    this.setState({
+      showModal: false
+    })
+  }
+
   render() {
     return (
       <div className="generic-wrapper">
+        {!this.state.error.status && 
+          <ConfirmModal
+            show={this.state.showModal}
+            hide={this.hideModal}
+            action={this.deletUserAccount}
+            itemToDelete={this.state.currentUserUid}
+          />
+        }
         <DisplayErrors error={this.state.error} />
         <UserInfo user={this.props.user} />
-        <section className="profile-form">
+        <section className="profile-form" style={{marginBottom: "2rem"}}>
           <h2>Update your profile</h2>
           <form onSubmit={this.onSubmitHandler}>
             <div className="profile-form__username">
@@ -171,6 +237,7 @@ class UserProfile extends Component {
             />
           </form>
         </section>
+        <button onClick={() => this.setState({showModal: true})}>Delete your account</button>
         <UserPosts user={this.props.user} />
       </div>
     );
