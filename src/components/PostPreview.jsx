@@ -161,7 +161,13 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
         </div>
         <div>
           {userfromContext && userfromContext.uid === user.uid &&
-            <button className="delete" onClick={() => setShowModal(true)}>Delete</button>
+            <button
+              style={{color: "#fff"}}
+              className="delete"
+              onClick={() => setShowModal(true)}
+            >
+              Delete
+            </button>
           }
           {userfromContext &&
             <button
@@ -169,9 +175,9 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
               onClick={!starred ? () => addStar(id) : () => removeStar(id)}
             >
               {starred ?
-                <span>Dislike <i className="far fa-thumbs-down"></i></span>
+                <span style={{color: "#fff"}}>Dislike <i className="far fa-thumbs-down"></i></span>
                 :
-                <span>Like <i className="far fa-thumbs-up"></i></span>
+                <span style={{color: "#fff"}}>Like <i className="far fa-thumbs-up"></i></span>
               }
             </button>
           }
