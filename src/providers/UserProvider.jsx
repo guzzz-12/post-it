@@ -43,6 +43,7 @@ const UserProvider = (props) => {
 
     // eslint-disable-next-line
     unsubscribeFromUsers = firestore.collection("users").onSnapshot(async (snap) => {
+      console.log("user changed")
       if(user.user && auth.currentUser) {        
         const updatedUserRef = snap.docs.find(el => {
           return el.id === auth.currentUser.uid
@@ -51,7 +52,7 @@ const UserProvider = (props) => {
         if(updatedUserRef) {
           let updatedUser = updatedUserRef.data()
           
-          await updateUserPosts(updatedUser.id, {...updatedUser})
+          await updateUserPosts(updatedUserRef.id, {...updatedUser})
 
           setUser({
             user: {
