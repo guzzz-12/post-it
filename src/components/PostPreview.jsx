@@ -7,10 +7,32 @@ import ReactHtmlParser from "react-html-parser";
 import ConfirmModal from "./ConfirmModal/ConfirmModal";
 
 const PostPreview = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
+  const userfromContext = useContext(UserContext);
+
   const [starred, setStarred] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [marginBottom, setMarginBottom] = useState("0.5rem");
 
-  const userfromContext = useContext(UserContext);
+  useEffect(() => {
+    if((window.innerWidth >= 600 && auth.currentUser) || (window.innerWidth >= 600 && !auth.currentUser)) {
+      setMarginBottom(0)
+    } else if(window.innerWidth < 600 && auth.currentUser) {
+      setMarginBottom("0.5rem")
+    } else if(window.innerWidth < 600 && !auth.currentUser) {
+      setMarginBottom(0)
+    }
+
+    window.addEventListener("resize", (e) => {
+      if((e.target.innerWidth >= 600 && auth.currentUser) || (e.target.innerWidth >= 600 && !auth.currentUser)) {
+        setMarginBottom(0)
+      } else if(e.target.innerWidth < 600 && auth.currentUser) {
+        setMarginBottom("0.5rem")
+      } else if(e.target.innerWidth < 600 && !auth.currentUser) {
+        setMarginBottom(0)
+      }
+    })
+  }, [auth.currentUser])
+
   
   useEffect(() => {
     const docRef = firestore.collection("posts").doc(id)
@@ -143,7 +165,7 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
         </div>
       </Link>
       <div className="Post--meta">
-        <div>
+        <div style={{marginBottom: marginBottom}}>
           <p>
             <span role="img" aria-label="star">
               <i className="far fa-thumbs-up" />
