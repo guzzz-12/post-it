@@ -1,5 +1,5 @@
 import React, {useState, useEffect, createContext} from 'react';
-import {firestore, auth, getUserDoc} from "../firebase";
+import {firestore, auth, createUserProfileDoc} from "../firebase";
 import {withRouter} from "react-router-dom";
 
 export const UserContext = createContext();
@@ -32,36 +32,48 @@ const UserProvider = (props) => {
     })
 
     await Promise.all(promises)
-  }
+  }  
 
-  useEffect(() => {
-    auth.currentUser ? props.history.push("/profile") : props.history.push("/signin-signup")
-  }, [user.user])
-  
   useEffect(() => {
     // eslint-disable-next-line
     unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
-      // Obtener el perfil del usuario
-      const userDoc = user ? await getUserDoc(user.uid) : null
+      const userDoc = await createUserProfileDoc(user)
       setUser({user: userDoc})
     });
 
     // eslint-disable-next-line
     unsubscribeFromUsers = firestore.collection("users").onSnapshot(async (snap) => {
-      if(user.user && auth.currentUser) {
-        const user = snap.docs.find(el => {
+      if(user.user && auth.currentUser) {        
+        const updatedUserRef = snap.docs.find(el => {
           return el.id === auth.currentUser.uid
         })
         
-        if(user) {
-          await updateUserPosts(user.id, {...user.data()})
+        if(updatedUserRef) {
+          let updatedUser = updatedUserRef.data()
+          
+          await updateUserPosts(updatedUser.id, {...updatedUser})
+
           setUser({
             user: {
-              uid: user.id,
-              ...user.data()
+              uid: updatedUser.id,
+              ...updatedUser
             }
           })
-        }  
+        }
+      }
+
+      if(auth.currentUser && user.user && user.user.emailVerified !== auth.currentUser.emailVerified) {
+        const userRef = firestore.collection("users").doc(auth.currentUser.uid)
+        const userSnap = await userRef.get()
+        if(userSnap.exists) {
+          await userRef.update({emailVerified: auth.currentUser.emailVerified})
+          setUser({
+            user: {
+              ...user.user,
+              emailVerified: auth.currentUser.emailVerified
+            }
+          })
+        }
       }
     })
     

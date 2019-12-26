@@ -34,7 +34,7 @@ export const signInWithGoogle = async () => {
 export const createUserProfileDoc = async (user, data) => {
   //Chequear si el usuario existe, si no existe, retornar
   if(!user) {
-    return
+    return null
   }
 
   //Referencia al documento del usuario
@@ -60,11 +60,6 @@ export const createUserProfileDoc = async (user, data) => {
     }
   }
 
-  //Si el usuario verifica el email, cambiar emailVerified a true en la base de datos
-  if(userSnapshot.exists && !userSnapshot.data().emailVerified && auth.currentUser.emailVerified) {
-    await userRef.update({emailVerified: true})
-  }
-
   return getUserDoc(user.uid)
 }
 
@@ -77,14 +72,10 @@ export const getUserDoc = async (uid) => {
     const userDoc = await firestore.collection("users").doc(uid).get()
     const userData = userDoc.data()
 
-    if(userDoc.exists) {
-      return {
-        uid,
-        ...userData
-      }
+    return {
+      uid,
+      ...userData
     }
-
-    return null;
 
   } catch (error) {
     console.log(`Error fetching user data: ${error}`)
