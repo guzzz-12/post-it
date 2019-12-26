@@ -129,7 +129,7 @@ class UserProfile extends Component {
       await this.userRef.delete()
 
       // Borrar avatar del storage
-      if(!userPhotoUrl.toLowerCase().includes("gravatar")) {
+      if(!userPhotoUrl.toLowerCase().includes("gravatar") && !userPhotoUrl.toLowerCase().includes("google")) {
         await storage.ref()
         .child("user-profiles")
         .child(userId)
@@ -148,6 +148,9 @@ class UserProfile extends Component {
   
       // Borrar cuenta del usuario
       await auth.currentUser.delete()
+
+      // Redirigir al home
+      this.props.history.push("/")
       
     } catch (error) {
       this.setState({

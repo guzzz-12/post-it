@@ -45,12 +45,14 @@ class SignUp extends Component {
         // Crear perfil del usuario
         await createUserProfileDoc(newUser.user)
 
+        this.props.history.push("/profile")
+
         // Enviar email de verificación de cuenta
         this.sendVerification(newUser.user)
 
         this.setState({
           loading: false
-        }, () => this.props.history.push("/profile"))
+        })
          
       } catch (error) {
         this.setState({

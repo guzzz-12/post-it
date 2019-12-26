@@ -8,7 +8,7 @@ const UserPosts = (props) => {
 
   useEffect(() => {
     const filteredPosts = []
-    if(props.user) {
+    if(props.user && props.user.posts) {
       for(let id of props.user.posts) {
         let post = postsFromProvider.find(post => post.id === id)
         filteredPosts.push(post)

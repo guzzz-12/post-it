@@ -61,8 +61,10 @@ class SignIn extends Component {
       // Logueare con google
       const user = await signInWithGoogle();
 
+      this.props.history.push("/profile")
+
       // Crear el perfil del usuario si no existe
-      await createUserProfileDoc(user.user)
+      await createUserProfileDoc(user.user)      
 
       this.setState({
         loading: false
