@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {auth, createUserProfileDoc} from "../firebase";
+import {auth, createUserProfileDoc, firestore} from "../firebase";
 import md5 from "md5";
 import DisplayErrors from './DisplayErrors';
 import {withRouter} from "react-router-dom";
@@ -33,19 +33,26 @@ class SignUp extends Component {
       })
 
       try {
+        
         // Crear cuenta del usuario
         const newUser = await auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-
+        
         //Actualizar datos de la cuenta del usuario
         await newUser.user.updateProfile({
           displayName: this.state.displayName,
           photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
         })
+        
+        // Crear perfil del usuario o actualizarlo si ya existe
+        const userDocRef = await firestore.collection("users").doc(newUser.user.uid).get()
 
-        // Crear perfil del usuario
-        await createUserProfileDoc(newUser.user)
-
-        this.props.history.push("/profile")
+        if(userDocRef.exists && !userDocRef.data().displayName) {
+          userDocRef.ref.update({displayName: newUser.user.displayName, photoURL: newUser.user.photoURL})
+          this.props.history.push("/profile")
+        } else if(!userDocRef) {
+          await createUserProfileDoc(newUser.user)
+          this.props.history.push("/profile")
+        }
 
         // Enviar email de verificación de cuenta
         this.sendVerification(newUser.user)

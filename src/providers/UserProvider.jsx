@@ -11,6 +11,8 @@ const UserProvider = (props) => {
   let unsubscribeFromUsers = null;
 
   const updateUserPosts = async (uid, data) => {
+    console.log("posts changed")
+
     let promises = []
     let posts = []
     let userPosts = []
@@ -44,21 +46,32 @@ const UserProvider = (props) => {
     // eslint-disable-next-line
     unsubscribeFromUsers = firestore.collection("users").onSnapshot(async (snap) => {
       console.log("user changed")
-      if(user.user && auth.currentUser) {        
+      console.log(user.user, auth.currentUser)
+      if(user.user && auth.currentUser) {      
         const updatedUserRef = snap.docs.find(el => {
           return el.id === auth.currentUser.uid
         })
+
+        console.log("user posts changing")
         
+        //Actualizar posts del usuario cuando el usuario cambia su información
         if(updatedUserRef) {
           let updatedUser = updatedUserRef.data()
           
-          await updateUserPosts(updatedUserRef.id, {...updatedUser})
-
           setUser({
             user: {
-              uid: updatedUser.id,
+              uid: updatedUserRef.id,
               ...updatedUser
             }
+          })
+
+          await updateUserPosts(updatedUserRef.id, {...updatedUser})
+
+          console.log("user posts changed")
+  
+        } else if(!updatedUserRef) {
+          setUser({
+            user: null
           })
         }
       }
