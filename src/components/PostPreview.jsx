@@ -12,6 +12,7 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
   const [starred, setStarred] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [marginBottom, setMarginBottom] = useState("0.5rem");
+  // const [flexDirection, setFlexDirection] = useState(null)
 
   useEffect(() => {
     if((window.innerWidth >= 600 && auth.currentUser) || (window.innerWidth >= 600 && !auth.currentUser)) {
@@ -21,7 +22,7 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
     } else if(window.innerWidth < 600 && !auth.currentUser) {
       setMarginBottom(0)
     }
-
+    
     window.addEventListener("resize", (e) => {
       if((e.target.innerWidth >= 600 && auth.currentUser) || (e.target.innerWidth >= 600 && !auth.currentUser)) {
         setMarginBottom(0)
@@ -32,6 +33,7 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
       }
     })
   }, [auth.currentUser])
+
 
   
   useEffect(() => {
