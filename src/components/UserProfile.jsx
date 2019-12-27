@@ -321,7 +321,7 @@ class UserProfile extends Component {
           status: false
         }
       })
-    }, 3500)
+    }, 4000)
   }
 
   render() {
@@ -380,7 +380,15 @@ class UserProfile extends Component {
           {/* Crear o actualizar contraseña de seguridad para usuarios logueados con Google */}
           {auth.currentUser && auth.currentUser.providerData[0].providerId === "google.com" &&
             <div className="security-password-wrapper">
-              <h2>{this.state.securityPasswordSuccess ? "Security password updated successfully" : "Create or update your security password"}</h2>
+              <div
+                className={`${this.state.securityPasswordSuccess ?
+                "security-password-wrapper--on-success" :
+                "security-password-wrapper--on-success security-password-wrapper--on-success-hidden"}`}
+              >
+                <i class="far fa-check-circle"></i>
+                <h1>Security password <br/> successfully updated</h1>
+              </div>
+              <h2>Create or update your security password</h2>
               <p>
                 Your security password is required to perform sensitive operations, such as account deletion and change your user password
               </p>
