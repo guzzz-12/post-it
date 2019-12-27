@@ -32,7 +32,7 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
         setMarginBottom(0)
       }
     })
-  }, [auth.currentUser])
+  }, [])
 
 
   

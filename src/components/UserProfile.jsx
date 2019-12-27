@@ -13,6 +13,7 @@ class UserProfile extends Component {
   state = {
     displayName: "",
     imgFile: "",
+    imgFilePreview: "",
     securityPassword: "",
     currentSecurityPassword: "",
     confirmSecurityPassword: "",
@@ -58,6 +59,13 @@ class UserProfile extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+  }
+  
+  onImageChangeHandler = (e) => {
+    this.setState({
+      imgFilePreview: URL.createObjectURL(e.target.files[0]),
+      imgFile: e.target.value
+    })  
   }
 
   onSubmitHandler = async (e) => {
@@ -107,6 +115,7 @@ class UserProfile extends Component {
 
         this.setState({
           imgFile: "",
+          imgFilePreview: "",
           uploading: false
         })
 
@@ -360,15 +369,24 @@ class UserProfile extends Component {
               id="upload-image"
               ref={this.imageInputRef}
               name="imgFile"
-              onChange={this.onChangeHandler}
+              onChange={this.onImageChangeHandler}
               value={this.state.imgFile}
               accept="image/png, image/jpeg"
             />
+            {this.state.imgFilePreview &&
+              <div className="profile-form__avatar-preview">
+                <img
+                  className="profile-form__avatar-preview-img"
+                  src={this.state.imgFilePreview} alt="avatar preview"
+                />
+                <p>Avatar preview</p>
+              </div>
+            }
             <input
               type="submit"
               className="update"
               id="update"
-              disabled={this.state.uploading || this.state.updatingName || !this.state.displayName && !this.state.imgFile}
+              disabled={this.state.uploading || this.state.updatingName || (!this.state.displayName && !this.state.imgFile)}
               value={
                 this.state.uploading ? "Updating avatar..." :
                 this.state.updatingName ? "Updating name..." :
