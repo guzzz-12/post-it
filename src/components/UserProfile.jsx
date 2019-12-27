@@ -195,7 +195,7 @@ class UserProfile extends Component {
 
     try {
       //Chequear si el usuario ya creó su contraseña de seguridad
-      if(this.props.user.securityPassword !== "") {
+      if(this.props.user.securityPassword) {
         const check = await this.compareSecurityPasswords()
         if(!check) {
           this.setState({
@@ -206,6 +206,7 @@ class UserProfile extends Component {
               message: "Wrong password"
             }
           }, () => {
+            window.scrollTo({top: 0});
             this.hideModal()
             this.clearErrorMessage()
           })
@@ -222,6 +223,7 @@ class UserProfile extends Component {
             message: "You must complete all fields"
           }
         }, () => {
+          window.scrollTo({top: 0});
           this.hideModal()
           this.clearErrorMessage()
         })
@@ -234,6 +236,7 @@ class UserProfile extends Component {
             message: "You must complete all fields"
           }
         }, () => {
+          window.scrollTo({top: 0});
           this.hideModal()
           this.clearErrorMessage()
         })
@@ -246,6 +249,7 @@ class UserProfile extends Component {
             message: "You must complete all fields"
           }
         }, () => {
+          window.scrollTo({top: 0});
           this.hideModal()
           this.clearErrorMessage()
         })
@@ -258,6 +262,7 @@ class UserProfile extends Component {
             message: "Passwords don't match"
           }
         }, () => {
+          window.scrollTo({top: 0});
           this.hideModal()
           this.clearErrorMessage()
         })
@@ -272,6 +277,7 @@ class UserProfile extends Component {
       await this.userRef.update({securityPassword: hashedPassword})
 
       this.setState({
+        currentSecurityPassword: "",
         securityPassword: "",
         confirmSecurityPassword: "",
         securityPasswordSuccess: true
@@ -417,7 +423,10 @@ class UserProfile extends Component {
               <h3>In order to delete your account you must create your security password</h3>          
             }
           </div>
-          <button disabled={this.props.user && !this.props.user.securityPassword} onClick={() => this.setState({showDeleteAccountModal: true})}>
+          <button
+            disabled={!this.props.user || (this.props.user && auth.currentUser.providerData[0].providerId === "google.com" && !this.props.user.securityPassword)}
+            onClick={() => this.setState({showDeleteAccountModal: true})}
+          >
             Delete your account
           </button>
         </div>

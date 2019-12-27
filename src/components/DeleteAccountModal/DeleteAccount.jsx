@@ -60,7 +60,7 @@ const ConfirmModal = (props) => {
 
           // Borrar cuentas de usuarios autenticados con email/password
         } else {
-          const credential = firebase.auth.EmailAuthProvider.credential(data.email, data.password)
+          const credential = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, data.password)
           await user.reauthenticateWithCredential(credential)
           props.action(auth.currentUser.uid)
           setLoading(false)
