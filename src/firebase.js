@@ -27,7 +27,7 @@ export const signInWithGoogle = async () => {
     return credentials;
   } catch (error) {
     console.log(error)
-    throw new Error(error.message)
+    // throw new Error(error.message)
   }
 }
 
@@ -52,6 +52,7 @@ export const createUserProfileDoc = async (user, data) => {
         emailVerified: user.emailVerified,
         photoURL: user.photoURL,
         posts: [],
+        securityPassword: "",
         createdAt,
         ...data
       })

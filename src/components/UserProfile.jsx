@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import bcryptjs from "bcryptjs";
 import {firestore, auth, storage} from "../firebase";
 import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
@@ -12,6 +13,10 @@ class UserProfile extends Component {
   state = {
     displayName: "",
     imgFile: "",
+    securityPassword: "",
+    currentSecurityPassword: "",
+    confirmSecurityPassword: "",
+    securityPasswordSuccess: false,
     uploading: false,
     updatingName: false,
     showModal: false,
@@ -173,17 +178,6 @@ class UserProfile extends Component {
     }
   }
 
-  clearErrorMessage = () => {
-    setTimeout(() => {
-      this.setState({
-        error: {
-          ...this.state.error,
-          status: false
-        }
-      })
-    }, 3500)
-  }
-
   hideModal = () => {
     this.setState({
       showModal: false
@@ -196,7 +190,136 @@ class UserProfile extends Component {
     })
   }
 
+  securityPasswordHandler = async (e) => {
+    e.preventDefault()
+
+    try {
+      //Chequear si el usuario ya creó su contraseña de seguridad
+      if(this.props.user.securityPassword !== "") {
+        const check = await this.compareSecurityPasswords()
+        if(!check) {
+          this.setState({
+            currentSecurityPassword: "",
+            error: {
+              status: true,
+              type: "currentPassword",
+              message: "Wrong password"
+            }
+          }, () => {
+            this.hideModal()
+            this.clearErrorMessage()
+          })
+          return false  
+        }
+      }
+      
+      // Crear o actualizar la contraseña de seguridad
+      if(!this.state.securityPassword && !this.setState.confirmSecurityPassword) {
+        this.setState({
+          error: {
+            status: true,
+            type: "emptyFields",
+            message: "You must complete all fields"
+          }
+        }, () => {
+          this.hideModal()
+          this.clearErrorMessage()
+        })
+        return false
+      } else if(this.state.securityPassword === "") {
+        this.setState({
+          error: {
+            status: true,
+            type: "securityPassword",
+            message: "You must complete all fields"
+          }
+        }, () => {
+          this.hideModal()
+          this.clearErrorMessage()
+        })
+        return false
+      } else if(this.state.confirmSecurityPassword === "") {
+        this.setState({
+          error: {
+            status: true,
+            type: "confirmSecurityPassword",
+            message: "You must complete all fields"
+          }
+        }, () => {
+          this.hideModal()
+          this.clearErrorMessage()
+        })
+        return false
+      } else if(this.state.securityPassword !== this.state.confirmSecurityPassword) {
+        this.setState({
+          error: {
+            status: true,
+            type: "passwordsMatch",
+            message: "Passwords don't match"
+          }
+        }, () => {
+          this.hideModal()
+          this.clearErrorMessage()
+        })
+        return false
+      }
+
+      //Encriptar la contraseña del usuario si todo es correcto
+      const salt = await bcryptjs.genSalt(10);
+      const hashedPassword = await bcryptjs.hash(this.state.securityPassword, salt);
+      
+      // Guardar la contraseña en la base de datos
+      await this.userRef.update({securityPassword: hashedPassword})
+
+      this.setState({
+        securityPassword: "",
+        confirmSecurityPassword: "",
+        securityPasswordSuccess: true
+      }, () => {
+        setTimeout(() => {
+          this.setState({
+            securityPasswordSuccess: false
+          })
+        }, 3500)
+      })
+    } catch (error) {
+      this.setState({
+        error: {
+          status: true,
+          type: "submitSecurityPassword",
+          message: error.message
+        }
+      }, () => {
+        this.hideModal()
+        this.clearErrorMessage()
+      })
+      console.log(error)
+    }
+  }
+
+  compareSecurityPasswords = async () => {
+    const check = await bcryptjs.compare(this.state.currentSecurityPassword, this.props.user.securityPassword)
+    if(check) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  clearErrorMessage = () => {
+    setTimeout(() => {
+      this.setState({
+        error: {
+          ...this.state.error,
+          type: null,
+          status: false
+        }
+      })
+    }, 3500)
+  }
+
   render() {
+    console.log(this.state.securityPassword, this.state.confirmSecurityPassword)
     return (
       <div className="generic-wrapper">
         <DeleteAccount
@@ -208,7 +331,7 @@ class UserProfile extends Component {
         <UserInfo user={this.props.user} />
         <section className="profile-form" style={{marginBottom: "2rem"}}>
           <h2>Update your profile</h2>
-          <form onSubmit={this.onSubmitHandler}>
+          <form onSubmit={this.onSubmitHandler} className="profile-form__update-form">
             <div className="profile-form__username">
               <input
                 type="text"
@@ -248,6 +371,45 @@ class UserProfile extends Component {
               }
             />
           </form>
+
+          {/* Crear o actualizar contraseña de seguridad para usuarios logueados con Google */}
+          {auth.currentUser && auth.currentUser.providerData[0].providerId === "google.com" &&
+            <div className="security-password-wrapper">
+              <h2>{this.state.securityPasswordSuccess ? "Security password updated successfully" : "Create or update your security password"}</h2>
+              <p>
+                Your security password is required to perform sensitive operations, such as account deletion and change your user password
+              </p>
+              <form onSubmit={this.securityPasswordHandler}>
+                {this.props.user && this.props.user.securityPassword !== "" &&
+                  <input
+                    className={`${this.state.error.type === "currentPassword" ? "input-validation-error" : ""}`}
+                    type="password"
+                    name="currentSecurityPassword"
+                    placeholder= {`${this.state.error.type === "currentPassword" ? "Wrong password" : "Current security password"}`}
+                    onChange={this.onChangeHandler}
+                    value={this.state.currentSecurityPassword}
+                  />
+                }
+                <input
+                className={`${this.state.error.type === "emptyFields" || this.state.error.type === "securityPassword" || this.state.error.type === "passwordsMatch" ? "input-validation-error" : ""}`}
+                  type="password"
+                  name="securityPassword"
+                  placeholder="Security password"
+                  onChange={this.onChangeHandler}
+                  value={this.state.securityPassword}
+                />
+                <input
+                  className={`${this.state.error.type === "emptyFields" || this.state.error.type === "confirmSecurityPassword" || this.state.error.type === "passwordsMatch" ? "input-validation-error" : ""}`}
+                  type="password"
+                  name="confirmSecurityPassword"
+                  placeholder="Confirm security password"
+                  onChange={this.onChangeHandler}
+                  value={this.state.confirmSecurityPassword}
+                />
+                <button>Create security password</button>
+              </form>
+            </div>
+          }
         </section>
         <button onClick={() => this.setState({showDeleteAccountModal: true})}>Delete your account</button>
         <UserPosts user={this.props.user} />
