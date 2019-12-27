@@ -319,7 +319,6 @@ class UserProfile extends Component {
   }
 
   render() {
-    console.log(this.state.securityPassword, this.state.confirmSecurityPassword)
     return (
       <div className="generic-wrapper">
         <DeleteAccount
@@ -380,7 +379,7 @@ class UserProfile extends Component {
                 Your security password is required to perform sensitive operations, such as account deletion and change your user password
               </p>
               <form onSubmit={this.securityPasswordHandler}>
-                {this.props.user && this.props.user.securityPassword !== "" &&
+                {this.props.user && this.props.user.securityPassword &&
                   <input
                     className={`${this.state.error.type === "currentPassword" ? "input-validation-error" : ""}`}
                     type="password"
@@ -411,7 +410,17 @@ class UserProfile extends Component {
             </div>
           }
         </section>
-        <button onClick={() => this.setState({showDeleteAccountModal: true})}>Delete your account</button>
+        <div className="delete-account-button">
+          <div className="delete-account-button__text">
+            <h2>Delete your account</h2>
+            {this.props.user && !this.props.user.securityPassword &&
+              <h3>In order to delete your account you must create your security password</h3>          
+            }
+          </div>
+          <button disabled={this.props.user && !this.props.user.securityPassword} onClick={() => this.setState({showDeleteAccountModal: true})}>
+            Delete your account
+          </button>
+        </div>
         <UserPosts user={this.props.user} />
       </div>
     );

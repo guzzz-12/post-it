@@ -294,6 +294,10 @@ input[type="file"] {
   border-radius: 10px;
   border: 1px solid $input-color;
 
+  &__update-form {
+    margin-bottom: 2rem;
+  }
+
   h2 {
     margin-top: 0;
   }
@@ -313,16 +317,87 @@ input[type="file"] {
     color: #fff;
     background-color: $input-color;
     cursor: pointer;
+    transition: all 350ms;
+
+    &:hover {
+      background-color: rgb(60, 117, 192);
+    }
   }
 
   & #update {
     padding: 1rem;
     color: #fff;
     background-color: $danger-color;
+    transition: all 350ms;
+
+    &:hover {
+      background-color: rgb(177, 85, 57);
+    }
 
     &:disabled {
       background-color: #ccc;
       cursor: auto;
+    }
+  }
+
+  .security-password-wrapper {
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid $input-color;
+
+    h2 {
+      margin: 0
+    }
+
+    p {
+      margin-top: 0;
+    }
+
+    input {
+      margin-bottom: 1rem;
+    }
+  }
+
+  button {
+    padding: 1rem;
+    border: none;
+    color: #fff;
+    background-color: $input-color;
+    transition: all 350ms;
+
+    &:hover {
+      background-color: rgb(60, 117, 192);
+    }
+  }
+}
+
+.delete-account-button {
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid $input-color; 
+
+  &__text {
+    margin: 0 0 2rem 0;
+  }
+
+  h2 {
+    margin: 0
+  }
+
+  h3 {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  button {
+    padding: 1rem;
+    transition: all 350ms;
+    color: #fff;
+    background-color: $danger-color;
+    transition: all 350ms;
+
+    &:hover {
+      background-color: rgb(177, 85, 57);
     }
   }
 }
