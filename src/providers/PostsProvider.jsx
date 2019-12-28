@@ -11,7 +11,7 @@ const PostsProvider = (props) => {
 
   useEffect(() => {
     // eslint-disable-next-line
-    unsubscribeFromFirestore = firestore.collection("posts").onSnapshot((snap) => {
+    unsubscribeFromFirestore = firestore.collection("posts").orderBy("createdAt", "asc").onSnapshot((snap) => {
       const posts = snap.docs.map(collectIdsAndDocs);
       setPosts(posts)
     })
