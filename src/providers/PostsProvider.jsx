@@ -23,7 +23,7 @@ const PostsProvider = (props) => {
         // Chequear si se agregó un nuevo post para mostrar la notificación a los usuarios
         snap.docChanges().forEach(change => {
           if(change.type === "added" ) {
-            lastPostContext.getLastPost(change.doc.data());
+            lastPostContext.getLastPost({id: change.doc.id, ...change.doc.data()});
           }
         })
       })

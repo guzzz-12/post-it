@@ -19,12 +19,8 @@ const Notifications = (props) => {
         setTimeout(() => {
           setDisplay(false)
           LastPostContext.clearLastPost()
-        }, 5000)
+        }, 6000)
       }
-      
-    } else {
-      setDisplay(false)
-      setNewPostData(null)
     }
 
     // eslint-disable-next-line
@@ -32,12 +28,14 @@ const Notifications = (props) => {
   
   return (
     <div className={`${display ? "notifications notifications--show" : "notifications"}`}>
-      <Link to={`/post/${newPostData && newPostData.id}`}>
-        <div className="notifications__content">
-          <h3>{newPostData && newPostData.author} added a new post!</h3>
-          <p>{newPostData && newPostData.title}</p>
-        </div>
-      </Link>
+      {newPostData && 
+        <Link to={`/post/${newPostData.id}`}>
+          <div className="notifications__content">
+            <h3>{newPostData.user.displayName.split(" ")[0]} added a new post!</h3>
+            <p>{newPostData.title}</p>
+          </div>
+        </Link>
+      }
     </div>
   );
 }
