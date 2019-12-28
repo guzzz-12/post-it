@@ -43,6 +43,9 @@ const PostMain = (props) => {
     try {
       //Borrar el post
       await firestore.collection("posts").doc(id).delete();
+
+      //Redirigir al home al borrar el post
+      props.history.push("/");
       
       //Borrar la id del post del documento del usuario que lo creó
       const userRef = firestore.collection("users").doc(props.user.uid)
@@ -66,9 +69,6 @@ const PostMain = (props) => {
         commentsIds.forEach(commentId => deleteCommentsPromises.push(commentsRef.doc(commentId).delete()))
         Promise.all(deleteCommentsPromises).then(() => console.log("Comments should now be removed"))
       })    
-
-      //Redirigir al home al borrar el post
-      props.history.push("/");
     } catch (err) {
       console.log(err)
     }

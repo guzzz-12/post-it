@@ -6,11 +6,13 @@ import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
 import PostMain from "./PostMain";
 import Spinner from './Spinner/Spinner';
+import NotFound from "./NotFound/NotFound";
 
 class PostPage extends Component {  
   state = {
     post: null,
-    comments: []
+    comments: [],
+    postNotFound: false
   }
   
   unsubscribeFromPost = null
@@ -21,21 +23,34 @@ class PostPage extends Component {
   commentsRef = this.postsRef.collection("comments")
   
   async componentDidMount() {
-    // document.title = `Post It! | ${}`
-
     try {
       this.unsubscribeFromPost = this.postsRef.onSnapshot(async (snapshot) => {
         if(!snapshot.exists) {
-          this.props.history.push("/")
-          return
+          this.setState({
+            post: null,
+            postNotFound: true
+          })
+        } else {
+          const updatedPost = collectIdsAndDocs(snapshot)          
+          this.setState({
+            post: updatedPost,
+            postNotFound: false
+          })
         }
-
-        const post = collectIdsAndDocs(snapshot)
-        
-        this.setState({
-          post: post
-        })
       })
+
+      const post = await this.postsRef.get();
+      if(post.exists) {
+        this.setState({
+          post: post.data(),
+          postNotFound: false
+        })
+      } else {
+        this.setState({
+          post: null,
+          postNotFound: true
+        })
+      }
       
     } catch (error) {
       console.log(error)
@@ -110,21 +125,26 @@ class PostPage extends Component {
   }
   
   render() {    
-    const {post, comments} = this.state;
+    const {post, comments, postNotFound} = this.state;
 
     document.title = `Post It! ${!post ? "" : `| ${post.title}`}`
 
     return (
       <section className="generic-wrapper">
-        {!post && <Spinner />}
-        {post && <PostMain post={post} />}
-        <Comments
-          comments={comments}
-          postId={post && post.id}
-          onCreate={this.createComment}
-          onDelete={this.deleteComment}
-          user={this.props.user}
-        />
+        {!post && !postNotFound && <Spinner />}
+        {!post && postNotFound && <NotFound />}
+        {post && !postNotFound &&
+          <React.Fragment>
+            <PostMain post={post} />
+            <Comments
+              comments={comments}
+              postId={post && post.id}
+              onCreate={this.createComment}
+              onDelete={this.deleteComment}
+              user={this.props.user}
+            />
+          </React.Fragment>
+        }
       </section>
     );
   }
