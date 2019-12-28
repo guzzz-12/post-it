@@ -445,7 +445,7 @@ class UserProfile extends Component {
         <div className="delete-account-button">
           <div className="delete-account-button__text">
             <h2>Delete your account</h2>
-            {this.props.user && !this.props.user.securityPassword &&
+            {this.props.user && !this.props.user.securityPassword && this.props.user && auth.currentUser.providerData[0].providerId === "google.com" &&
               <h3>In order to delete your account you must create your security password</h3>          
             }
           </div>

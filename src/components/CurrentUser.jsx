@@ -13,7 +13,7 @@ const CurrentUser = (props) => {
   // Volver al avatar por defecto en caso de que error al cargar el avatar del storage o éste haya sido eliminado
   const onLoadErrorHandler = async () => {
     const userRef = firestore.collection("users").doc(auth.currentUser.uid);
-    await userRef.update({photoURL: auth.currentUser.photoURL})
+    await userRef.update({photoURL: "/img/default-user.png"})
   }
 
   return (

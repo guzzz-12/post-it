@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {auth, createUserProfileDoc, firestore} from "../firebase";
-import md5 from "md5";
 import DisplayErrors from './DisplayErrors';
 import {withRouter} from "react-router-dom";
 
@@ -40,7 +39,7 @@ class SignUp extends Component {
         //Actualizar datos de la cuenta del usuario
         await newUser.user.updateProfile({
           displayName: this.state.displayName,
-          photoURL: `http://gravatar.com/avatar/${md5(this.state.email)}?d=identicon`
+          photoURL: "/img/default-user.png"
         })
         
         // Crear perfil del usuario o actualizarlo si ya existe
