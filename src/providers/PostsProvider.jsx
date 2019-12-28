@@ -1,20 +1,32 @@
-import React, {useEffect, useState, createContext} from 'react';
+import React, {useEffect, useState, createContext, useContext} from 'react';
+import LastPostContext from "../context/lastPost/lastPostContext";
 import {firestore} from "../firebase";
 import {collectIdsAndDocs} from "../utils";
 
 export const PostContext = createContext();
 
 const PostsProvider = (props) => {
-  const [posts, setPosts] = useState([]);
+  const lastPostContext = useContext(LastPostContext);  
+  const [allPosts, setAllPosts] = useState([]);
 
   let unsubscribeFromFirestore = null;
 
   useEffect(() => {
     // eslint-disable-next-line
-    unsubscribeFromFirestore = firestore.collection("posts").orderBy("createdAt", "asc").onSnapshot((snap) => {
-      const posts = snap.docs.map(collectIdsAndDocs);
-      setPosts(posts)
-    })
+    unsubscribeFromFirestore = firestore
+      .collection("posts")
+      .orderBy("createdAt", "asc")
+      .onSnapshot((snap) => {
+        const posts = snap.docs.map(collectIdsAndDocs);
+        setAllPosts(posts)
+        
+        // Chequear si se agregó un nuevo post para mostrar la notificación a los usuarios
+        snap.docChanges().forEach(change => {
+          if(change.type === "added" ) {
+            lastPostContext.getLastPost(change.doc.data());
+          }
+        })
+      })
 
     return () => {
       unsubscribeFromFirestore();
@@ -22,7 +34,7 @@ const PostsProvider = (props) => {
   }, [])
 
   return (
-    <PostContext.Provider value={posts}>
+    <PostContext.Provider value={allPosts}>
       {props.children}
     </PostContext.Provider>
   );

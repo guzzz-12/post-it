@@ -1,39 +1,34 @@
 import React, {useState, useEffect, useContext} from "react";
 import "./notifications.scss";
 import {auth} from "../../firebase";
-import {PostContext} from "../../providers/PostsProvider";
+import lastPostContext from "../../context/lastPost/lastPostContext";
 import {Link} from "react-router-dom";
 
 const Notifications = (props) => {
-  const postsContext = useContext(PostContext);
-  const [posts, setPosts] = useState([]);
-  const [display, setDiplay] = useState(false)
-  const [newPostData, setNewPostData] = useState(null)
+  const LastPostContext = useContext(lastPostContext);
+
+  const [newPostData, setNewPostData] = useState(null);
+  const [display, setDisplay] = useState(false);
 
   useEffect(() => {
-    if(postsContext.length > posts.length) {
-      const lastPost = postsContext[postsContext.length - 1]
-
-      setNewPostData({
-        id: lastPost.id,
-        title: lastPost.title,
-        authorUid: lastPost.user.uid,
-        author: lastPost.user.displayName.split(" ")[0]
-      })
-
-      if(auth.currentUser && newPostData && auth.currentUser.uid !== newPostData.authorUid) {
-        setDiplay(true)
+    if(LastPostContext.lastPost) {
+      if(auth.currentUser && auth.currentUser.uid !== LastPostContext.lastPost.user.uid) {
+        setNewPostData(LastPostContext.lastPost)
+        setDisplay(true)
   
         setTimeout(() => {
-          setDiplay(false)
-        }, 5000);
+          setDisplay(false)
+          LastPostContext.clearLastPost()
+        }, 5000)
       }
+      
+    } else {
+      setDisplay(false)
+      setNewPostData(null)
     }
 
-    setPosts(postsContext)
-
     // eslint-disable-next-line
-  }, [postsContext])
+  }, [LastPostContext])
   
   return (
     <div className={`${display ? "notifications notifications--show" : "notifications"}`}>
