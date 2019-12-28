@@ -34,8 +34,6 @@ const Notifications = (props) => {
 
     // eslint-disable-next-line
   }, [postsContext])
-
-  console.log(newPostData)
   
   return (
     <div className={`${display ? "notifications notifications--show" : "notifications"}`}>
