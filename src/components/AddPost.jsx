@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from "../firebase";
 import {firestore, auth, getUserDoc} from "../firebase";
 import DisplayErrors from './DisplayErrors';
 import {UserContext} from "../providers/UserProvider";
@@ -58,7 +59,7 @@ class AddPost extends Component {
         stars: [],
         commentsUsers: [],
         comments: 0,
-        createdAt: Date.now(),
+        createdAt: firebase.database.ServerValue.TIMESTAMP 
       }
 
       try {

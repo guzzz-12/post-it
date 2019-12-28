@@ -1,0 +1,35 @@
+.notifications {
+  position: fixed;
+  right: 0;
+  top: 30%;
+  transform: translateX(100%);
+  border-radius: 5px 0 0 5px;
+  background-color: rgb(71, 145, 241);
+  z-index: 10000;
+  transition: all 350ms;
+  
+  a {
+    display: block;
+    padding: 1rem;
+  }
+
+  &__content {
+    margin-right: 2rem;
+    
+    h3 {
+      margin: 0 0 0.5rem 0;
+      color: #fff;
+    }
+    
+    p {
+      margin: 0;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+}
+
+.notifications--show {
+  transform: translateX(0);
+  transition: all 350ms;
+}

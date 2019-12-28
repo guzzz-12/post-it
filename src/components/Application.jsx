@@ -9,11 +9,13 @@ import UserProfile from './UserProfile';
 import CreatePostPage from './CreatePost/CreatePostPage';
 import Footer from './Footer/Footer';
 import NotFound from './NotFound/NotFound';
+import Notifications from "./Notifications/Notifications";
 
 class Application extends Component {
   render() {
     return (
       <div className="main-wrapper">
+        <Notifications />
         <Nav />
         <main className="Application">
           <Switch>
