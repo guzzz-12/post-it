@@ -1,12 +1,15 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import moment from "moment";
 import {Link, withRouter} from "react-router-dom";
 import {firestore, auth} from "../firebase";
 import WithUser from "./WithUser";
 import ReactHtmlParser from 'react-html-parser';
 import ConfirmModal from "./ConfirmModal/ConfirmModal";
+import editPostContext from "../context/editPost/editPostContext";
 
 const PostMain = (props) => {
+  const EditPostContext = useContext(editPostContext);
+
   const [starred, setStarred] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -106,6 +109,25 @@ const PostMain = (props) => {
     }
   }
 
+  // Enviar al context la data del post a editar
+  const editPostHandler = async (id) => {
+    try {
+      EditPostContext.setPostLoading(true)
+  
+      const docRef = firestore.collection("posts").doc(id)
+      const post = await docRef.get()
+      const postData = post.data()
+      
+      EditPostContext.setPostContent({postId: id, postTitle: postData.title, postContent: postData.content})
+      EditPostContext.setPostLoading(false)
+  
+      props.history.push("/create-post")
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const hideModal = () => {
     setShowModal(false)
   }
@@ -133,11 +155,6 @@ const PostMain = (props) => {
       <div className="post-main__user-actions">
         <div className="post-main__likes">
           <p><i className="far fa-thumbs-up" /> {props.post.stars && props.post.stars.length}</p>
-        </div>
-        <div className="post-main__buttons">
-          {props.user && props.user.uid === props.post.user.uid &&
-            <button className="delete" onClick={() => setShowModal(true)}>Delete post</button>
-          }
           {props.user &&
             <button
               className="star"
@@ -149,6 +166,14 @@ const PostMain = (props) => {
                 <span>Like <i className="far fa-thumbs-up"></i></span>
               }
             </button>
+          }
+        </div>
+        <div className="post-main__buttons">
+          {props.user && props.user.uid === props.post.user.uid &&
+          <React.Fragment>
+            <button className="delete" onClick={() => editPostHandler(props.post.id)}>Edit post</button>
+            <button className="delete" onClick={() => setShowModal(true)}>Delete post</button>
+          </React.Fragment>
           }
         </div>
       </div>

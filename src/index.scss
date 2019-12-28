@@ -983,7 +983,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0 1rem;
     border: 1px solid #ccc;
     border-radius: 100px;  
     
@@ -1010,20 +1010,30 @@ a {
         margin-right: 1rem;
       }
     }
-  }
 
-  &__likes {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.5rem;
-
-    p {
-      margin: 0;
-      color: rgb(71, 145, 241);
-    }
-
-    i:before {
-      color: rgb(71, 145, 241);
+    .post-main__likes {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+  
+      p {
+        margin-right: 1rem;
+        color: rgb(71, 145, 241);
+      }
+  
+      i:before {
+        color: rgb(71, 145, 241);
+      }
+  
+      .star {
+        margin-right: 0;
+        font-size: 1.1rem;
+        i {
+          &:before {
+            color: #fff;
+          }
+        }
+      }
     }
   }
 
