@@ -6,7 +6,7 @@ import {Link, withRouter} from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
 import ConfirmModal from "./ConfirmModal/ConfirmModal";
 
-const PostPreview = ({id, title, content, user, createdAt, stars, comments, history, location}) => {
+const PostPreview = ({id, title, category, content, user, createdAt, stars, comments, history, location}) => {
   const userfromContext = useContext(UserContext);
 
   const [starred, setStarred] = useState(false);
@@ -15,20 +15,20 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
   // const [flexDirection, setFlexDirection] = useState(null)
 
   useEffect(() => {
-    if((window.innerWidth > 600 && auth.currentUser) || (window.innerWidth > 600 && !auth.currentUser)) {
+    if((window.innerWidth > 700 && auth.currentUser) || (window.innerWidth > 700 && !auth.currentUser)) {
       setMarginBottom(0)
-    } else if(window.innerWidth <= 600 && auth.currentUser) {
+    } else if(window.innerWidth <= 700 && auth.currentUser) {
       setMarginBottom("0.5rem")
-    } else if(window.innerWidth <= 600 && !auth.currentUser) {
+    } else if(window.innerWidth <= 700 && !auth.currentUser) {
       setMarginBottom(0)
     }
     
     window.addEventListener("resize", (e) => {
-      if((e.target.innerWidth > 600 && auth.currentUser) || (e.target.innerWidth > 600 && !auth.currentUser)) {
+      if((e.target.innerWidth > 700 && auth.currentUser) || (e.target.innerWidth > 700 && !auth.currentUser)) {
         setMarginBottom(0)
-      } else if(e.target.innerWidth <= 600 && auth.currentUser) {
+      } else if(e.target.innerWidth <= 700 && auth.currentUser) {
         setMarginBottom("0.5rem")
-      } else if(e.target.innerWidth <= 600 && !auth.currentUser) {
+      } else if(e.target.innerWidth <= 700 && !auth.currentUser) {
         setMarginBottom(0)
       }
     })
@@ -167,7 +167,10 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
         </div>
       </Link>
       <div className="Post--meta">
-        <div style={{marginBottom: marginBottom}}>
+        <div
+          className="Post--meta__content"
+          style={{marginBottom: marginBottom, alignItems: `${!auth.currentUser ? "center" : "flex-start"}`}}
+        >
           <p>
             <span role="img" aria-label="star">
               <i className="far fa-thumbs-up" />
@@ -182,8 +185,9 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
           </p>
           <p>Posted by <Link to={`/users/${user.uid}`}>{user && user.displayName}</Link></p>
           <p>{moment(createdAt).calendar()}</p>
+          <p style={{textTransform: "capitalize"}}>Category: <Link to={`/post/category/${category}`}>{category}</Link></p>
         </div>
-        <div>
+        <div className="Post--meta__buttons">
           {userfromContext && userfromContext.uid === user.uid &&
             <button
               style={{color: "#fff"}}
