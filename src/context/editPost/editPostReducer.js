@@ -12,6 +12,7 @@ export default (state, action) => {
         ...state,
         postId: action.payload.postId,
         postTitle: action.payload.postTitle,
+        postCategory: action.payload.postCategory,
         postContent: action.payload.postContent
       }
     case CLEAR_POST_DATA:
@@ -19,6 +20,7 @@ export default (state, action) => {
         ...state,
         postId: null,
         postTitle: null,
+        postCategory: null,
         postContent: null
       }
     default:

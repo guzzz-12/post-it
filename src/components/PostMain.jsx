@@ -118,7 +118,7 @@ const PostMain = (props) => {
       const post = await docRef.get()
       const postData = post.data()
       
-      EditPostContext.setPostContent({postId: id, postTitle: postData.title, postContent: postData.content})
+      EditPostContext.setPostContent({postId: id, postTitle: postData.title, postCategory: postData.category, postContent: postData.content})
       EditPostContext.setPostLoading(false)
   
       props.history.push("/create-post")

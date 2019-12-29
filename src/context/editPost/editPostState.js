@@ -7,6 +7,7 @@ const EditPostState = (props) => {
   const initialState = {
     postId: null,
     postTitle: null,
+    postCategory: null,
     postContent: null,
     loadingPost: false
   }
@@ -38,6 +39,7 @@ const EditPostState = (props) => {
       value={{
         postId: state.postId,
         postTitle: state.postTitle,
+        postCategory: state.postCategory,
         postContent: state.postContent,
         loadingPost: state.loadingPost,
         setPostLoading,

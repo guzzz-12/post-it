@@ -33,6 +33,7 @@ const CreatePostPage = (props) => {
     if(EditPostContext.postTitle && EditPostContext.postContent) {
       setEditMode(true)
       setPostTitle(EditPostContext.postTitle)
+      setPostCategory(EditPostContext.postCategory)
       setPostContent(EditPostContext.postContent)
 
       // Ocultar el editor para creación de posts cuando se entra en modo edición
