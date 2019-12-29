@@ -1,0 +1,40 @@
+.search-posts {
+  position: relative;
+  // margin-bottom: 2rem;
+
+  &__form {
+    // background-color: yellow;
+  }
+
+  &__input-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    input {
+      width: 30%;
+      margin-bottom: 0;
+      transform-origin: right center;
+      transition: all 700ms;
+    }
+
+    input:focus {
+      width: 100%;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+    
+    i {
+      position: absolute;
+      right: 0;
+      margin-right: 3rem;
+      font-size: 1.6rem;
+
+      &::before {
+        color: #ccc;
+      }
+    }
+  }
+}

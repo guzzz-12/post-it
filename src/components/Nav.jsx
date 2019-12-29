@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
 import CurrentUser from "./CurrentUser";
 import EmailVerificationWarning from "./EmailVerificationWarning";
 import Spinner from "./Spinner/Spinner";
+import SearchPosts from "./SearchPosts/SearchPosts";
 
 const Nav = (props) => {
   const [userLoaded, setUserLoaded] = useState(false);
@@ -16,10 +17,7 @@ const Nav = (props) => {
 
   return (
     <React.Fragment>
-      <nav
-        className="main-nav"
-        style={{marginBottom: `${!props.user || (props.user && props.user.emailVerified) ? "2rem" : "0"}`}}
-      >
+      <nav className="main-nav">
         <div className="main-nav__content">
           <Link to="/"><h1>Post It!</h1></Link>
           <div style={{position: "relative", minHeight:"2rem", minWidth: "150px"}}>
@@ -43,8 +41,9 @@ const Nav = (props) => {
         </div>
       </nav>
       <EmailVerificationWarning user={props.user} />
+      <SearchPosts />
     </React.Fragment>
   );
 }
 
-export default WithUser(Nav);
+export default WithUser(withRouter(Nav));
