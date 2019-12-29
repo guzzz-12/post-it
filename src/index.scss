@@ -1038,6 +1038,11 @@ a {
     &-date {
       margin: 0;
     }
+
+    &-category {
+      text-transform: capitalize;
+      font-weight: bold;
+    }
   }
 
   &__content {

@@ -17,6 +17,7 @@ const CreatePostPage = (props) => {
   
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [postCategory, setPostCategory] = useState("science");
   const [editMode, setEditMode] = useState(false);
   const [userRef, setUserRef] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,10 @@ const CreatePostPage = (props) => {
     setPostTitle(e.target.value)
   }
 
+  const categoryHandler = (e) => {
+    setPostCategory(e.target.value)
+  }
+
   const onContentChangeHandler = (e, editor) => {
     setError({
       status: false,
@@ -84,6 +89,7 @@ const CreatePostPage = (props) => {
       const author = await getUserDoc(auth.currentUser.uid)
       post = {
         title: postTitle,
+        category: postCategory,
         content: postContent,
         user: {
           uid: author.uid,
@@ -135,7 +141,7 @@ const CreatePostPage = (props) => {
   const editPostHandler = async () => {
     try {
       const postRef = firestore.collection("posts").doc(EditPostContext.postId)
-      await postRef.update({title: postTitle, content: window.editor.getData()})
+      await postRef.update({title: postTitle, category: postCategory, content: window.editor.getData()})
       setEditMode(false)
       EditPostContext.clearPostContent()
       props.history.push(`/post/${EditPostContext.postId}`)
@@ -196,6 +202,8 @@ const CreatePostPage = (props) => {
     }, 3500)
   }
 
+  console.log(postCategory)
+
   return (
     <section className="create-post-page generic-wrapper">
       <DisplayErrors error={error} />
@@ -213,6 +221,48 @@ const CreatePostPage = (props) => {
             value={postTitle}
             onChange={onTitleChangeHandler}
           />
+          {/* Categorías de los posts */}
+          <div className="create-post-page__post-category">
+            <h2>Post category:</h2>
+            <div className="post-categories">
+              <div className="post-category post-category--science">
+                <label
+                  htmlFor="science"
+                  style={{backgroundColor: `${postCategory === "science" ? "#4791f1" : "#ccc"}`}}
+                >
+                  Science
+                </label>
+                <input type="radio" checked={postCategory === "science"} name="category" id="science" value="science" onClick={categoryHandler}/>
+              </div>
+              <div className="post-category post-category--technology">
+                <label
+                  htmlFor="technology"
+                  style={{backgroundColor: `${postCategory === "technology" ? "#4791f1" : "#ccc"}`}}
+                >
+                  Technology
+                </label>
+                <input type="radio" checked={postCategory === "technology"} name="category" id="technology" value="technology"  onClick={categoryHandler}/>
+              </div>
+              <div className="post-category post-category--development">
+                <label
+                  htmlFor="development"
+                  style={{backgroundColor: `${postCategory === "development" ? "#4791f1" : "#ccc"}`}}
+                >
+                  Development
+                </label>
+                <input type="radio" checked={postCategory === "development"} name="category" id="development" value="development"  onClick={categoryHandler}/>
+              </div>
+              <div className="post-category post-category--other">
+                <label
+                  htmlFor="other"
+                  style={{backgroundColor: `${postCategory === "other" ? "#4791f1" : "#ccc"}`}}
+                >
+                  Other
+                </label>
+                <input type="radio" checked={postCategory === "other"} name="category" id="other" value="other"  onClick={categoryHandler}/>
+              </div>
+            </div>
+          </div>
         </form>
         <h2>Post content:</h2>
         <div ref={editorsWrapperRef} className="editors-wrapper">

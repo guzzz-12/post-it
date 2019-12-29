@@ -1,4 +1,7 @@
 .create-post-page {
+  h2 {
+    margin-top: 0;
+  }
 
   &__header {
 
@@ -14,11 +17,60 @@
   &__title-input {
     margin-bottom: 2rem;
     border-bottom: none;
-    border: 1px solid #ccc;
     outline: none;
+
+    input[type="text"] {
+      margin-bottom: 2rem;
+    }
   }
 
-  &__submit-post {
+  // Categorías de los posts
+  &__post-category {
+    display: flex;
+    align-items: center;
 
+    h2 {
+      margin-bottom: 0;
+    }
+
+    .post-categories {
+      display: flex;
+
+      label {
+        display: block;
+        padding: 0.5rem 1rem;
+        background-color: #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+     
+    .post-category {
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      align-items: center;
+      padding: 0.5rem;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    &--science {
+
+    }
+
+    &--technology {
+
+    }
+
+    &--development {
+
+    }
+
+    &--other {
+
+    }
   }
 }
