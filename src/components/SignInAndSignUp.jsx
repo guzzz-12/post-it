@@ -10,7 +10,7 @@ const SignInAndSignUp = (props) => {
 
   if(!props.user) {
     return (
-      <div className="generic-wrapper">
+      <div className="signin-signup-wrapper generic-wrapper">
         <SignIn />
         <SignUp />
       </div>

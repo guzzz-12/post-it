@@ -69,6 +69,7 @@ const ConfirmModal = (props) => {
 
       } catch (error) {
         console.log(error)
+        window.scrollTo({top: 0});
         setLoading(false)
         setError({
           status: true,

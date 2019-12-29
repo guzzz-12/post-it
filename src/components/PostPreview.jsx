@@ -15,20 +15,20 @@ const PostPreview = ({id, title, content, user, createdAt, stars, comments, hist
   // const [flexDirection, setFlexDirection] = useState(null)
 
   useEffect(() => {
-    if((window.innerWidth >= 600 && auth.currentUser) || (window.innerWidth >= 600 && !auth.currentUser)) {
+    if((window.innerWidth > 600 && auth.currentUser) || (window.innerWidth > 600 && !auth.currentUser)) {
       setMarginBottom(0)
-    } else if(window.innerWidth < 600 && auth.currentUser) {
+    } else if(window.innerWidth <= 600 && auth.currentUser) {
       setMarginBottom("0.5rem")
-    } else if(window.innerWidth < 600 && !auth.currentUser) {
+    } else if(window.innerWidth <= 600 && !auth.currentUser) {
       setMarginBottom(0)
     }
     
     window.addEventListener("resize", (e) => {
-      if((e.target.innerWidth >= 600 && auth.currentUser) || (e.target.innerWidth >= 600 && !auth.currentUser)) {
+      if((e.target.innerWidth > 600 && auth.currentUser) || (e.target.innerWidth > 600 && !auth.currentUser)) {
         setMarginBottom(0)
-      } else if(e.target.innerWidth < 600 && auth.currentUser) {
+      } else if(e.target.innerWidth <= 600 && auth.currentUser) {
         setMarginBottom("0.5rem")
-      } else if(e.target.innerWidth < 600 && !auth.currentUser) {
+      } else if(e.target.innerWidth <= 600 && !auth.currentUser) {
         setMarginBottom(0)
       }
     })

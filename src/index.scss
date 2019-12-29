@@ -33,6 +33,7 @@ textarea {
 body {
   margin: 0;
   min-width: 360px;
+  background-color: #f7f7f7;
 }
 
 input,
@@ -140,7 +141,7 @@ input[type="file"] {
 }
 
 .generic-wrapper {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -157,7 +158,7 @@ input[type="file"] {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 0 2rem;
 
@@ -293,6 +294,7 @@ input[type="file"] {
   padding: 2rem;
   border-radius: 10px;
   border: 1px solid $input-color;
+  background-color: #fff;
 
   &__update-form {
     margin-bottom: 2rem;
@@ -445,6 +447,7 @@ input[type="file"] {
 .delete-account-button {
   padding: 2rem;
   border-radius: 10px;
+  background-color: #fff;
   border: 1px solid $input-color; 
 
   &__text {
@@ -488,33 +491,76 @@ input[type="file"] {
     padding: 0.5em;
     border-left: 5px solid $info-color;
   }
+
+  input:focus {
+    background-color: #e7e7e7;
+  }
 }
 
 a {
   text-decoration: none;
 }
 
+.signin-signup-wrapper {
+  display: flex;
+
+  @media (max-width: 800px) {
+    flex-wrap: wrap;
+  }
+}
+
 .SignIn {
   @extend %authentication;
+
+  flex-basis: 50%;
+  flex-shrink: 0;
+  margin-right: 1rem;
+  background-color: #fff;
+
+  @media (max-width: 800px) {
+    flex-basis: 100%;
+  }
 }
 
 .SignUp {
   @extend %authentication;
+  
+  flex-basis: 50%;
+  flex-shrink: 0;
+  background-color: #fff;
+
+  @media (max-width: 800px) {
+    flex-basis: 100%;
+  }
 }
 
 .CurrentUser {
+  width: 60%;
+  padding: 0;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  border: none;
+  min-width: 250px;
+
   @extend %authentication;
+
   .CurrentUser--profile {
     display: flex;
-    margin-bottom: 0.5em;
+    padding: 2rem;
+    border: 1px solid $input-color;
+    background-color: #fff;
 
-    @media (max-width: 430px) {
+    @media (max-width: 720px) {
       flex-direction: column;
       align-items: center;
       text-align: center;
       margin-bottom: 0;
-    }
 
+      h2 {
+        text-align: center;
+        border-left: none;
+      }
+    }
   }
   .CurrentUser--information {
     flex: 4;
@@ -522,7 +568,7 @@ a {
   &__img-container {
     flex-basis: 150px;
     height: 150px;
-
+    
     @media (max-width: 430px) {
       flex-basis: 80px;
       height: 80px;
@@ -538,10 +584,14 @@ a {
       border-radius: 50%;
       margin-right: 1em;
 
+      @media (max-width: 720px) {
+        margin-right: 0;
+        padding: 0;
+      }
+
       @media (max-width: 430px) {
         width: 80px;
         height: 80px;
-        margin-right: 0;
       }
 
     }
@@ -550,9 +600,15 @@ a {
   h2 {
     margin-bottom: 1em;
 
-    @media (max-width: 430px) {
+    @media (max-width: 720px) {
       margin: 0;
       border: none;
+    }
+  }
+
+  p {
+    @media (max-width: 720px) {
+      margin-top: 0;
     }
   }
 
@@ -678,6 +734,7 @@ a {
 }
 
 .Post {
+  background-color: #fff;
   border: 1px solid $input-color;
   margin-bottom: 1em;
 }
@@ -911,6 +968,7 @@ a {
   justify-content: center;
   align-items: center;
   max-width: 450px;
+  min-width: 300px;
   padding: 2rem;
   border: 2px solid red;
   border-radius: 10px;
@@ -943,10 +1001,12 @@ a {
 /*----- Estilos de la página del post -----*/
 .post-main {
   // min-height: 100vh;
-  padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  border-bottom: 1px solid #e7e7e7;
+
+  @media (max-width: 800px) {
+    padding: 0;
+  }
 
   &__title {
     margin-top: 0;
@@ -960,8 +1020,13 @@ a {
   &__info {
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
+    padding-bottom: 1rem;
     font-size: 1rem;
+    border-bottom: 1px solid #e7e7e7;
+
+    p {
+      margin-top: 0;
+    }
 
     &-author {
 
@@ -976,16 +1041,18 @@ a {
   }
 
   &__content {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    border-bottom: 1px solid #e7e7e7;
   }
 
   &__user-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
-    border: 1px solid #ccc;
-    border-radius: 100px;  
+
+    @media (max-width: 450px) {
+      flex-direction: column;
+    }
     
     button {
       display: block;
@@ -1018,6 +1085,7 @@ a {
   
       p {
         margin-right: 1rem;
+        font-size: 1.3rem;
         color: rgb(71, 145, 241);
       }
   
@@ -1028,6 +1096,7 @@ a {
       .star {
         margin-right: 0;
         font-size: 1.1rem;
+
         i {
           &:before {
             color: #fff;
@@ -1040,6 +1109,10 @@ a {
   &__buttons {
     display: flex;
     justify-content: space-between;
-    align-items: center;      
+    align-items: center;
+    
+    @media (max-width: 450px) {
+      margin-bottom: 1rem;
+    }
   }
 }
