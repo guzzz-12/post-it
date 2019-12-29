@@ -10,6 +10,7 @@ import CreatePostPage from './CreatePost/CreatePostPage';
 import Footer from './Footer/Footer';
 import NotFound from './NotFound/NotFound';
 import Notifications from "./Notifications/Notifications";
+import FilteredPosts from "./FilteredPosts/FilteredPosts";
 
 class Application extends Component {
   render() {
@@ -24,6 +25,7 @@ class Application extends Component {
             <Route exact path="/signin-signup" component={SignInAndSignUp} />
             <Route exact path="/profile" component={UserProfile} />
             <Route exact path="/post/:postId" component={PostPage} />
+            <Route path="/post/category/:postCategory" component={FilteredPosts} />
             <Route exact path="/users/:userId" component={User} />
             <Route exact path="*" component={NotFound} />
           </Switch>
