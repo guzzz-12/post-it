@@ -98,6 +98,7 @@ input[type="file"] {
   justify-content: center;
   align-items: center;
   width: 100%;
+  // margin-bottom: 2rem;
   padding: 10px 0;
   text-align: center;
   border: 1px solid #fff;
@@ -149,6 +150,7 @@ input[type="file"] {
 .main-nav {
   position: relative;
   width: 100%;
+  margin-bottom: 0;
   padding: 1rem 0;
   background-color: $input-color;
 
@@ -503,6 +505,7 @@ a {
 
 .signin-signup-wrapper {
   display: flex;
+  margin-top: 2rem;
 
   @media (max-width: 800px) {
     flex-wrap: wrap;
@@ -539,6 +542,7 @@ a {
   padding: 0;
   margin: 0 auto;
   margin-bottom: 1rem;
+  margin-top: 2rem;
   border: none;
   min-width: 250px;
 
@@ -685,6 +689,10 @@ a {
   }
 }
 
+.create-post-page {
+  margin-top: 2rem;
+}
+
 .AddPost {
   padding: 3rem;
   margin-bottom: 2rem;
@@ -719,6 +727,7 @@ a {
 
 .Posts {
   min-height: 50vh;
+  margin-top: 2rem;
 
   &__message {
     padding: 3rem;
@@ -1022,7 +1031,7 @@ a {
 /*----- Estilos de la página del post -----*/
 .post-main {
   // min-height: 100vh;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
   border-bottom: 1px solid #e7e7e7;
 
   @media (max-width: 800px) {

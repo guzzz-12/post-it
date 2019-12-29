@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from "react";
+import "./filteredPosts.scss";
 import {firestore} from "../../firebase";
 import {withRouter} from "react-router-dom";
 import PostPreview from "../PostPreview";
@@ -37,7 +38,7 @@ const FilteredPosts = (props) => {
   }
 
   return (
-    <div className="generic-wrapper">
+    <div className="filtered-posts generic-wrapper">
       {!loading && <h2>Posts category: {props.match.params.postCategory}</h2>}
       {loading && filteredPosts.length === 0 && <Spinner />}
       {!loading && filteredPosts.length === 0 && <h2>No posts found...</h2>}

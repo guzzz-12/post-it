@@ -31,7 +31,6 @@ const EmailVerificationWarning = (props) => {
       "email-warning"
       :
       "email-warning email-warning--hidden"}`}
-      style={{marginBottom: `${props.user && !props.user.emailVerified ? "2rem" : "0"}`}}
     >
       {message &&
         <h3>{message}</h3>
