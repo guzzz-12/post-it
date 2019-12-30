@@ -12,7 +12,7 @@
     align-items: center;
 
     input {
-      width: 30%;
+      width: 50%;
       margin-bottom: 0;
       transform-origin: right center;
       transition: all 700ms;
@@ -36,5 +36,23 @@
         color: #ccc;
       }
     }
+  }
+
+  &__clear-search {
+    display: none;
+    position: absolute;
+    right: 5rem;
+    padding: 0.5rem;
+    transform-origin: right center;
+    text-align: center;
+    color: #777777;
+    border-radius: 5px;
+    background-color: #e7e7e7;
+    transition: all 700ms;
+    cursor: pointer;
+  }
+  
+  &__clear-search--show {
+    display: block;
   }
 }

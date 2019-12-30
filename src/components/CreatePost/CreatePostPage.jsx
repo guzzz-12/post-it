@@ -88,8 +88,10 @@ const CreatePostPage = (props) => {
       setLoading(true);
 
       const author = await getUserDoc(auth.currentUser.uid)
+      const titleArray = postTitle.toLowerCase().split(" ")
       post = {
         title: postTitle,
+        titleArray,
         category: postCategory,
         content: postContent,
         user: {
@@ -142,7 +144,8 @@ const CreatePostPage = (props) => {
   const editPostHandler = async () => {
     try {
       const postRef = firestore.collection("posts").doc(EditPostContext.postId)
-      await postRef.update({title: postTitle, category: postCategory, content: window.editor.getData()})
+      const titleArray = postTitle.toLowerCase().split(" ")
+      await postRef.update({title: postTitle, titleArray, category: postCategory, content: window.editor.getData()})
       setEditMode(false)
       EditPostContext.clearPostContent()
       props.history.push(`/post/${EditPostContext.postId}`)
