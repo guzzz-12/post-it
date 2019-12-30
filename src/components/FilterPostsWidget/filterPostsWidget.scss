@@ -1,0 +1,46 @@
+.posts__post-category {
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  h2 {
+    margin: 0;
+
+    @media (max-width: 600px) {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .post-categories {
+    display: flex;
+    flex-wrap: wrap;
+
+    label {
+      display: block;
+      padding: 0.5rem 1rem;
+      background-color: #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+
+      // @media (max-width: 430px) {
+      //   flex-basis: 50%;
+      // }
+    }
+  }
+   
+  .post-category {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+}
