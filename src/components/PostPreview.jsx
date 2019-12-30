@@ -134,7 +134,7 @@ const PostPreview = ({id, title, category, content, user, createdAt, stars, comm
 
   const reducePostContent = () => {
     const contentArray = content.split(" ")
-    const reducedContent = contentArray.splice(0, 30).join(" ")
+    const reducedContent = contentArray.splice(0, 60).join(" ")
     return `${reducedContent}... [Click to continue reading...]`
   }
 
