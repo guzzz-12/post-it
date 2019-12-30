@@ -3,10 +3,6 @@
     margin-top: 0;
   }
 
-  &__header {
-
-  }
-
   &__data {
     padding: 2rem;
     margin-bottom: 2rem;
@@ -19,6 +15,10 @@
     border-bottom: none;
     outline: none;
 
+    @media (max-width: 600px) {
+      margin-bottom: 2rem;
+    }
+
     input[type="text"] {
       margin-bottom: 2rem;
     }
@@ -29,12 +29,22 @@
     display: flex;
     align-items: center;
 
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     h2 {
       margin-bottom: 0;
+
+      @media (max-width: 600px) {
+        margin-bottom: 0.5rem;
+      }
     }
 
     .post-categories {
       display: flex;
+      flex-wrap: wrap;
 
       label {
         display: block;
@@ -42,6 +52,10 @@
         background-color: #ccc;
         border-radius: 5px;
         cursor: pointer;
+
+        // @media (max-width: 430px) {
+        //   flex-basis: 50%;
+        // }
       }
     }
      
@@ -55,22 +69,6 @@
 
     input[type="radio"] {
       display: none;
-    }
-
-    &--science {
-
-    }
-
-    &--technology {
-
-    }
-
-    &--development {
-
-    }
-
-    &--other {
-
     }
   }
 }
