@@ -1,11 +1,7 @@
 .search-posts {
   position: relative;
   // margin-bottom: 2rem;
-
-  &__form {
-    // background-color: yellow;
-  }
-
+  
   &__input-container {
     display: flex;
     justify-content: flex-end;
@@ -16,6 +12,10 @@
       margin-bottom: 0;
       transform-origin: right center;
       transition: all 700ms;
+
+      @media (max-width: 800px) {
+        width: 100%;    
+      }
     }
 
     input:focus {
@@ -24,6 +24,10 @@
 
     input::placeholder {
       color: #ccc;
+
+      @media (max-width: 430px) {
+        font-size: 1.1rem;   
+      }
     }
     
     i {

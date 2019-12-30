@@ -41,7 +41,7 @@ const SearchPosts = (props) => {
               >
                 Clear search
               </span>
-              <i class="fas fa-search"></i>
+              <i className="fas fa-search"></i>
             </div>
           </form>
         </div>
