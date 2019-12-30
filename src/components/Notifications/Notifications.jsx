@@ -31,7 +31,7 @@ const Notifications = (props) => {
       {newPostData && 
         <Link to={`/post/${newPostData.id}`}>
           <div className="notifications__content">
-            <h3>{newPostData.user.displayName.split(" ")[0]} added a new post!</h3>
+            <h3>{newPostData.user.displayName.split(" ")[0]} added a new post:</h3>
             <p>{newPostData.title}</p>
           </div>
         </Link>

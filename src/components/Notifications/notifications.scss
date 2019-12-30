@@ -1,12 +1,20 @@
 .notifications {
   position: fixed;
-  right: 0;
-  top: 30%;
-  transform: translateX(100%);
-  border-radius: 5px 0 0 5px;
-  background-color: rgb(71, 145, 241);
+  left: 2rem;
+  bottom: 0rem;
+  transform: translateY(100%);
+  border-radius: 5px;
+  background-color: #de6b48;
   z-index: 10000;
-  transition: all 350ms;
+  transition: all 700ms ease-in-out;
+  
+  @media (max-width: 500px) {
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    border-radius: 0px;
+  }
   
   a {
     display: block;
@@ -18,11 +26,14 @@
     
     h3 {
       margin: 0 0 0.5rem 0;
+      font-weight: 400;
+      text-transform: uppercase;
       color: #fff;
     }
     
     p {
       margin: 0;
+      font-size: 1.1rem;
       font-weight: bold;
       color: #fff;
     }
@@ -30,6 +41,15 @@
 }
 
 .notifications--show {
-  transform: translateX(0);
-  transition: all 350ms;
+  transform: translateY(0);
+  bottom: 4rem;
+  transition: all 700ms ease-in-out;
+
+  @media (max-width: 500px) {
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    border-radius: 0px;
+  }
 }
