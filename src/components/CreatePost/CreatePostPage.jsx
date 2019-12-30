@@ -27,9 +27,16 @@ const CreatePostPage = (props) => {
     message: null
   })
 
+  // Limpiar contenido del post al salir de la página
   useEffect(() => {
-
-    // Crear el editor para editar posts cuando se entra en modo edición
+    return () => {
+      EditPostContext.clearPostContent()
+    }
+    // eslint-disable-next-line
+  }, [])
+  
+  // Crear el editor para editar posts cuando se entra en modo edición
+  useEffect(() => {
     if(EditPostContext.postTitle && EditPostContext.postContent) {
       setEditMode(true)
       setPostTitle(EditPostContext.postTitle)
@@ -161,6 +168,11 @@ const CreatePostPage = (props) => {
     }
   }
 
+  // Cancelar edición del post
+  const cancelEdit = () => {
+    props.history.goBack()
+  }
+
   //Validar que se haya completado la información requerida para crear el post
   const isFormValid = (data) => {
     if(data.title === "" && data.content === "") {
@@ -206,12 +218,13 @@ const CreatePostPage = (props) => {
     }, 3500)
   }
 
-  console.log(postCategory)
-
   return (
     <section className="create-post-page generic-wrapper">
       <DisplayErrors error={error} />
-      <h2 className="create-post-page__header">{editMode ? "Edit post" : "Create new post"}</h2>
+      <div className="create-post-page__header-content">
+        <h2 className="create-post-page__header">{editMode ? "Edit post" : "Create new post"}</h2>
+        {editMode && <span onClick={cancelEdit}>Cancel editing</span>}
+      </div>
       <div className="create-post-page__data">
         <form
           className="create-post-page__title-input"
