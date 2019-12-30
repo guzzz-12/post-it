@@ -9,18 +9,21 @@ import UserProvider from './providers/UserProvider';
 import EditPostState from "./context/editPost/editPostState";
 import LastPostState from "./context/lastPost/lastPostState";
 import {BrowserRouter} from "react-router-dom";
+import SearchPostsState from './context/searchPosts/searchPostsState';
 
 render(
   <BrowserRouter>
-    <LastPostState>
-      <EditPostState>
-        <UserProvider>
-          <PostsProvider>
-            <Application />
-          </PostsProvider>
-        </UserProvider>
-      </EditPostState>
-    </LastPostState>
+    <SearchPostsState>
+      <LastPostState>
+        <EditPostState>
+          <UserProvider>
+            <PostsProvider>
+              <Application />
+            </PostsProvider>
+          </UserProvider>
+        </EditPostState>
+      </LastPostState>
+    </SearchPostsState>
   </BrowserRouter>,
   document.getElementById('root')
 );
