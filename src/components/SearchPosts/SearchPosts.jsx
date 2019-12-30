@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext} from "react";
 import "./searchPosts.scss";
 import {withRouter} from "react-router-dom";
 import SearchPostsContext from "../../context/searchPosts/searchPostsContext";
@@ -7,14 +7,6 @@ const SearchPosts = (props) => {
   const searchPostsContext = useContext(SearchPostsContext);
 
   const [searchTerm, setSearchTerm] = useState(null);
-
-  useEffect(() => {
-    if(props.location.pathname !== "/") {
-      setSearchTerm(null)
-      searchPostsContext.clearSearch()
-    }
-     // eslint-disable-next-line
-  }, [props.location.pathname])
 
   const onChangeHandler = (e) => {
     setSearchTerm(e.target.value)
@@ -28,6 +20,7 @@ const SearchPosts = (props) => {
   const clearSearchHandler = () => {
     setSearchTerm(null)
     searchPostsContext.clearSearch()
+    searchPostsContext.resetFilter()
   }
 
   return (

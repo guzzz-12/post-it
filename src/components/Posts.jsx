@@ -5,6 +5,7 @@ import { PostContext } from '../providers/PostsProvider';
 import WithUser from './WithUser';
 import Spinner from './Spinner/Spinner';
 import SearchPostsContext from "../context/searchPosts/searchPostsContext";
+import FilterPostsWidget from './FilterPostsWidget/FilterPostsWidget';
 
 const Posts = (props) => {
   document.title = "Post It! | Home"
@@ -16,17 +17,22 @@ const Posts = (props) => {
   const [postsLoaded, setPostsLoaded] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
   const [searchPosts, setSearchPosts] = useState(null);
+  const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
+  // Buscar posts por título
+  useEffect(() => {    
     if(searchPostsContext.searchTerm) {
-      const posts = []
-
+      const foundPosts = []
+      setIsLoading(true)
+      searchPostsContext.resetFilter()
+      
       firestore.collection("posts")
       .where("titleArray", "array-contains", searchPostsContext.searchTerm.toLowerCase())
       .get()
       .then((snap) => {
-        snap.forEach(doc => posts.push(doc.data()))
-        setSearchPosts(posts)
+        snap.forEach(doc => foundPosts.push(doc.data()))
+        setIsLoading(false)
+        setSearchPosts(foundPosts)
       })
       .catch((err) => console.log(err))
     } else {
@@ -34,6 +40,31 @@ const Posts = (props) => {
     }
   }, [searchPostsContext])
 
+
+  // Filtrar posts por categoría
+  useEffect(() => {
+    const postsRef = firestore.collection("posts");
+    
+    const getFilteredPosts = async () => {
+      const filteredPosts = [];
+      const filteredPostsSnapshot = await postsRef.where("category", "==", filter).get()
+      filteredPostsSnapshot.forEach(doc => filteredPosts.push(doc.data()))
+      return filteredPosts;
+    }
+
+    if(filter !== "all") {
+      setIsLoading(true)
+      getFilteredPosts().then((res) => {
+        setIsLoading(false)
+        setSearchPosts(res)
+      })
+    } else {
+      setSearchPosts(null)
+    }
+
+  }, [filter])
+
+  // Indicar carga inicial de los posts
   useEffect(() => {
     setPostsLoaded(true)
   }, [allPosts])
@@ -44,19 +75,29 @@ const Posts = (props) => {
     }
   }, [postsLoaded])
 
+  // Indicar carga de la data del usuario
   useEffect(() => {
     if(props.user) {
       setUserLoaded(true)
     }
   }, [props.user])
 
+  // Callback a ejecutar en FilterPostsWidget para tomar el filtro seleccionado
+  const setFilterHandler = (filter) => {
+    if(searchPostsContext.searchTerm) {
+      searchPostsContext.clearSearch()
+    }
+    setFilter(filter)
+  }
+
+  // Generar los preview de los posts
   const renderPosts = () => {
     if(searchPosts && searchPosts.length > 0) {
       return searchPosts.map(post => {
         return <PostPreview {...post} key={post.id} />
       })
     } else if (searchPosts && searchPosts.length === 0) {
-      return <h2>No posts match your search...</h2>
+      return <h2>No posts found...</h2>
     }
     return allPosts.map(post => {
       return <PostPreview {...post} key={post.id} />
@@ -65,9 +106,10 @@ const Posts = (props) => {
 
   return (
     <React.Fragment>
-      {isLoading && <Spinner position="flex-start"/>}
+      {isLoading && allPosts.length === 0 && <Spinner position="flex-start"/>}
       <section className="Posts generic-wrapper">
         {allPosts.length > 0 && <h2 className="Posts__title">Posts</h2>}
+        {allPosts.length > 0 && <FilterPostsWidget setFilter={setFilterHandler} />}
         {renderPosts()}
         {userLoaded && !props.user && !isLoading &&
           <div className="Posts__message">
