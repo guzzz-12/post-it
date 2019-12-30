@@ -15,7 +15,8 @@ const Spinner = (props) => {
           width: `${props.small && "2rem"}`,
           height: `${props.small && "2rem"}`,
           borderLeft: `${props.white && "0.4rem solid #fff"}`,
-          alignSelf: `${props.position}`
+          alignSelf: `${props.position}`,
+          top: `${props.top}`
         }}
       >
         Loading...

@@ -22,7 +22,6 @@ const Posts = (props) => {
   // Buscar posts por título
   useEffect(() => {    
     if(searchPostsContext.searchTerm) {
-      const foundPosts = []
       setIsLoading(true)
       searchPostsContext.resetFilter()
       
@@ -30,6 +29,7 @@ const Posts = (props) => {
       .where("titleArray", "array-contains", searchPostsContext.searchTerm.toLowerCase())
       .get()
       .then((snap) => {
+        const foundPosts = []
         snap.forEach(doc => foundPosts.push(doc.data()))
         setIsLoading(false)
         setSearchPosts(foundPosts)
@@ -46,12 +46,13 @@ const Posts = (props) => {
     const postsRef = firestore.collection("posts");
     
     const getFilteredPosts = async () => {
+      // setSearchPosts(null)
       const filteredPosts = [];
       const filteredPostsSnapshot = await postsRef.where("category", "==", filter).get()
       filteredPostsSnapshot.forEach(doc => filteredPosts.push(doc.data()))
       return filteredPosts;
     }
-
+    
     if(filter !== "all") {
       setIsLoading(true)
       getFilteredPosts().then((res) => {
@@ -99,23 +100,26 @@ const Posts = (props) => {
     } else if (searchPosts && searchPosts.length === 0) {
       return <h2>No posts found...</h2>
     }
-    return allPosts.map(post => {
+    return !isLoading &&!searchPosts && allPosts.map(post => {
       return <PostPreview {...post} key={post.id} />
     })
   }
 
   return (
     <React.Fragment>
-      {isLoading && allPosts.length === 0 && <Spinner position="flex-start"/>}
       <section className="Posts generic-wrapper">
-        {allPosts.length > 0 && <h2 className="Posts__title">Posts</h2>}
-        {allPosts.length > 0 && <FilterPostsWidget setFilter={setFilterHandler} />}
-        {renderPosts()}
-        {userLoaded && !props.user && !isLoading &&
-          <div className="Posts__message">
-            <h2>Login to star creating your posts!</h2>
+          {isLoading && allPosts.length === 0 && <Spinner top="3rem" position="flex-start"/>}
+          {allPosts.length > 0 && <h2 className="Posts__title">Posts</h2>}
+          {allPosts.length > 0 && <FilterPostsWidget setFilter={setFilterHandler} />}
+          <div className="Posts__content" style={{position: "relative"}}>
+            {isLoading && <Spinner top="3rem" position="flex-start"/>}
+            {renderPosts()}        
           </div>
-        }
+          {userLoaded && !props.user && !isLoading &&
+            <div className="Posts__message">
+              <h2>Login to star creating your posts!</h2>
+            </div>
+          }        
       </section>
     </React.Fragment>
   )

@@ -11,6 +11,7 @@ const FilterPostsWidget = (props) => {
       setPostCategory("all")
       props.setFilter("all");
     }
+    // eslint-disable-next-line
   }, [searchPostsContext])
 
   const categoryHandler = (e) => {
