@@ -26,6 +26,7 @@ const Comments = ({ comments, onCreate, user, onDelete, sortComments, commentsCh
   return (
     <section className="Comments">
       <div className="Comments__header">
+        {comments.length === 0 && <h3>No comments yet...</h3>}
         {comments.length > 0 && comments.length === 1 && <h3>1 comment</h3>}
         {comments.length > 0 && comments.length > 1 && <h3>{comments.length} comments</h3>}
         <div className="Comments__header-select">

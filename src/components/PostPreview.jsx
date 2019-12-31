@@ -135,7 +135,7 @@ const PostPreview = ({id, title, category, content, user, createdAt, stars, comm
   const reducePostContent = () => {
     const contentArray = content.split(" ")
     const reducedContent = contentArray.splice(0, 60).join(" ")
-    return `${reducedContent}... [Click to continue reading...]`
+    return `${reducedContent}... <span style="font-weight: 400">[Click to continue reading...]</span>`
   }
 
   const hideModal = () => {

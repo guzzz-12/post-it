@@ -53,7 +53,11 @@ const CreatePostPage = (props) => {
       }
       
       // Editor de edición
-      ClassicEditor.create(document.querySelector("#editor"))
+      ClassicEditor.create(document.querySelector("#editor"), {
+        mediaEmbed: {
+          previewsInData: true
+        }
+      })
       .then((editor) => {
         editor.setData(postContent)
         window.editor = editor
@@ -286,6 +290,11 @@ const CreatePostPage = (props) => {
           <div id="editor"></div>
           <CKEditor
             editor={ClassicEditor}
+            config={{
+              mediaEmbed: {
+                previewsInData: true
+              }
+            }}
             onChange={onContentChangeHandler}
           />
         </div>

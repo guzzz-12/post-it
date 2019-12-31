@@ -1085,7 +1085,7 @@ a {
 
   &__title {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     font-size: 2rem;
     text-transform: uppercase;
     font-weight: 400;
@@ -1123,6 +1123,12 @@ a {
   &__content {
     font-size: 1.3rem;
     border-bottom: 1px solid #e7e7e7;
+
+    a {
+      &:hover {
+        color: $input-color;
+      }
+    }
   }
 
   &__user-actions {

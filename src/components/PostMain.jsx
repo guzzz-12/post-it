@@ -150,7 +150,7 @@ const PostMain = (props) => {
           <p className="post-main__info-date">{moment(props.post.createdAt).calendar()}</p>
         </div>
         <div className="post-main__content">
-          <p>{ReactHtmlParser(props.post.content)}</p>
+          {ReactHtmlParser(props.post.content)}
         </div>
       </article>
       <div className="post-main__user-actions">
