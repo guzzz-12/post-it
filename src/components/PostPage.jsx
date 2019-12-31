@@ -12,6 +12,8 @@ class PostPage extends Component {
   state = {
     post: null,
     comments: [],
+    sortedBy: "asc",
+    commentsChanged: false,
     postNotFound: false
   }
   
@@ -24,6 +26,7 @@ class PostPage extends Component {
   
   async componentDidMount() {
     try {
+      // Escuchar los cambios de la colección de posts para actualizar la interfaz en tiempo real
       this.unsubscribeFromPost = this.postsRef.onSnapshot(async (snapshot) => {
         if(!snapshot.exists) {
           this.setState({
@@ -56,7 +59,8 @@ class PostPage extends Component {
       console.log(error)
     }
 
-    this.unsubscribeFromComments = this.commentsRef.orderBy("createdAt", "asc").onSnapshot((snapshot) => {      
+    // Escuchar los cambios de la colección de comentarios para actualizar la interfaz en tiempo real
+    this.unsubscribeFromComments = this.commentsRef.orderBy("createdAt", this.state.sortedBy).onSnapshot((snapshot) => {      
       const comments = snapshot.docs.map(doc => {
         return collectIdsAndDocs(doc)
       })
@@ -67,6 +71,7 @@ class PostPage extends Component {
     })
   }
 
+  // Agregar comentario a la base de datos
   createComment = async (comment) => {
     const postCommentsUsersRef = await this.postsRef.get()
     const commentsUsersIds = postCommentsUsersRef.data().commentsUsers
@@ -86,8 +91,13 @@ class PostPage extends Component {
     })
 
     await this.postsRef.update({comments: commentsAmount + 1})
+
+    this.setState({
+      commentsChanged: true
+    })
   }
 
+  // Borrar comentario de la base de datos
   deleteComment = async (id) => {
     const postCommentsUsersRef = await this.postsRef.get()
     const commentsAmount = postCommentsUsersRef.data().comments
@@ -96,6 +106,10 @@ class PostPage extends Component {
       //Borrar el comentario
       await this.commentsRef.doc(id).delete()
       await this.postsRef.update({comments: commentsAmount - 1})
+
+      this.setState({
+        commentsChanged: true
+      })
 
       //Eliminar la id del usuario de la propiedad commentsUsers del post cuando el usuario elimina todos sus comentarios
       const allComments = []
@@ -113,12 +127,58 @@ class PostPage extends Component {
         commentsUsersIds.splice(userIdIndex, 1)
 
         await this.postsRef.update({commentsUsers: commentsUsersIds})
+
       }      
     } catch (error) {
       console.log(error)
     }
   }
 
+  // Ordenar comentarios en el cliente, no se ejecuta un nuevo query
+  sortCommentsHandler = (sortBy) => {
+    if(sortBy === "asc") {
+      const compare = ( a, b ) => {
+        if ( a.createdAt < b.createdAt ){
+          return -1;
+        }
+        if ( a.createdAt > b.createdAt ){
+          return 1;
+        }
+        return 0;
+      }
+
+      const sorted = [...this.state.comments].sort(compare)
+      this.setState({
+        comments: sorted,
+        commentsChanged: false,
+      })
+    } else if(sortBy === "desc") {
+      const compare = ( a, b ) => {
+        if ( a.createdAt > b.createdAt ){
+          return -1;
+        }
+        if ( a.createdAt < b.createdAt ){
+          return 1;
+        }
+        return 0;
+      }
+
+      const sorted = [...this.state.comments].sort(compare)
+      this.setState({
+        comments: sorted,
+        commentsChanged: false
+      })
+    }
+  }
+
+  // Resetear el sort al agregar o eliminar comentarios
+  resetCommentsChanged = () => {
+    this.setState({
+      commentsChanged: false
+    })
+  }
+
+  // Desuscribirse de los listeners al salir de la página
   componentWillUnmount() {
     this.unsubscribeFromPost()
     this.unsubscribeFromComments()
@@ -139,9 +199,12 @@ class PostPage extends Component {
             <Comments
               comments={comments}
               postId={post && post.id}
+              user={this.props.user}
               onCreate={this.createComment}
               onDelete={this.deleteComment}
-              user={this.props.user}
+              sortComments={this.sortCommentsHandler}
+              commentsChanged={this.state.commentsChanged}
+              resetCommentsChanged={this.resetCommentsChanged}
             />
           </React.Fragment>
         }
