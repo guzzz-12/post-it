@@ -144,9 +144,17 @@ const PostMain = (props) => {
         <h1 className="post-main__title">{props.post.title}</h1>
         <div className="post-main__info">
           <p className="post-main__info-author">
-            <Link to={`/users/${props.post.user.uid}`}>Created by: {props.post.user.displayName}</Link>
+            Created by: 
+            <Link to={`/users/${props.post.user.uid}`}>
+              {props.post.user.displayName}
+            </Link>
           </p>
-          <p className="post-main__info-category">Category: <Link to={`/post/category/${props.post.category}`}>{props.post.category}</Link></p>
+          <p className="post-main__info-category">
+            Category: 
+            <Link to={`/post/category/${props.post.category}`}>
+              {props.post.category}
+            </Link>
+          </p>
           <p className="post-main__info-date">{moment(props.post.createdAt).calendar()}</p>
         </div>
         <div className="post-main__content">

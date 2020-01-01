@@ -1101,30 +1101,40 @@ a {
 
     p {
       margin-top: 0;
+      font-size: 1.3rem;
     }
 
     &-author {
+      font-size: 1.3rem;
 
       a {
+        margin-left: 5px;
         font-weight: bold;
+        color: $input-color;
       }
     }
-
+    
     &-date {
       margin: 0;
     }
-
+    
     &-category {
       text-transform: capitalize;
-      font-weight: bold;
+      
+      a {
+        margin-left: 5px;
+        font-weight: bold;
+        color: $input-color;
+      }
     }
   }
 
   &__content {
     font-size: 1.3rem;
     border-bottom: 1px solid #e7e7e7;
-
+    
     a {
+      font-size: 1.3rem;
       &:hover {
         color: $input-color;
       }
