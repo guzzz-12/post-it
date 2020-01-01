@@ -150,22 +150,20 @@ const PostPreview = ({id, title, category, content, user, createdAt, stars, comm
         hide={hideModal}
         itemToDelete={id}
       />
-      <Link to={`/post/${id}`}>
-        <div className="Post--content">
-          <div
-            className="Post--content-img"
-            style={{
-              backgroundImage: `url(${user.photoURL})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center"
-            }}
-          />
-          <div className="Post--content-text">
-            <h3>{title}</h3>
-            <div>{ReactHtmlParser(reducePostContent())}</div>
-          </div>
+      <div className="Post--content" onClick={() => history.push(`/post/${id}`)} style={{cursor: "pointer"}}>
+        <div
+          className="Post--content-img"
+          style={{
+            backgroundImage: `url(${user.photoURL})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        />
+        <div className="Post--content-text">
+          <h3>{title}</h3>
+          <div>{ReactHtmlParser(reducePostContent())}</div>
         </div>
-      </Link>
+      </div>
       <div className="Post--meta">
         <div
           className="Post--meta__content"
