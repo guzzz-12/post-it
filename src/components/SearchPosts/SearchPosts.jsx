@@ -33,7 +33,7 @@ const SearchPosts = (props) => {
                 type="text"
                 value={searchTerm || ""}
                 onChange={onChangeHandler}
-                placeholder="Search posts by title (add only one word)"
+                placeholder="Search posts by title (type only one word)"
               />
               <span
                 onClick={clearSearchHandler}

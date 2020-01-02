@@ -6,11 +6,18 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    padding: 10px;
+    filter: drop-shadow(3px 3px 3px #ccc);
 
     input {
       width: 50%;
       margin-bottom: 0;
+      padding: 1rem;
       transform-origin: right center;
+      background-color: #f7f7f7;
+      border: none;
+      border-radius: 100px;
+      border: 1px solid transparent;
       transition: all 700ms;
 
       @media (max-width: 800px) {
@@ -20,9 +27,11 @@
 
     input:focus {
       width: 100%;
+      border: 1px solid #ccc;
     }
 
     input::placeholder {
+      font-size: 1.3rem;
       color: #ccc;
 
       @media (max-width: 430px) {
@@ -33,7 +42,7 @@
     i {
       position: absolute;
       right: 0;
-      margin-right: 3rem;
+      margin-right: 2rem;
       font-size: 1.6rem;
 
       &::before {
