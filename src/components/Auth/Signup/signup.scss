@@ -1,0 +1,94 @@
+.signup-form-container {
+  position: relative;
+  height: 70vh;
+}
+
+.signup-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 400px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 15px #ccc;
+  border-radius: 10px;
+
+  &__form-wrapper {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #f7f7f7;
+
+    form {
+      // margin-bottom: 2rem;
+  
+      h2 {
+        margin-top: 0;
+        font-size: 1.8rem;
+        text-align: center;
+        text-transform: uppercase;
+      }
+  
+      input {
+        border: none;
+        margin-bottom: 2rem;
+  
+        &:focus {
+          border-bottom: 1px solid #4791f1;
+        }
+      }
+    }
+
+    input[type="submit"] {
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+      color: #fff;
+      border-radius: 5px;
+      background-color: #4791f1;
+      border: none;
+      transition: all 350ms;
+
+      &:hover {
+        background-color: rgb(60, 117, 192);
+      }
+    }
+
+  }
+
+  p {
+    a {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+}
+
+
+
+/*----- Errores de formularios -----*/
+.input-validation-error {
+  color: red;
+  border: 1px solid red;
+  background-color: rgba(255, 0, 0, 0.25);
+
+  &::placeholder {
+    color: red
+  }
+}
+
+/*----- Estilos de los botones en disabled -----*/
+button:disabled, input[type="submit"]:disabled {
+  color: rgb(165, 165, 165);
+  border-color: transparent;
+  background-color: rgb(226, 226, 226);
+
+  &:hover {
+   background-color: rgb(226, 226, 226);
+   cursor: default;
+  }
+}

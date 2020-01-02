@@ -25,10 +25,10 @@ const Nav = (props) => {
             {!props.user && userLoaded &&
             <div className="main-nav__signin-signup">
               <div className="main-nav__signin">
-                <Link to="/signin-signup">Sing In</Link>
+                <Link to="/signin">Sing In</Link>
               </div>
               <div className="main-nav__signup">
-                <Link to="/signin-signup">Sign Up</Link>
+                <Link to="/signup">Sign Up</Link>
               </div>
             </div>
             }
