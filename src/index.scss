@@ -504,40 +504,6 @@ a {
   text-decoration: none;
 }
 
-.signin-signup-wrapper {
-  display: flex;
-  margin-top: 2rem;
-
-  @media (max-width: 800px) {
-    flex-wrap: wrap;
-  }
-}
-
-.SignIn {
-  @extend %authentication;
-
-  flex-basis: 50%;
-  flex-shrink: 0;
-  margin-right: 1rem;
-  background-color: #fff;
-
-  @media (max-width: 800px) {
-    flex-basis: 100%;
-  }
-}
-
-.SignUp {
-  @extend %authentication;
-  
-  flex-basis: 50%;
-  flex-shrink: 0;
-  background-color: #fff;
-
-  @media (max-width: 800px) {
-    flex-basis: 100%;
-  }
-}
-
 .CurrentUser {
   width: 60%;
   padding: 0;
