@@ -142,39 +142,37 @@ class SignIn extends Component {
     return (
       <div className="signin-form-container">
         <DisplayErrors error={error} />
-        <div className="signin-form generic-wrapper">
-          <div className="signin-form__form-wrapper">
-            <form onSubmit={this.handleSubmit}>
-              <h2>Signin</h2>
-              <input
-                className={`${error.status ? "input-validation-error" : ""}`}
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={email}
-                onChange={this.handleChange}
-              />
-              <input
-                className={`${error.status ? "input-validation-error" : ""}`}
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={password}
-                onChange={this.handleChange}
-              />
-              <button disabled={error.status || loading}>
-                {loading ? "Submiting..." : "Signin"}
-              </button>
-            </form>
-            <div className="signin-form__google">
-              <p>Or signin with <strong>Google</strong></p>
-              <button disabled={error.status || loading} onClick={this.handleGoogleSignin}>
-                <span><i className="fab fa-google"></i></span> {loading ? "Submiting..." : "Google"}
-              </button>
-            </div>
-            <p style={{margin: 0, textAlign: "center"}}>Don't have an account? <Link to="/signup">Signup</Link> </p>
-            <p style={{marginBottom: "0.5rem", textAlign: "center"}}>Forgot your password? <Link to="/forgot-password">Reset your password</Link> </p>
+        <div className="signin-form">
+          <form onSubmit={this.handleSubmit}>
+            <h2>Signin</h2>
+            <input
+              className={`${error.status ? "input-validation-error" : ""}`}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={this.handleChange}
+            />
+            <input
+              className={`${error.status ? "input-validation-error" : ""}`}
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={this.handleChange}
+            />
+            <button disabled={error.status || loading}>
+              {loading ? "Submiting..." : "Signin"}
+            </button>
+          </form>
+          <div className="signin-form__google">
+            <p>Or signin with <strong>Google</strong></p>
+            <button disabled={error.status || loading} onClick={this.handleGoogleSignin}>
+              <span><i className="fab fa-google"></i></span> {loading ? "Submiting..." : "Google"}
+            </button>
           </div>
+          <p style={{margin: 0, textAlign: "center"}}>Don't have an account? <Link to="/signup">Signup</Link> </p>
+          <p style={{marginBottom: "0.5rem", textAlign: "center"}}>Forgot your password? <Link to="/forgot-password">Reset your password</Link> </p>
         </div>
       </div>
     )

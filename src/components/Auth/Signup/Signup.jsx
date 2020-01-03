@@ -167,53 +167,51 @@ class SignUp extends Component {
     return (
       <div className="signup-form-container">
         <DisplayErrors error={error} />
-        <div className="signup-form generic-wrapper">
-          <div className="signup-form__form-wrapper">
-            <form
-              onSubmit={this.handleSubmit}
-              style={{overflow: "hidden"}}
-            >
-              <h2>Sign Up</h2>
-              <input
-                type="text"
-                name="displayName"
-                className={`${error.status ? "input-validation-error" : ""}`}
-                placeholder="Name"
-                value={displayName}
-                onChange={this.handleChange}
-              />
-              <input
-                type="email"
-                name="email"
-                className={`${error.status ? "input-validation-error" : ""}`}
-                placeholder="Email"
-                value={email}
-                onChange={this.handleChange}
-              />
-              <input
-                type="password"
-                name="password"
-                className={`${error.status ? "input-validation-error" : ""}`}
-                placeholder="Password"
-                value={password}
-                onChange={this.handleChange}
-              />
-              <input
-                type="password"
-                name="passwordConfirm"
-                className={`${error.status ? "input-validation-error" : ""}`}
-                placeholder="Confirm your password"
-                value={passwordConfirm}
-                onChange={this.handleChange}
-              />
-              <input
-                disabled={error.status || loading}
-                type="submit"
-                value={loading ? "Submitting..." : "Signup"}
-              />
-            </form>
-            <p style={{margin: 0, textAlign: "center"}}>Already a member? <Link to="/signin">Signin</Link> </p>  
-          </div>
+        <div className="signup-form">
+          <form
+            onSubmit={this.handleSubmit}
+            style={{overflow: "hidden"}}
+          >
+            <h2>Sign Up</h2>
+            <input
+              type="text"
+              name="displayName"
+              className={`${error.status ? "input-validation-error" : ""}`}
+              placeholder="Name"
+              value={displayName}
+              onChange={this.handleChange}
+            />
+            <input
+              type="email"
+              name="email"
+              className={`${error.status ? "input-validation-error" : ""}`}
+              placeholder="Email"
+              value={email}
+              onChange={this.handleChange}
+            />
+            <input
+              type="password"
+              name="password"
+              className={`${error.status ? "input-validation-error" : ""}`}
+              placeholder="Password"
+              value={password}
+              onChange={this.handleChange}
+            />
+            <input
+              type="password"
+              name="passwordConfirm"
+              className={`${error.status ? "input-validation-error" : ""}`}
+              placeholder="Confirm your password"
+              value={passwordConfirm}
+              onChange={this.handleChange}
+            />
+            <input
+              disabled={error.status || loading}
+              type="submit"
+              value={loading ? "Submitting..." : "Signup"}
+            />
+          </form>
+          <p style={{margin: 0, textAlign: "center"}}>Already a member? <Link to="/signin">Signin</Link> </p>  
         </div>
       </div>
     );

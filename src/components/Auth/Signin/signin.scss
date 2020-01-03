@@ -1,63 +1,54 @@
 .signin-form-container {
   position: relative;
-  height: 70vh;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 2rem;
+  padding: 0 2rem;
 }
 
 .signin-form {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 90%;
+  width: 100%;
   max-width: 400px;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f7f7f7;
+
   box-shadow: 0 5px 15px #ccc;
   border-radius: 10px;
 
-  &__form-wrapper {
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    background-color: #f7f7f7;
+  form {
+    // margin-bottom: 2rem;
 
-    form {
-      // margin-bottom: 2rem;
-  
-      h2 {
-        margin-top: 0;
-        font-size: 1.8rem;
-        text-align: center;
-        text-transform: uppercase;
-      }
-  
-      input {
-        border: none;
-        margin-bottom: 2rem;
-  
-        &:focus {
-          border-bottom: 1px solid #4791f1;
-        }
-      }
+    h2 {
+      margin-top: 0;
+      font-size: 1.8rem;
+      text-align: center;
+      text-transform: uppercase;
     }
 
-    button {
-      font-size: 1.5rem;
-      font-weight: 300;
-      margin-bottom: 2rem;
-      color: #fff;
-      border-radius: 5px;
-      background-color: #4791f1;
+    input {
       border: none;
-      transition: all 350ms;
+      margin-bottom: 2rem;
 
-      &:hover {
-        background-color: rgb(60, 117, 192);
+      &:focus {
+        border-bottom: 1px solid #4791f1;
       }
     }
+  }
 
+  button {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: #fff;
+    border-radius: 5px;
+    background-color: #4791f1;
+    border: none;
+    transition: all 350ms;
+
+    &:hover {
+      background-color: rgb(60, 117, 192);
+    }
   }
 
   &__google {
@@ -66,26 +57,26 @@
       margin-bottom: 1rem;
       text-align: center;
     }
-
+  
     button {
       display: flex;
       justify-content: center;
       align-items: center;
       margin-bottom: 6rem;
     }
-
+  
     span {
       i {
         font-size: 1.5rem;
         margin-right: 10px;
-
+  
         &:before {
           color: #fff;
         }
       }
     }
   }
-
+  
   p {
     a {
       font-weight: bold;
