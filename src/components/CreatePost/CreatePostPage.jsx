@@ -238,9 +238,9 @@ const CreatePostPage = (props) => {
             className={`${error.status ? "input-validation-error" : ""}`}
             type="text"
             name="title"
-            placeholder="Post title (30 words max.)"
+            placeholder="Title (56 characters max.)"
             value={postTitle}
-            maxLength={30}
+            maxLength={56}
             onChange={onTitleChangeHandler}
           />
           {/* Categorías de los posts */}
