@@ -173,6 +173,7 @@ class SignIn extends Component {
               </button>
             </div>
             <p style={{margin: 0, textAlign: "center"}}>Don't have an account? <Link to="/signup">Signup</Link> </p>
+            <p style={{marginBottom: "0.5rem", textAlign: "center"}}>Forgot your password? <Link to="/forgot-password">Reset your password</Link> </p>
           </div>
         </div>
       </div>

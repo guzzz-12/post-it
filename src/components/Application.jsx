@@ -6,6 +6,7 @@ import User from "./User";
 import Nav from "./Nav";
 import Signin from "./Auth/Signin/Signin";
 import Signup from "./Auth/Signup/Signup";
+import ForgotPassword from "./ForgotPassword/ForgotPassword";
 import UserProfile from './UserProfile';
 import CreatePostPage from './CreatePost/CreatePostPage';
 import Footer from './Footer/Footer';
@@ -25,6 +26,7 @@ class Application extends Component {
             <Route exact path="/create-post" component={CreatePostPage} />
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/profile" component={UserProfile} />
             <Route exact path="/post/:postId" component={PostPage} />
             <Route exact path="/post/category/:postCategory" component={FilteredPosts} />

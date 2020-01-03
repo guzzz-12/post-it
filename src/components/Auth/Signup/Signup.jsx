@@ -83,7 +83,7 @@ class SignUp extends Component {
   };
 
   sendVerification = (user) => {
-    user.sendEmailVerification({url: "http://localhost:3000/"})
+    user.sendEmailVerification({url: "https://think-piece-ad813.firebaseapp.com/"})
     .then(() => {
       console.log("Email verification sent, please check your inbox")
     })
