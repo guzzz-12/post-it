@@ -28,6 +28,7 @@ class UserProfile extends Component {
     showModal: false,
     showDeleteAccountModal: false,
     currentUserUid: null,
+    loading: false,
     error: {
       status: false,
       type: null,
@@ -219,6 +220,10 @@ class UserProfile extends Component {
       confirmNewUserPassword: this.state.confirmNewUserPassword
     }
     if(this.isFormValid(data)) {
+      this.setState({
+        loading: true
+      })
+
       try {
         // Chequear crendenciales del usuario
         const credential = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, data.userPassword);
@@ -236,7 +241,8 @@ class UserProfile extends Component {
               userPassword: "",
               newUserPassword: "",
               confirmNewUserPassword: "",
-              changeUserPasswordSuccess: false
+              changeUserPasswordSuccess: false,
+              loading: false
             })
           }, 3500)
         })
@@ -245,6 +251,7 @@ class UserProfile extends Component {
         console.log(error)
         window.scrollTo({top: 0});
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "submit",
@@ -262,10 +269,16 @@ class UserProfile extends Component {
     try {
       //Chequear si el usuario ya creó su contraseña de seguridad
       if(this.props.user.securityPassword) {
+        this.setState({
+          loading: true
+        })
+
         const check = await this.compareSecurityPasswords()
+
         if(!check) {
           this.setState({
             currentSecurityPassword: "",
+            loading: false,
             error: {
               status: true,
               type: "currentPassword",
@@ -283,6 +296,7 @@ class UserProfile extends Component {
       // Crear o actualizar la contraseña de seguridad
       if(!this.state.securityPassword && !this.setState.confirmSecurityPassword) {
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "emptyFields",
@@ -296,6 +310,7 @@ class UserProfile extends Component {
         return false
       } else if(this.state.securityPassword === "") {
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "securityPassword",
@@ -309,6 +324,7 @@ class UserProfile extends Component {
         return false
       } else if(this.state.confirmSecurityPassword === "") {
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "confirmSecurityPassword",
@@ -322,6 +338,7 @@ class UserProfile extends Component {
         return false
       } else if(this.state.securityPassword !== this.state.confirmSecurityPassword) {
         this.setState({
+          loading: false,
           error: {
             status: true,
             type: "passwordsMatch",
@@ -350,6 +367,7 @@ class UserProfile extends Component {
       }, () => {
         setTimeout(() => {
           this.setState({
+            loading: false,
             securityPasswordSuccess: false
           })
         }, 3500)
@@ -457,8 +475,8 @@ class UserProfile extends Component {
         <DisplayErrors error={this.state.error} />
         <UserInfo user={this.props.user} />
         <section className="profile-form" style={{marginBottom: "2rem"}}>
-          <h2>Update your profile</h2>
           <form onSubmit={this.onSubmitHandler} className="profile-form__update-form">
+            <h2>Update your profile</h2>
             <div className="profile-form__username">
               <input
                 type="text"
@@ -473,7 +491,8 @@ class UserProfile extends Component {
                 className="profile-form__upload-btn"
                 htmlFor="upload-image"
               >
-                {`${(this.state.imgFile && "File: " + this.state.imgFile.split('\\')[2]) || "Choose new avatar"}`}
+                Choose new avatar...
+                {/* {`${(this.state.imgFile && "File: " + this.state.imgFile.split('\\')[2]) || "Choose new avatar"}`} */}
               </label>
             </div>
             <input
@@ -545,7 +564,9 @@ class UserProfile extends Component {
                   onChange={this.onChangeHandler}
                   value={this.state.confirmNewUserPassword}
                 />
-                <button>Update password</button>
+                <button disabled={this.state.loading}>
+                  {`${this.state.loading ? "Updating password..." : "Update password"}`}
+                </button>
               </form>
             </div>
           }

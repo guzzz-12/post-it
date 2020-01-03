@@ -141,8 +141,8 @@ class SignIn extends Component {
 
     return (
       <div className="signin-form-container">
+        <DisplayErrors error={error} />
         <div className="signin-form generic-wrapper">
-          <DisplayErrors error={error} />
           <div className="signin-form__form-wrapper">
             <form onSubmit={this.handleSubmit}>
               <h2>Signin</h2>

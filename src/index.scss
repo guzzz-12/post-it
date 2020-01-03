@@ -299,8 +299,25 @@ input[type="file"] {
   border: 1px solid $input-color;
   background-color: #fff;
 
+  display: flex;
+  justify-content: space-between;
+  align-items:stretch;
+  flex-wrap: wrap;
+
   &__update-form {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
+    padding: 2rem;
+    border: 1px solid $input-color;
+    border-radius: 10px;
+
+    flex-basis: 48%;
+    flex-shrink: 0;
+
+    @media (max-width: 650px) {
+      flex-basis: 100%;
+      margin-bottom: 2rem;
+    }
+
   }
 
   h2 {
@@ -384,12 +401,19 @@ input[type="file"] {
     border: 1px solid $input-color;
     overflow: hidden;
 
+    flex-basis: 48%;
+    flex-shrink: 0;
+
+    @media (max-width: 650px) {
+      flex-basis: 100%;
+    }
+
     h2 {
       margin: 0
     }
 
     p {
-      margin-top: 0;
+      margin-top: 1rem;
     }
 
     input {
@@ -406,6 +430,12 @@ input[type="file"] {
 
     &:hover {
       background-color: rgb(60, 117, 192);
+    }
+
+    &::disabled {
+      color: rgb(165, 165, 165);
+      border-color: transparent;
+      background-color: rgb(226, 226, 226);
     }
   }
 }
@@ -1002,7 +1032,7 @@ a {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, 0%);
+  transform: translate(-50%, calc(50vh - 100%));
   opacity: 1;
   display: flex;
   flex-direction: column;
@@ -1014,8 +1044,8 @@ a {
   border: 2px solid red;
   border-radius: 10px;
   background-color: rgb(252, 229, 229);
-  transition: all 350ms;
-  z-index: 10;
+  transition: all 700ms;
+  z-index: 10000;
 
   p:first-of-type {
     margin: 0;
@@ -1034,8 +1064,8 @@ a {
 .display-errors--hidden {
   transform: translate(-50%, -100%);
   opacity: 0;
-  z-index: -10;
-  transition: all 350ms;
+  z-index: -10000;
+  transition: all 750ms;
 }
 
 

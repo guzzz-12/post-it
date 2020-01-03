@@ -96,8 +96,8 @@ class ForgotPassword extends Component {
 
     return (
       <div className="forgot-password-form-container">
+        <DisplayErrors error={error} />
         <div className="forgot-password-form generic-wrapper">
-          <DisplayErrors error={error} />
           <div
             className={`${this.state.success ?
             "email-send-wrapper--on-success" :
