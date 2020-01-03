@@ -178,7 +178,7 @@ class SignUp extends Component {
                 type="text"
                 name="displayName"
                 className={`${error.status ? "input-validation-error" : ""}`}
-                placeholder="Display Name"
+                placeholder="Name"
                 value={displayName}
                 onChange={this.handleChange}
               />

@@ -10,6 +10,7 @@ const UserProvider = (props) => {
   let unsubscribeFromAuth = null;
   let unsubscribeFromUsers = null;
 
+  // Funcionalidad para actualizar los post del usuario cuando ése actualiza su perfil
   const updateUserPosts = async (uid, data) => {
     console.log("posts changed")
 
@@ -45,13 +46,18 @@ const UserProvider = (props) => {
 
     // eslint-disable-next-line
     unsubscribeFromUsers = firestore.collection("users").onSnapshot(async (snap) => {
-      if(user.user && auth.currentUser) {      
+      if(auth.currentUser) {      
         const updatedUserRef = snap.docs.find(el => {
           return el.id === auth.currentUser.uid
         })
+
         
-        //Actualizar posts del usuario cuando el usuario cambia su información
+        //Actualizar información y posts del usuario cuando este modifica su perfil
         if(updatedUserRef) {
+          // Verificar si el usuario verificó su email
+          await updatedUserRef.ref.update({emailVerified: auth.currentUser.emailVerified})
+
+          // Enviar la data actualizada del usuario a los componentes para actualizar la interfaz
           let updatedUser = updatedUserRef.data()
           
           setUser({
@@ -61,27 +67,18 @@ const UserProvider = (props) => {
             }
           })
 
-          await updateUserPosts(updatedUserRef.id, {...updatedUser})
-  
-        } else if(!updatedUserRef) {
-          setUser({
-            user: null
-          })
+          // Actualizar los posts del usuario con la información actualizada del perfil
+          await updateUserPosts(updatedUserRef.id, {...updatedUser})  
         }
-      }
 
-      if(auth.currentUser && user.user && user.user.emailVerified !== auth.currentUser.emailVerified) {
-        const userRef = firestore.collection("users").doc(auth.currentUser.uid)
-        const userSnap = await userRef.get()
-        if(userSnap.exists) {
-          await userRef.update({emailVerified: auth.currentUser.emailVerified})
-          setUser({
-            user: {
-              ...user.user,
-              emailVerified: auth.currentUser.emailVerified
-            }
-          })
-        }
+        // Borrar data del usuario del state si éste borra su cuenta
+        snap.docChanges().forEach(change => {
+          if(change.type === "removed" && change.doc.id === user.user.uid) {
+            setUser({
+              user: null
+            })  
+          }
+        })
       }
     })
     

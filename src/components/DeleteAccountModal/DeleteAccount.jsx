@@ -115,6 +115,7 @@ const ConfirmModal = (props) => {
   }
 
   const hideModalHandler = () => {
+    setPassword("")
     props.hide()
   }
 
@@ -127,7 +128,7 @@ const ConfirmModal = (props) => {
             {loading && <Spinner />}
             <div className="delete-account-modal__content">
               <h1>Confirm account deletion</h1>
-              <form className="delete-account-modal__form">
+              <form onSubmit={(e) => e.preventDefault()} className="delete-account-modal__form">
                 <input
                   className={`${error.type === "password" ? "input-validation-error" : ""}`}
                   type="password"
