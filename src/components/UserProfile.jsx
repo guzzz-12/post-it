@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import bcryptjs from "bcryptjs";
+import firebase from "../firebase";
 import {firestore, auth, storage} from "../firebase";
 import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
@@ -14,6 +15,10 @@ class UserProfile extends Component {
     displayName: "",
     imgFile: "",
     imgFilePreview: "",
+    userPassword: "",
+    newUserPassword: "",
+    confirmNewUserPassword: "",
+    changeUserPasswordSuccess: false,
     securityPassword: "",
     currentSecurityPassword: "",
     confirmSecurityPassword: "",
@@ -55,12 +60,15 @@ class UserProfile extends Component {
     return this.imageInputRef && this.imageInputRef.current.files[0]
   }
 
+
+  // Almacenar en el state los valores de los campos de los formularios
   onChangeHandler = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     })
   }
   
+  // Guardar en el state la data de la imagen de avatar seleccionada
   onImageChangeHandler = (e) => {
     this.setState({
       imgFilePreview: URL.createObjectURL(e.target.files[0]),
@@ -68,6 +76,7 @@ class UserProfile extends Component {
     })  
   }
 
+  // Procesar los formularios
   onSubmitHandler = async (e) => {
     e.preventDefault();
     if(this.state.displayName) {
@@ -134,6 +143,8 @@ class UserProfile extends Component {
     }
   }
 
+  // Funcionalidad para borrar la cuenta del usuario y todos sus datos asociados
+  // Aún falta la funcionalidad para eliminar todos los comentarios del usuario al eliminar su cuenta
   deletUserAccount = async (userId) => {
     const userPhotoUrl = this.props.user.photoURL;
     const postsRef = await firestore.collection("posts").where("user.uid", "==", userId).get()
@@ -199,6 +210,52 @@ class UserProfile extends Component {
     })
   }
 
+  // Funcionalidad para cambiar la contraseña de usuarios autenticados con email/password
+  userPasswordHandler = async (e) => {
+    e.preventDefault()
+    const data = {
+      userPassword: this.state.userPassword,
+      newUserPassword: this.state.newUserPassword,
+      confirmNewUserPassword: this.state.confirmNewUserPassword
+    }
+    if(this.isFormValid(data)) {
+      try {
+        // Chequear crendenciales del usuario
+        const credential = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, data.userPassword);
+        await auth.currentUser.reauthenticateWithCredential(credential);
+
+        // Cambiar la contraseña y notificar al usuario si todo es correcto
+        const user = auth.currentUser;
+        await user.updatePassword(data.newUserPassword);
+
+        this.setState({
+          changeUserPasswordSuccess: true
+        }, () => {
+          setTimeout(() => {
+            this.setState({
+              userPassword: "",
+              newUserPassword: "",
+              confirmNewUserPassword: "",
+              changeUserPasswordSuccess: false
+            })
+          }, 3500)
+        })
+        
+      } catch (error) {
+        console.log(error)
+        window.scrollTo({top: 0});
+        this.setState({
+          error: {
+            status: true,
+            type: "submit",
+            message: error.code.includes("wrong-password") ? "Wrong password, try again" : error.message
+          }
+        }, () => this.clearErrorMessage())
+      }
+    } 
+  }
+
+  // Funcionalidad para crear o modificar la contraseña de seguridad (Sólo para usuarios de google provider)
   securityPasswordHandler = async (e) => {
     e.preventDefault()
 
@@ -312,6 +369,7 @@ class UserProfile extends Component {
     }
   }
 
+  // Chequear si la contraseña de seguridad es correcta (Sólo para usuarios de google provider)
   compareSecurityPasswords = async () => {
     const check = await bcryptjs.compare(this.state.currentSecurityPassword, this.props.user.securityPassword)
     if(check) {
@@ -319,6 +377,61 @@ class UserProfile extends Component {
     } else {
       return false
     }
+  }
+
+  // Confirmar formulario de cambio de contraseña para usuarios autenticados mediante email/password
+  isFormValid = (data) => {
+    if(data.userPassword === "" && data.newUserPassword === "" && data.confirmNewUserPassword) {
+      this.setState({
+        error: {
+          status: true,
+          type: "emptyFields",
+          message: "You must complete all fields"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+
+    } else if(data.userPassword === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "userPassword",
+          message: "You must provide your current password"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+
+    } else if(data.newUserPassword === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "newUserPassword",
+          message: "You must provide your new password"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+    } else if(data.confirmNewUserPassword === "") {
+      this.setState({
+        error: {
+          status: true,
+          type: "confirmNewUserPassword",
+          message: "You must confirm your new password"
+        }
+      }, () => this.clearErrorMessage())
+      return false
+    }
+    else if(data.newUserPassword !== data.confirmNewUserPassword) {
+      this.setState({
+        error: {
+          status: true,
+          type: "passwordsMatch",
+          message: "Passwords don't match"
+        }
+      }, () => this.clearErrorMessage())
+      window.scrollTo({top: 0})
+      return false
+    }
+    return true
   }
 
   clearErrorMessage = () => {
@@ -395,6 +508,48 @@ class UserProfile extends Component {
             />
           </form>
 
+          {/* Modificar contraseña para usuarios logueados con email/password */}
+          {auth.currentUser && auth.currentUser.providerData[0].providerId !== "google.com" &&
+            <div className="security-password-wrapper">
+              <div
+                className={`${this.state.changeUserPasswordSuccess ?
+                "security-password-wrapper--on-success" :
+                "security-password-wrapper--on-success security-password-wrapper--on-success-hidden"}`}
+              >
+                <i className="far fa-check-circle"></i>
+                <h1>Password <br/> successfully updated</h1>
+              </div>
+              <h2 style={{marginBottom: "1rem"}}>Change your password</h2>
+              <form onSubmit={this.userPasswordHandler}>
+                <input
+                  className={`${this.state.error.type === "userPassword" ? "input-validation-error" : this.state.error.type === "emptyFields" ? "input-validation-error" : ""}`}
+                  type="password"
+                  name="userPassword"
+                  placeholder= {`${this.state.error.type === "userPassword" ? this.state.error.message : "Current password"}`}
+                  onChange={this.onChangeHandler}
+                  value={this.state.userPassword}
+                />
+                <input
+                className={`${this.state.error.type === "emptyFields" || this.state.error.type === "newUserPassword" ||this.state.error.type === "passwordsMatch" ? "input-validation-error" : ""}`}
+                  type="password"
+                  name="newUserPassword"
+                  placeholder={`${this.state.error.type === "newUserPassword" ? this.state.error.message : "New password"}`}
+                  onChange={this.onChangeHandler}
+                  value={this.state.newUserPassword}
+                />
+                <input
+                  className={`${this.state.error.type === "emptyFields" || this.state.error.type === "confirmNewUserPassword" ||this.state.error.type === "passwordsMatch" ? "input-validation-error" : ""}`}
+                  type="password"
+                  name="confirmNewUserPassword"
+                  placeholder={`${this.state.error.type === "confirmNewUserPassword" ? this.state.error.message : "Confirm new password"}`}
+                  onChange={this.onChangeHandler}
+                  value={this.state.confirmNewUserPassword}
+                />
+                <button>Update password</button>
+              </form>
+            </div>
+          }
+
           {/* Crear o actualizar contraseña de seguridad para usuarios logueados con Google */}
           {auth.currentUser && auth.currentUser.providerData[0].providerId === "google.com" &&
             <div className="security-password-wrapper">
@@ -403,7 +558,7 @@ class UserProfile extends Component {
                 "security-password-wrapper--on-success" :
                 "security-password-wrapper--on-success security-password-wrapper--on-success-hidden"}`}
               >
-                <i class="far fa-check-circle"></i>
+                <i className="far fa-check-circle"></i>
                 <h1>Security password <br/> successfully updated</h1>
               </div>
               <h2>Create or update your security password</h2>
