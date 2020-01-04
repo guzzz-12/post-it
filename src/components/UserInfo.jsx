@@ -16,8 +16,8 @@ const UserPage = (props) => {
             }
             <div className="CurrentUser--information">
               <h2>{props.user.displayName}</h2>
-              <p className="email">{props.user.email}</p>
-              <p className="created-at">{moment(props.user.createdAt).calendar()}</p>
+              <p className="email"><strong>Email:</strong> {props.user.email}</p>
+              <p className="created-at"><strong>Joined:</strong> {moment(props.user.createdAt).calendar()}</p>
             </div>
           </div>
         </section>    

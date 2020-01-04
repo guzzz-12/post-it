@@ -181,7 +181,7 @@ const PostPreview = ({id, title, category, content, user, createdAt, stars, comm
               {comments} Comments
             </span>
           </p>
-          <p>Posted by <Link to={`/users/${user.uid}`}>{user && user.displayName}</Link></p>
+          <p>Posted by <Link to={`/users/${user.uid}`}>{user && user.displayName.split(" ")[0]}</Link></p>
           <p>{moment(createdAt).calendar()}</p>
           <p style={{textTransform: "capitalize"}}>Category: <Link to={`/post/category/${category}`}>{category}</Link></p>
         </div>

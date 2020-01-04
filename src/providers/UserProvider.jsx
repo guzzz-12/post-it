@@ -73,7 +73,7 @@ const UserProvider = (props) => {
 
         // Borrar data del usuario del state si éste borra su cuenta
         snap.docChanges().forEach(change => {
-          if(change.type === "removed" && change.doc.id === user.user.uid) {
+          if(user.user && change.type === "removed" && change.doc.id === user.user.uid) {
             setUser({
               user: null
             })  
