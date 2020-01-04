@@ -24,7 +24,7 @@ class PostPage extends Component {
   
   commentsRef = this.postsRef.collection("comments")
   
-  async componentDidMount() {
+  async componentDidMount() {    
     try {
       // Escuchar los cambios de la colección de posts para actualizar la interfaz en tiempo real
       this.unsubscribeFromPost = this.postsRef.onSnapshot(async (snapshot) => {
@@ -75,7 +75,6 @@ class PostPage extends Component {
   createComment = async (comment) => {
     const postCommentsUsersRef = await this.postsRef.get()
     const commentsUsersIds = postCommentsUsersRef.data().commentsUsers
-    const commentsAmount = postCommentsUsersRef.data().comments
     
     if(!commentsUsersIds.includes(this.props.user.uid)) {
       commentsUsersIds.push(this.props.user.uid)
@@ -90,7 +89,9 @@ class PostPage extends Component {
       ...comment
     })
 
-    await this.postsRef.update({comments: commentsAmount + 1})
+    // Actualizar contador de comentarios en el post
+    const commentsCollection = await this.commentsRef.get()
+    await this.postsRef.update({comments: commentsCollection.size})
 
     this.setState({
       commentsChanged: true
@@ -99,13 +100,13 @@ class PostPage extends Component {
 
   // Borrar comentario de la base de datos
   deleteComment = async (id) => {
-    const postCommentsUsersRef = await this.postsRef.get()
-    const commentsAmount = postCommentsUsersRef.data().comments
-
     try {
       //Borrar el comentario
       await this.commentsRef.doc(id).delete()
-      await this.postsRef.update({comments: commentsAmount - 1})
+
+      // Actualizar contador de comentarios en el post
+      const commentsCollection = await this.commentsRef.get()
+      await this.postsRef.update({comments: commentsCollection.size})
 
       this.setState({
         commentsChanged: true
