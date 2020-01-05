@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Comments from "./Comments";
-import {firestore} from "../firebase";
+import {auth, firestore} from "../firebase";
 import {collectIdsAndDocs} from "../utils";
 import {withRouter} from "react-router-dom";
 import WithUser from "./WithUser";
@@ -20,11 +20,10 @@ class PostPage extends Component {
   unsubscribeFromPost = null
   unsubscribeFromComments = null
   
-  postsRef = firestore.collection("posts").doc(this.props.match.params.postId)
-  
+  postsRef = firestore.collection("posts").doc(this.props.match.params.postId)  
   commentsRef = this.postsRef.collection("comments")
   
-  async componentDidMount() {    
+  async componentDidMount() {
     try {
       // Escuchar los cambios de la colección de posts para actualizar la interfaz en tiempo real
       this.unsubscribeFromPost = this.postsRef.onSnapshot(async (snapshot) => {
@@ -73,17 +72,14 @@ class PostPage extends Component {
 
   // Agregar comentario a la base de datos
   createComment = async (comment) => {
-    const postCommentsUsersRef = await this.postsRef.get()
-    const commentsUsersIds = postCommentsUsersRef.data().commentsUsers
-    
-    if(!commentsUsersIds.includes(this.props.user.uid)) {
-      commentsUsersIds.push(this.props.user.uid)
-      
-      await this.postsRef.update({commentsUsers: commentsUsersIds})
-    }
-
+    // Agregar el comentario al post
     await this.commentsRef.add({
-      user: this.props.user,
+      user: {
+        uid: this.props.user.uid,
+        displayName: this.props.user.displayName,
+        photoURL: this.props.user.photoURL,
+        email: this.props.user.email
+      },
       createdAt: Date.now(),
       postID: this.props.match.params.postId,
       ...comment
@@ -93,6 +89,28 @@ class PostPage extends Component {
     const commentsCollection = await this.commentsRef.get()
     await this.postsRef.update({comments: commentsCollection.size})
 
+    // Actualizar la propiedad postsCommented del user para indicar que el usuario comentó el post
+    const userRef = firestore.collection("users").doc(auth.currentUser.uid)
+    await userRef.get().then((snapshot) => {
+      const postsCommentedByUser = [...snapshot.data().postsCommented]
+
+      if(!postsCommentedByUser.includes(this.props.match.params.postId)) {
+        postsCommentedByUser.push(this.props.match.params.postId)
+        userRef.update({postsCommented: postsCommentedByUser})
+      }
+    })
+
+    // Agregar la id del usuario a la propiedad commentsUsers del post (si es la primera vez que comenta el post)
+    const postCommentsUsersRef = await this.postsRef.get()
+    const commentsUsersIds = postCommentsUsersRef.data().commentsUsers
+    
+    if(!commentsUsersIds.includes(this.props.user.uid)) {
+      commentsUsersIds.push(this.props.user.uid)
+      
+      await this.postsRef.update({commentsUsers: commentsUsersIds})
+    }
+
+    // Actualizar el state
     this.setState({
       commentsChanged: true
     })
@@ -129,6 +147,14 @@ class PostPage extends Component {
 
         await this.postsRef.update({commentsUsers: commentsUsersIds})
 
+        // Eliminar la id del post de la propiedad postsCommented del user
+        const userRef = firestore.collection("users").doc(auth.currentUser.uid)
+        userRef.get().then((snapshot) => {
+          const postsCommentedByUser = [...snapshot.data().postsCommented]
+          userRef.update({
+            postsCommented: postsCommentedByUser.filter(id => id !== this.props.match.params.postId)
+          })
+        })
       }      
     } catch (error) {
       console.log(error)
