@@ -22,11 +22,12 @@ const Posts = (props) => {
   // Buscar posts por título
   useEffect(() => {    
     if(searchPostsContext.searchTerm) {
+      const searchTermArray = searchPostsContext.searchTerm.toLowerCase().split(" ")
       setIsLoading(true)
       searchPostsContext.resetFilter()
       
       firestore.collection("posts")
-      .where("titleArray", "array-contains", searchPostsContext.searchTerm.toLowerCase())
+      .where("titleArray", "array-contains-any", searchTermArray)
       .get()
       .then((snap) => {
         const foundPosts = []
