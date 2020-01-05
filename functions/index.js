@@ -35,6 +35,56 @@ firestore.settings({timestampsInSnapshots: true})
 //   return null;
 // })
 
+// Actualizar datos del usuario en los comentarios cuando el usuario actualiza su perfil
+exports.updateComments = functions.firestore.document("/users/{userId}").onUpdate(async (snapshot, context) => {
+  const {userId} = context.params;
+  
+  // const userRef = await firestore.collection("users").doc(userId).get()
+  const updatedUserData = snapshot.after;
+  const postsRef = firestore.collection("posts")
+
+  //Buscar los posts comentados por el usuario
+  const commentedPosts = await postsRef.where("commentsUsers", "array-contains", userId).get()
+
+  // Buscar las colecciones de comentarios de los posts
+  const postsCommentsRef = commentedPosts.docs.map(doc => {
+    return doc.ref.collection("comments")
+  })
+
+  // Extraer los snapshots de cada colección de comentarios donde sólo se incluyan los comentarios del usuario
+  // Esta operación genera un array de arrays donde cada array interno es una colección de comentarios
+  const postsCommentsPromises = postsCommentsRef.map(doc => doc.where("user.uid", "==", userId).get())
+  const commentsRefs = await Promise.all(postsCommentsPromises);
+
+  // Extraer los ref de los documentos de cada colección de comentarios
+  // Esta operación genera un array de arrays donde cada array interno contiene los refs de los comentarios de cada post
+  const commentsDocs = commentsRefs.map(snapshot => snapshot.docs)
+
+  // Unir todos los refs de los comentarios en un solo array
+  const commentsRefsArray = []
+  commentsDocs.forEach(docArray => docArray.map(doc => commentsRefsArray.push(doc.ref)))
+
+  // Extraer los comentarios
+  const commentsPromises = []
+  commentsRefsArray.forEach(doc => commentsPromises.push(doc.get()))
+  commentsRefsArray.forEach(doc => console.log(doc.parent.parent.path))
+  const resolvedComments = await Promise.all(commentsPromises);
+  resolvedComments.forEach(comment => console.log(comment.data()))
+  console.log("resolvedComments", resolvedComments)
+
+  // Actualizar los comentarios del usuario con la información actualizada del usuario
+  resolvedComments.forEach(comment => commentsPromises.push(comment.ref.update({
+    user: {
+      uid: updatedUserData.data().uid,
+      displayName: updatedUserData.data().displayName,
+      photoURL: updatedUserData.data().photoURL,
+      email: updatedUserData.data().email
+    }
+  })))
+
+  await Promise.all(commentsPromises)
+})
+
 // Borrar todos los comentarios de un usuario de cada post cuando éste elimine su cuenta
 exports.deleteUserComments = functions.firestore.document("/users/{userId}").onDelete(async (snapshot, context) => {
   const {userId} = context.params;
