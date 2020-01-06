@@ -44,21 +44,21 @@ exports.updateComments = functions.firestore.document("/users/{userId}").onUpdat
   const postsRef = firestore.collection("posts")
 
   //Buscar los posts comentados por el usuario
-  const commentedPosts = await postsRef.where("commentsUsers", "array-contains", userId).get()
+  const commentedPostsSnapshot = await postsRef.where("commentsUsers", "array-contains", userId).get()
 
   // Buscar las colecciones de comentarios de los posts
-  const postsCommentsRef = commentedPosts.docs.map(doc => {
+  const postsCommentsRefs = commentedPostsSnapshot.docs.map(doc => {
     return doc.ref.collection("comments")
   })
 
   // Extraer los snapshots de cada colección de comentarios donde sólo se incluyan los comentarios del usuario
   // Esta operación genera un array de arrays donde cada array interno es una colección de comentarios
-  const postsCommentsPromises = postsCommentsRef.map(doc => doc.where("user.uid", "==", userId).get())
-  const commentsRefs = await Promise.all(postsCommentsPromises);
+  const postsCommentsPromises = postsCommentsRefs.map(commentsCollRef => commentsCollRef.where("user.uid", "==", userId).get())
+  const commentsSnapshots = await Promise.all(postsCommentsPromises);
 
   // Extraer los ref de los documentos de cada colección de comentarios
   // Esta operación genera un array de arrays donde cada array interno contiene los refs de los comentarios de cada post
-  const commentsDocs = commentsRefs.map(snapshot => snapshot.docs)
+  const commentsDocs = commentsSnapshots.map(snapshot => snapshot.docs)
 
   // Unir todos los refs de los comentarios en un solo array
   const commentsRefsArray = []
@@ -66,11 +66,8 @@ exports.updateComments = functions.firestore.document("/users/{userId}").onUpdat
 
   // Extraer los comentarios
   const commentsPromises = []
-  commentsRefsArray.forEach(doc => commentsPromises.push(doc.get()))
-  commentsRefsArray.forEach(doc => console.log(doc.parent.parent.path))
-  const resolvedComments = await Promise.all(commentsPromises);
-  resolvedComments.forEach(comment => console.log(comment.data()))
-  console.log("resolvedComments", resolvedComments)
+  commentsRefsArray.forEach(docSnapshot => commentsPromises.push(docSnapshot.get()))  
+  const resolvedComments = await Promise.all(commentsPromises)
 
   // Actualizar los comentarios del usuario con la información actualizada del usuario
   resolvedComments.forEach(comment => commentsPromises.push(comment.ref.update({
@@ -103,22 +100,18 @@ exports.deleteUserComments = functions.firestore.document("/users/{userId}").onD
   // Esta operación genera un array de arrays donde cada array interno es una colección de comentarios
   const postsCommentsPromises = postsCommentsRef.map(doc => doc.where("user.uid", "==", userId).get())
   const commentsRefs = await Promise.all(postsCommentsPromises);
-  console.log(commentsRefs)
 
   // Extraer los ref de los documentos de cada colección de comentarios
   // Esta operación genera un array de arrays donde cada array interno contiene los refs de los comentarios de cada post
   const commentsDocs = commentsRefs.map(snapshot => snapshot.docs)
-  console.log(commentsDocs)
 
   // Unir todos los refs de los comentarios en un solo array
   const commentsRefsArray = []
   commentsDocs.forEach(docArray => docArray.map(doc => commentsRefsArray.push(doc.ref)))
-  console.log(commentsRefsArray)
 
   // Extraer los comentarios
   const commentsPromises = []
   commentsRefsArray.forEach(doc => commentsPromises.push(doc.get()))
-  commentsRefsArray.forEach(doc => console.log(doc.parent.parent.path))
   const resolvedComments = await Promise.all(commentsPromises);
   
   // Finalmente, borrar todos los comentarios del usuario
