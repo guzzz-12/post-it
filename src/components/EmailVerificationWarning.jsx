@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {auth} from "../firebase";
 
 const EmailVerificationWarning = (props) => {
@@ -19,12 +19,6 @@ const EmailVerificationWarning = (props) => {
     }
   }
 
-  useEffect(() => {
-    return () => {
-      setMessage(null)
-    }
-  })
-
   return (
     <div
       className={`${props.user && !props.user.emailVerified ?
@@ -32,7 +26,7 @@ const EmailVerificationWarning = (props) => {
       :
       "email-warning email-warning--hidden"}`}
     >
-      {message &&
+      {props.user && !props.user.emailVerified && message &&
         <h3>{message}</h3>
       }
       {props.user && !props.user.emailVerified && !message &&
