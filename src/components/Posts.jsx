@@ -49,7 +49,7 @@ const Posts = (props) => {
     const getFilteredPosts = async () => {
       // setSearchPosts(null)
       const filteredPosts = [];
-      const filteredPostsSnapshot = await postsRef.where("category", "==", filter).get()
+      const filteredPostsSnapshot = await postsRef.where("category", "==", filter).orderBy("createdAt", "desc").get()
       filteredPostsSnapshot.forEach(doc => filteredPosts.push(doc.data()))
       return filteredPosts;
     }
