@@ -675,11 +675,13 @@ a {
   }
 
   #AddComment__content-input {
-    padding: 1rem;
+    padding: 1rem 30px;
     font-size: 1.1rem;
-    border-radius: 100px;
+    border-radius: 30px;
     background-color: #f7f7f7;
     border: 1px solid #e7e7e7;
+    resize: none;
+    overflow: hidden;
 
     &:focus {
       background-color: #e7e7e7;
@@ -690,8 +692,17 @@ a {
   #AddComment__create-comment {
     display: block;
     flex: 0 0;
-    background-color: yellow;
     border: none;
+  }
+}
+
+.commentForm__info {
+  margin-top: 5px;
+  color: #646464;
+  p {
+    margin: 0;
+    text-align: center;
+    color: inherit;
   }
 }
 
@@ -997,6 +1008,10 @@ a {
     border-radius: 20px;
     background-color: #e7e7e7;
     border: 1px solid #ccc;
+  }
+
+  span {
+    white-space: pre-wrap;
   }
 
   &__delete {
